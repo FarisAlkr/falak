@@ -31,7 +31,7 @@ Falak organizes the curriculum into 14 units. Each maps to a specific segment of
 | 2 | `kinematics-2d` | الحركة في بُعدين والمقذوفات | תנועה במישור וזריקות | 2D Motion & Projectiles |
 | 3 | `newtons-laws` | قوانين نيوتن والديناميكا | חוקי ניוטון ודינמיקה | Newton's Laws & Dynamics |
 | 4 | `work-energy` | العمل والطاقة والقدرة | עבודה, אנרגיה והספק | Work, Energy, Power |
-| 5 | `momentum` | التنع والمتكف | תנע ומתקף | Momentum & Impulse |
+| 5 | `momentum` | الزخم والدفع | תנע ומתקף | Momentum & Impulse |
 | 6 | `circular-motion` | الحركة الدائرية | תנועה מעגלית | Circular Motion |
 | 7 | `gravitation` | الجاذبية والحركة الهرمونية | גרביטציה ותנועה הרמונית | Gravitation & SHM |
 

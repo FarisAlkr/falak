@@ -56,7 +56,7 @@ export const UNIT_LISTING: readonly UnitListing[] = [
     number: 5,
     section: 'mechanics',
     titles: {
-      ar: 'التنع والمتكف',
+      ar: 'الزخم والدفع',
       he: 'תנע ומתקף',
       en: 'Momentum & Impulse',
     },
