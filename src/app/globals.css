@@ -20,6 +20,7 @@
   --accent: #C1272D;
   --accent-dark: #A01F24;
   --accent-tint: rgba(193, 39, 45, 0.08);
+  --accent-glow: rgba(193, 39, 45, 0.18);
 
   /* Functional */
   --success: #3B7A3B;
@@ -60,6 +61,24 @@
     font-family: var(--font-body), system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+    font-feature-settings: 'kern', 'liga', 'calt';
+  }
+
+  /* Display headings: enable Fraunces stylistic alternates and optical sizing */
+  .font-display {
+    font-feature-settings: 'kern', 'liga', 'calt', 'ss01', 'ss02';
+    font-optical-sizing: auto;
+    letter-spacing: -0.01em;
+  }
+
+  /* Mono numerals: tabular figures so unit numbers and counters align */
+  .font-mono {
+    font-feature-settings: 'kern', 'tnum', 'zero';
+  }
+
+  /* Arabic: kashida-aware kerning */
+  .font-arabic {
+    font-feature-settings: 'kern', 'liga', 'calt';
   }
 
   ::selection {
@@ -70,6 +89,36 @@
   :focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 2px;
+  }
+}
+
+@layer utilities {
+  /* Faint paper-grain overlay applied to the whole viewport. Fixed, non-scrolling,
+     so it reads as paper texture rather than parallax noise. */
+  .paper-grain::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image: url('/grain.svg');
+    background-size: 200px 200px;
+    opacity: 0.025;
+    mix-blend-mode: multiply;
+  }
+
+  .paper-grain > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* A subtle radial accent — used by the cursor-spotlight effect on cards. */
+  .spotlight {
+    background-image: radial-gradient(
+      circle at var(--mx, 50%) var(--my, 50%),
+      var(--accent-tint),
+      transparent 50%
+    );
   }
 }
 

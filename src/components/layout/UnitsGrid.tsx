@@ -8,8 +8,8 @@ export interface UnitsGridProps {
 export function UnitsGrid({ units }: UnitsGridProps) {
   return (
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {units.map((unit) => (
-        <UnitCard key={unit.id} unit={unit} />
+      {units.map((unit, i) => (
+        <UnitCard key={unit.id} unit={unit} index={i} />
       ))}
     </div>
   );

@@ -54,6 +54,11 @@ const config: Config = {
         out: 'var(--ease-out)',
         'in-out': 'var(--ease-in-out)',
       },
+      boxShadow: {
+        soft: '0 1px 2px rgba(26, 22, 18, 0.04), 0 4px 16px rgba(26, 22, 18, 0.04)',
+        lift: '0 2px 4px rgba(26, 22, 18, 0.06), 0 12px 32px rgba(26, 22, 18, 0.08)',
+        glow: '0 0 0 1px rgba(193, 39, 45, 0.15), 0 8px 24px rgba(193, 39, 45, 0.12)',
+      },
     },
   },
   plugins: [typography, forms, rtl],
