@@ -40,7 +40,8 @@ Before using ANY physics term in Arabic, verify it against the terminology table
 | الشدّة (for force) | القوّة |
 | الوزن (for mass) | الكتلة |
 | الكتلة (for weight) | الوزن |
-| الزخم (for momentum, informal) | التنع / كمّيّة الحركة |
+| التنع (Hebrew loanword form) | الزخم |
+| المتكف (Hebrew loanword form) | الدفع |
 | الجول (for joule) | الجول (transliteration OK for units) |
 | الدوائر (for circular, informal) | الدائريّة |
 | السرعة (without qualifier for velocity) | السرعة المتجهة |
