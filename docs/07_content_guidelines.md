@@ -55,8 +55,8 @@
 | Energy | الطاقة | — |
 | Work | الشغل / العمل | — |
 | Power | القدرة / الاستطاعة | — |
-| Momentum | التنع / كمّيّة الحركة | الزخم (acceptable but less common) |
-| Impulse | الدفع / المتكف | — |
+| Momentum | الزخم | التنع / كمّيّة الحركة (older / less common) |
+| Impulse | الدفع | المتكف (Hebrew loanword form, avoid) |
 | Circular motion | الحركة الدائريّة | — |
 | Centripetal | مركزي | جاذب (wrong) |
 | Current (electric) | التيّار الكهربائي | — |
