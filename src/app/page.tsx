@@ -1,9 +1,14 @@
+import { Hero } from '@/components/layout/Hero';
+import { UnitsGrid } from '@/components/layout/UnitsGrid';
+import { UNIT_LISTING } from '@/lib/content/unitRegistry';
+
 export default function HomePage() {
   return (
-    <main>
-      <h1>Falak</h1>
-      <p>فَلَك · Bilingual physics platform for the Israeli 5-unit Bagrut.</p>
-      <p>Phase 0 · Bootstrap.</p>
+    <main className="mx-auto max-w-6xl px-6 pb-24">
+      <Hero />
+      <section className="pt-16">
+        <UnitsGrid units={UNIT_LISTING} />
+      </section>
     </main>
   );
 }
