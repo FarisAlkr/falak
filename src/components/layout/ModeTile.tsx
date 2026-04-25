@@ -1,57 +1,134 @@
+'use client';
+
 import Link from 'next/link';
-import { ChevronLeft } from 'lucide-react';
-import { Card } from '@/components/primitives';
+import { useRef } from 'react';
+import { motion } from 'framer-motion';
+import { ChevronLeft, BookOpen, Play, ClipboardCheck, Star, type LucideIcon } from 'lucide-react';
+import { useTilt, useElementMouse, TRANSITION } from '@/lib/motion';
 import { MODE_LABELS, type UnitMode } from '@/types/mode';
 import type { UnitId } from '@/types/unit';
+import { cn } from '@/lib/utils/cn';
+
+const MODE_ICON: Record<UnitMode, LucideIcon> = {
+  theory: BookOpen,
+  interactive: Play,
+  exam: ClipboardCheck,
+  summary: Star,
+};
+
+const MODE_INDEX: Record<UnitMode, string> = {
+  theory: '01',
+  interactive: '02',
+  exam: '03',
+  summary: '04',
+};
 
 export interface ModeTileProps {
   unitId: UnitId;
   mode: UnitMode;
+  index?: number;
 }
 
-export function ModeTile({ unitId, mode }: ModeTileProps) {
+export function ModeTile({ unitId, mode, index = 0 }: ModeTileProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  const { rotateX, rotateY } = useTilt(ref, 2.5);
+  const mouse = useElementMouse(ref);
+  const Icon = MODE_ICON[mode];
   const label = MODE_LABELS[mode];
+  const mx = mouse ? `${(mouse.x + 0.5) * 100}%` : '50%';
+  const my = mouse ? `${(mouse.y + 0.5) * 100}%` : '50%';
+  const isHovered = mouse !== null;
 
   return (
-    <Link
-      href={`/units/${unitId}/${mode}`}
-      className="group block focus-visible:outline-none"
-      aria-label={label.en}
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ ...TRANSITION.slow, delay: 0.06 * index }}
     >
-      <Card
-        surface="raised"
-        className="h-full p-8 flex flex-col gap-6 group-hover:border-accent group-focus-visible:border-accent"
+      <Link
+        href={`/units/${unitId}/${mode}`}
+        className="group block focus-visible:outline-none"
+        aria-label={label.en}
       >
-        <div className="flex-1 space-y-2">
-          <p
-            dir="rtl"
-            className="font-arabic text-3xl font-semibold leading-tight text-ink"
-          >
-            {label.ar}
-          </p>
-          <p
-            dir="rtl"
-            className="font-hebrew text-sm text-accent"
-          >
-            {label.he}
-          </p>
-          <p
-            dir="ltr"
-            className="font-body text-sm italic text-ink-muted"
-          >
-            {label.en}
-          </p>
-        </div>
-
-        <div className="flex items-center justify-end">
-          <ChevronLeft
-            size={16}
-            strokeWidth={1.5}
-            className="text-ink-muted transition-transform duration-fast ease-out group-hover:-translate-x-1 group-hover:text-accent"
+        <motion.div
+          ref={ref}
+          style={{
+            rotateX,
+            rotateY,
+            transformPerspective: 1000,
+            transformStyle: 'preserve-3d',
+          }}
+          className={cn(
+            'relative h-full overflow-hidden rounded-sm border border-border bg-paper-raised p-10',
+            'transition-[border-color,box-shadow] duration-base ease-out',
+            'group-hover:border-accent group-focus-visible:border-accent group-hover:shadow-lift',
+          )}
+        >
+          {/* Cursor-follow spotlight */}
+          <div
+            className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-base ease-out group-hover:opacity-100"
+            style={{
+              background: `radial-gradient(280px circle at ${mx} ${my}, var(--accent-tint), transparent 65%)`,
+            }}
             aria-hidden
           />
-        </div>
-      </Card>
-    </Link>
+
+          <div className="relative flex h-full flex-col gap-8">
+            <div className="flex items-start justify-between">
+              <span
+                dir="ltr"
+                className="font-mono text-xs uppercase tracking-meta text-ink-faint"
+              >
+                {MODE_INDEX[mode]}
+              </span>
+              <Icon
+                size={20}
+                strokeWidth={1.5}
+                className={cn(
+                  'transition-colors duration-base ease-out',
+                  isHovered ? 'text-accent' : 'text-ink-muted',
+                )}
+                aria-hidden
+              />
+            </div>
+
+            <div className="flex-1 space-y-2">
+              <p
+                dir="rtl"
+                className="font-arabic text-3xl font-semibold leading-tight text-ink"
+              >
+                {label.ar}
+              </p>
+              <p
+                dir="rtl"
+                className="font-hebrew text-sm text-accent"
+              >
+                {label.he}
+              </p>
+              <p
+                dir="ltr"
+                className="font-body text-sm italic text-ink-muted"
+              >
+                {label.en}
+              </p>
+            </div>
+
+            <div className="flex items-center justify-end">
+              <ChevronLeft
+                size={16}
+                strokeWidth={1.5}
+                className={cn(
+                  'transition-all duration-base ease-out',
+                  isHovered
+                    ? '-translate-x-1.5 text-accent'
+                    : 'translate-x-0 text-ink-muted',
+                )}
+                aria-hidden
+              />
+            </div>
+          </div>
+        </motion.div>
+      </Link>
+    </motion.div>
   );
 }

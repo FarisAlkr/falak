@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { motion } from 'framer-motion';
 import { MODE_LABELS, MODE_ORDER, type UnitMode } from '@/types/mode';
 import type { UnitId } from '@/types/unit';
 import { cn } from '@/lib/utils/cn';
@@ -12,6 +13,7 @@ export interface UnitModeNavProps {
 
 export function UnitModeNav({ unitId }: UnitModeNavProps) {
   const pathname = usePathname() ?? '';
+  const activeMode = detectActiveMode(pathname);
 
   return (
     <nav
@@ -20,24 +22,32 @@ export function UnitModeNav({ unitId }: UnitModeNavProps) {
     >
       {MODE_ORDER.map((mode) => {
         const href = `/units/${unitId}/${mode}`;
-        const active = isModeActive(pathname, mode);
+        const active = mode === activeMode;
         return (
           <Link
             key={mode}
             href={href}
             aria-current={active ? 'page' : undefined}
             className={cn(
-              '-mb-px border-b-2 px-5 py-3 font-mono text-xs uppercase tracking-meta transition-colors duration-fast ease-out',
-              active
-                ? 'border-accent text-ink'
-                : 'border-transparent text-ink-muted hover:text-ink',
+              'group relative px-5 py-4 transition-colors duration-base ease-out',
+              active ? 'text-ink' : 'text-ink-muted hover:text-ink',
             )}
           >
-            <span dir="rtl" className="font-arabic text-base font-medium">
+            <span dir="rtl" className="font-arabic text-base font-semibold">
               {MODE_LABELS[mode].ar}
             </span>
             <span className="mx-2 text-ink-faint">·</span>
-            <span>{MODE_LABELS[mode].en}</span>
+            <span className="font-mono text-xs uppercase tracking-meta">
+              {MODE_LABELS[mode].en}
+            </span>
+            {active && (
+              <motion.span
+                layoutId="active-mode-underline"
+                className="absolute inset-x-3 -bottom-px h-px bg-accent"
+                transition={{ type: 'spring', stiffness: 380, damping: 32 }}
+                aria-hidden
+              />
+            )}
           </Link>
         );
       })}
@@ -45,7 +55,10 @@ export function UnitModeNav({ unitId }: UnitModeNavProps) {
   );
 }
 
-function isModeActive(pathname: string, mode: UnitMode): boolean {
+function detectActiveMode(pathname: string): UnitMode | null {
   const normalized = pathname.replace(/\/$/, '');
-  return normalized.endsWith(`/${mode}`);
+  for (const mode of MODE_ORDER) {
+    if (normalized.endsWith(`/${mode}`)) return mode;
+  }
+  return null;
 }

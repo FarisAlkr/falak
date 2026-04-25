@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import { fraunces, inter, jetbrainsMono, notoKufiArabic, heebo } from './fonts';
+import { PageTransition } from '@/components/layout/PageTransition';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -19,7 +20,9 @@ const fontVariables = [
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="ar" dir="rtl" className={fontVariables}>
-      <body>{children}</body>
+      <body className="paper-grain">
+        <PageTransition>{children}</PageTransition>
+      </body>
     </html>
   );
 }
