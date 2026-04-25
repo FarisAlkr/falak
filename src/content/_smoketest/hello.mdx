@@ -1,0 +1,60 @@
+# MDX + KaTeX smoke test
+
+This page verifies the slide-authoring pipeline works end-to-end. If you can read this paragraph in Inter, the equation below in KaTeX, and the Arabic block in Noto Kufi Arabic with full RTL flow, the pipeline is working.
+
+## Inline math
+
+Newton's second law in inline form: $\vec{F}_{net} = m\vec{a}$. The kinematic equation in inline form: $v^2 = v_0^2 + 2a\Delta x$.
+
+## Block math
+
+$$
+\vec{F}_{net} = m\vec{a}
+$$
+
+$$
+x(t) = x_0 + v_0 t + \tfrac{1}{2} a t^2
+$$
+
+$$
+E = mc^2
+$$
+
+## Arabic prose with embedded math
+
+<div dir="rtl" className="font-arabic text-lg leading-[1.8] text-ink">
+  حركة المقذوف هي اتحاد حركتين مستقلّتين: حركة أفقية بسرعة ثابتة، وحركة رأسية بتسارع <span dir="ltr">$g = 9.8\,\text{m/s}^2$</span>.
+  الزمن الكلّي للسقوط من ارتفاع <span dir="ltr">$h$</span> يُعطى بالعلاقة:
+</div>
+
+$$
+t = \sqrt{\frac{2h}{g}}
+$$
+
+## Hebrew terminology
+
+<div dir="rtl" className="font-hebrew text-base text-ink-muted">
+  כוח שקול · תאוצה · נפילה חופשית · תנועת זריקה
+</div>
+
+## Bilingual list
+
+- **القوة** · כוח · *Force*
+- **الكتلة** · מסה · *Mass*
+- **التسارع** · תאוצה · *Acceleration*
+
+## Code
+
+The kinematic helper:
+
+```ts
+export function position(x0: number, v0: number, a: number, t: number): number {
+  return x0 + v0 * t + 0.5 * a * t * t;
+}
+```
+
+> Physics is a dialogue between mathematics and the world. — *Falak*
+
+---
+
+If everything above renders correctly, the MDX pipeline is healthy.
