@@ -20,13 +20,30 @@ Falak (Arabic for "orbit") is an open-source educational platform that helps tea
 
 Start with [`START_HERE.md`](./START_HERE.md). If you're using Claude Code, open this directory and the agent will auto-load [`CLAUDE.md`](./CLAUDE.md).
 
+### Local development
+
+Requires Node 20+ and pnpm 10+ (managed via Corepack — run `corepack enable` once if needed).
+
+```bash
+pnpm install
+pnpm dev        # http://localhost:3000
+```
+
+### Build & checks
+
+```bash
+pnpm build      # produces ./out/ (static HTML/CSS/JS)
+pnpm typecheck  # tsc --noEmit
+pnpm lint       # next lint
+```
+
 ## Tech stack
 
-Next.js 14 · TypeScript · Tailwind CSS · Framer Motion · MDX · KaTeX · Dexie (IndexedDB)
+Next.js 14 (App Router, static export) · TypeScript · Tailwind CSS · Framer Motion · MDX · KaTeX · Zustand · Dexie (IndexedDB)
 
 ## Status
 
-**Phase 0** — project setup. No code written yet. See [`docs/08_build_roadmap.md`](./docs/08_build_roadmap.md) for the development plan.
+**Phase 0** — project setup. See [`docs/IMPLEMENTATION_PLAN.md`](./docs/IMPLEMENTATION_PLAN.md) for the current execution plan and [`docs/08_build_roadmap.md`](./docs/08_build_roadmap.md) for the long-term development plan.
 
 ## License
 
