@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { fraunces, inter, jetbrainsMono, notoKufiArabic, heebo } from './fonts';
 import { PageTransition } from '@/components/layout/PageTransition';
 import './globals.css';
+import 'katex/dist/katex.min.css';
 
 export const metadata: Metadata = {
   title: 'Falak · فَلَك',

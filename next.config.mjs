@@ -1,3 +1,7 @@
+import createMDX from '@next/mdx';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'export',
@@ -6,6 +10,14 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  pageExtensions: ['ts', 'tsx', 'mdx'],
 };
 
-export default nextConfig;
+const withMDX = createMDX({
+  options: {
+    remarkPlugins: [remarkMath],
+    rehypePlugins: [[rehypeKatex, { strict: 'ignore' }]],
+  },
+});
+
+export default withMDX(nextConfig);
