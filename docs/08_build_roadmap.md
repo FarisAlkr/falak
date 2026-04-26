@@ -80,7 +80,7 @@ While Unit 3 is being built, the author can:
 ### Build order
 
 1. Unit 1 · 1D Kinematics (1 week — content is mostly recap, interactive is moderate)
-2. Unit 2 · 2D Motion & Projectiles (1 week — prototype already exists, needs full integration)
+2. Unit 2 · 2D Motion & Projectiles (1.5 weeks — full build; visuals are the heavy lift)
 3. Unit 4 · Work, Energy, Power (1 week — interactive is moderate)
 4. Unit 5 · Momentum & Impulse (1 week)
 5. Unit 6 · Circular Motion (1 week)

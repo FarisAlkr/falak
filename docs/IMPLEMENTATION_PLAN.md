@@ -740,6 +740,7 @@ _Updates from the roadmap's risk register using what we learned in the interview
 Track these here. Mark done (✓) when resolved; add new items as they appear.
 
 - [x] **Reviewer identification** — resolved 2026-04-23: Faris is the Arabic reviewer (native speaker + physics teacher). Per-unit Arabic protocol: draft → 48h cool-off → re-read → commit. Student spot-reading still sought opportunistically but not blocking.
+- [ ] **Reviewer-protocol re-confirm at §4.2.2** — before content drafting begins on Unit 3, re-verify that Faris's chosen approach (solo self-review + 48h cool-off) still feels right, OR escalate to (b) one colleague physics teacher committed to reviewing, OR (c) 2+ students earmarked for spot-reading. Per `IMPLEMENTATION_PLAN.md` §3.2.10.
 - [ ] **Past-Bagrut archive** — download last 6 years of mechanics (036-361), EM (036-371), radiation (036-282). Populate `bagrut/` per §3.2.10. **Due:** before §4.2.1 research phase (Unit 3 exam drafting depends on it).
 - [ ] **Second physics reviewer** — nice to have, not blocking. Ask one other 5-unit physics teacher whether they'd peer-review one unit per month. Risk-reduction for §5's "Physics accuracy" row.
 - [ ] **Domain name** — `falak.education` is suggested. Register-or-don't decision can wait until Phase 2 (when there's something to deploy publicly).
