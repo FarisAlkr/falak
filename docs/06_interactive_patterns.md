@@ -86,8 +86,6 @@ These rules apply to EVERY interactive. No exceptions.
 
 **Failure hint:** "قصير — زِد السرعة أو ارفع الزاوية قليلًا." ("Short — increase velocity or raise angle slightly.")
 
-_(This is the existing prototype. Use it as the reference implementation for other interactives.)_
-
 ---
 
 ### Pattern 3 · FBD Builder (Unit 3) ★ MOST IMPORTANT

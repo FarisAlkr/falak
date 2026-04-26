@@ -84,7 +84,7 @@ $$R = \frac{v_0^2 \sin(2\theta)}{g} \quad,\quad H = \frac{v_0^2 \sin^2\theta}{2g
 
 **Hebrew terms:** וקטור, רכיבים, זריקה אופקית, זריקה בזווית, טווח, גובה מרבי, זמן מעוף, תנועה יחסית.
 
-**Interactive:** "Projectile Target" — student sets angle and velocity to hit a moving target. Real physics with g = 9.8. Uses the existing Falak projectile prototype as the reference implementation.
+**Interactive:** "Projectile Target" — student sets angle and velocity to hit a moving target. Real physics with g = 9.8.
 
 **Misconceptions:** Horizontal and vertical motion are independent. Gravity doesn't "kick in" at the peak.
 
