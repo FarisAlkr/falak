@@ -19,12 +19,14 @@ Falak solves all four by being Arabic-first for instruction, Hebrew-parallel for
 ## 2. Users
 
 ### Primary user: The teacher
+
 - Uses Falak's slide decks in class (projector, ~45 minute sessions)
 - Assigns unit interactives as homework
 - Uses the exam module for diagnostic assessment
 - Wants: polished presentation material, physics accuracy, bilingual support, no extra prep time
 
 ### Primary user: The student
+
 - Ages 15–18, 10th–12th grade
 - Native Arabic speaker
 - Varying math proficiency
@@ -32,6 +34,7 @@ Falak solves all four by being Arabic-first for instruction, Hebrew-parallel for
 - Wants: understandable explanations, challenging but solvable problems, clear feedback, progress tracking
 
 ### Secondary user: The parent/tutor
+
 - May review student progress
 - Wants: visibility into what's being learned, how the student is doing
 
@@ -42,7 +45,9 @@ Falak solves all four by being Arabic-first for instruction, Hebrew-parallel for
 Each unit has **four modes**, accessible from a unit home screen:
 
 #### 3.1.1 Theory (نظري / תיאוריה)
+
 A slide deck the teacher projects. Navigable by arrow keys. Contains:
+
 - Title slide (unit name, metadata)
 - 6–12 concept slides with diagrams, equations (KaTeX), key Hebrew terms
 - 1–2 worked example slides
@@ -50,7 +55,9 @@ A slide deck the teacher projects. Navigable by arrow keys. Contains:
 - A summary slide with the 2–3 sentence takeaway
 
 #### 3.1.2 Interactive (تفاعلي / אינטראקטיבי)
+
 A physics sim/game where students:
+
 1. Read a problem (Arabic primary, Hebrew terms inline)
 2. Think through the solution
 3. Input their answer (numerical value, vector components, selected forces, etc.)
@@ -61,12 +68,14 @@ A physics sim/game where students:
 See `docs/06_interactive_patterns.md` for sim patterns per unit type.
 
 #### 3.1.3 Exam (امتحان / בחינה)
+
 - 3–5 Bagrut-style problems per unit
 - Multi-part (a, b, c...) as in real Bagrut
 - Submit full work, get score + model solution
 - Store results in user profile for progress tracking
 
 #### 3.1.4 Summary (خلاصة / סיכום)
+
 - 2–3 sentences the student must memorize
 - Visual: a mini concept map or formula sheet
 - Printable/exportable card
@@ -89,16 +98,16 @@ See `docs/06_interactive_patterns.md` for sim patterns per unit type.
 
 ## 4. Non-functional requirements
 
-| Requirement | Specification |
-|---|---|
-| Performance | First contentful paint < 1.5s on 3G, Lighthouse score ≥ 90 |
-| Accessibility | WCAG 2.1 AA; full RTL support; keyboard-navigable slides |
-| Browser support | Last 2 versions of Chrome, Safari, Firefox, Edge; iPad Safari |
-| Responsiveness | Works on 768px tablets up to 4K projectors |
-| Privacy | No student PII required; all progress stored locally by default |
-| i18n | Arabic (primary UI), Hebrew (terminology only), English (admin/debug) |
-| Deployment | Static export to Vercel; no server required for v1 |
-| Cost | Free for students and teachers; platform runs <$20/month to serve 1000 users |
+| Requirement     | Specification                                                                |
+| --------------- | ---------------------------------------------------------------------------- |
+| Performance     | First contentful paint < 1.5s on 3G, Lighthouse score ≥ 90                   |
+| Accessibility   | WCAG 2.1 AA; full RTL support; keyboard-navigable slides                     |
+| Browser support | Last 2 versions of Chrome, Safari, Firefox, Edge; iPad Safari                |
+| Responsiveness  | Works on 768px tablets up to 4K projectors                                   |
+| Privacy         | No student PII required; all progress stored locally by default              |
+| i18n            | Arabic (primary UI), Hebrew (terminology only), English (admin/debug)        |
+| Deployment      | Static export to Vercel; no server required for v1                           |
+| Cost            | Free for students and teachers; platform runs <$20/month to serve 1000 users |
 
 ## 5. Technical architecture (summary)
 

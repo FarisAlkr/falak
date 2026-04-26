@@ -55,6 +55,7 @@ These rules apply to EVERY interactive. No exceptions.
 ## Per-unit interactive patterns
 
 ### Pattern 1 · Graph matching (Unit 1)
+
 **Concept taught:** Relating v-t, x-t, a-t graphs
 
 **UX:** Student sees a target x-t graph. They build the matching v-t graph by placing 4–6 control points. On play, a ball animates along the motion their graph describes, and they see if it matches the target.
@@ -70,6 +71,7 @@ These rules apply to EVERY interactive. No exceptions.
 ---
 
 ### Pattern 2 · Projectile target (Unit 2)
+
 **Concept taught:** Projectile motion, angle/velocity relationship
 
 **UX:** Student aims a cannon at a target. Adjusts angle and velocity. Dashed preview shows predicted trajectory. Presses fire. Projectile flies with real physics.
@@ -84,11 +86,12 @@ These rules apply to EVERY interactive. No exceptions.
 
 **Failure hint:** "قصير — زِد السرعة أو ارفع الزاوية قليلًا." ("Short — increase velocity or raise angle slightly.")
 
-*(This is the existing prototype. Use it as the reference implementation for other interactives.)*
+_(This is the existing prototype. Use it as the reference implementation for other interactives.)_
 
 ---
 
 ### Pattern 3 · FBD Builder (Unit 3) ★ MOST IMPORTANT
+
 **Concept taught:** Free-body diagrams, Newton's 2nd law application
 
 **UX:** Student sees a scenario (block on incline, pulley system, stacked masses, etc.). They drag force arrows onto the body from a palette: weight, normal, tension, friction, applied force. Each force has adjustable magnitude.
@@ -110,6 +113,7 @@ On play, the simulation uses the student's FBD (not the real one) to compute acc
 ---
 
 ### Pattern 4 · Energy Roller Coaster (Unit 4)
+
 **Concept taught:** Work-energy theorem, conservation of mechanical energy
 
 **UX:** Student designs a track with hills and valleys (drag vertices). A cart is released from the start. Live energy bars show KE, PE, total. Student's goal varies: "make it over hill 3" or "land in valley 2" or "match this speed at point X."
@@ -125,6 +129,7 @@ On play, the simulation uses the student's FBD (not the real one) to compute acc
 ---
 
 ### Pattern 5 · Collision Lab (Unit 5)
+
 **Concept taught:** Momentum conservation, elastic vs inelastic collisions
 
 **UX:** Two pucks on an air table. Student sets masses and initial velocities. Chooses collision type (elastic, perfectly inelastic). Predicts post-collision velocities numerically. Presses play. Watches collision.
@@ -140,6 +145,7 @@ On play, the simulation uses the student's FBD (not the real one) to compute acc
 ---
 
 ### Pattern 6 · Orbit Control (Unit 6)
+
 **Concept taught:** Uniform circular motion, centripetal force
 
 **UX:** Ball on a string. Student sets string length and rotation speed. Watches tension readout. Must hit a target at a specific moment by releasing the ball. Advanced: string breaks if tension exceeds max.
@@ -155,6 +161,7 @@ On play, the simulation uses the student's FBD (not the real one) to compute acc
 ---
 
 ### Pattern 7 · Orbit Designer (Unit 7)
+
 **Concept taught:** Gravitation, Kepler's laws
 
 **UX:** Student places a satellite at a given distance from Earth with initial velocity. Orbit is simulated using F = Gm₁m₂/r². Outcomes: circular orbit, elliptical orbit, escape trajectory, crash.
@@ -170,6 +177,7 @@ On play, the simulation uses the student's FBD (not the real one) to compute acc
 ---
 
 ### Pattern 8 · Field Mapper (Unit 8)
+
 **Concept taught:** Electric fields, superposition
 
 **UX:** Student places charges (+ or −) on a grid. They predict the field line pattern by drawing it. Then sim reveals real field lines using superposition of Coulomb fields.
@@ -185,6 +193,7 @@ On play, the simulation uses the student's FBD (not the real one) to compute acc
 ---
 
 ### Pattern 9 · Circuit Builder (Unit 9)
+
 **Concept taught:** DC circuits, Kirchhoff's laws
 
 **UX:** Student drags resistors, batteries, wires onto a breadboard grid. Predicts currents and voltages. Sim solves Kirchhoff's equations and shows the real values; bulbs light with correct brightness, LEDs show polarity.
@@ -200,9 +209,11 @@ On play, the simulation uses the student's FBD (not the real one) to compute acc
 ---
 
 ### Pattern 10 · Magnetic Playground (Unit 10)
+
 **Concept taught:** Magnetic force on moving charge, Faraday's law
 
 **UX:** Three modes:
+
 - **Mode A:** Drop a charged particle into a magnetic field. Student sets velocity vector, predicts trajectory. Sim shows circular/helical motion.
 - **Mode B:** Move a magnet through a coil. Sim shows induced current direction and magnitude. Student predicts direction (Lenz's law).
 - **Mode C:** Alternating current through a wire, see induced EMF in nearby coil.
@@ -214,6 +225,7 @@ On play, the simulation uses the student's FBD (not the real one) to compute acc
 ---
 
 ### Pattern 11 · Lens Lab (Unit 11)
+
 **Concept taught:** Thin lens equation, image formation
 
 **UX:** Student places an object at chosen distance from a lens (converging or diverging). Predicts image distance, size, and type (real/virtual, upright/inverted). Sim traces rays (principal rays: parallel, through focus, through center) and shows the image.
@@ -229,6 +241,7 @@ On play, the simulation uses the student's FBD (not the real one) to compute acc
 ---
 
 ### Pattern 12 · Interference Tank (Unit 12)
+
 **Concept taught:** Wave superposition, interference, diffraction
 
 **UX:** Two coherent sources on a water-like grid. Student sets frequency and source separation. Predicts locations of nodes and antinodes at a given distance. Sim runs the superposition, heatmap shows the pattern.
@@ -242,6 +255,7 @@ On play, the simulation uses the student's FBD (not the real one) to compute acc
 ---
 
 ### Pattern 13 · Photon Collider (Unit 13)
+
 **Concept taught:** Photoelectric effect, photon energy
 
 **UX:** Student sets photon wavelength (or frequency). Selects metal (each has a different work function). Presses fire. Photons hit the metal. If E_photon > φ, electrons emit with some KE. If not, nothing happens.
@@ -257,6 +271,7 @@ On play, the simulation uses the student's FBD (not the real one) to compute acc
 ---
 
 ### Pattern 14 · Atomic Transitions (Unit 14)
+
 **Concept taught:** Bohr model, atomic spectra, radioactive decay
 
 **UX:** Two modes:

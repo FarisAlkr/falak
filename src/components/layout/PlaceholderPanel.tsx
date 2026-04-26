@@ -45,11 +45,7 @@ export function PlaceholderPanel({ mode }: PlaceholderPanelProps) {
           قريباً
         </motion.p>
 
-        <motion.p
-          variants={fadeUp}
-          dir="rtl"
-          className="mt-4 font-hebrew text-base text-ink-muted"
-        >
+        <motion.p variants={fadeUp} dir="rtl" className="mt-4 font-hebrew text-base text-ink-muted">
           בקרוב
         </motion.p>
 

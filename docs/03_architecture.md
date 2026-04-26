@@ -164,19 +164,19 @@ src/
 
 ### Route table
 
-| Route | Purpose |
-|---|---|
-| `/` | Home — welcome + units grid |
-| `/units` | All units list (filterable by section) |
-| `/units/[unitId]` | Unit home — 4 mode tiles |
-| `/units/[unitId]/theory` | Slide viewer |
-| `/units/[unitId]/interactive` | Interactive sim |
-| `/units/[unitId]/exam` | Bagrut exam |
-| `/units/[unitId]/summary` | Takeaway card |
-| `/glossary` | Searchable bilingual glossary |
-| `/bagrut-simulator` | Cross-unit timed exam |
-| `/progress` | User's dashboard |
-| `/teacher-mode/[unitId]/theory` | Distraction-free projection mode |
+| Route                           | Purpose                                |
+| ------------------------------- | -------------------------------------- |
+| `/`                             | Home — welcome + units grid            |
+| `/units`                        | All units list (filterable by section) |
+| `/units/[unitId]`               | Unit home — 4 mode tiles               |
+| `/units/[unitId]/theory`        | Slide viewer                           |
+| `/units/[unitId]/interactive`   | Interactive sim                        |
+| `/units/[unitId]/exam`          | Bagrut exam                            |
+| `/units/[unitId]/summary`       | Takeaway card                          |
+| `/glossary`                     | Searchable bilingual glossary          |
+| `/bagrut-simulator`             | Cross-unit timed exam                  |
+| `/progress`                     | User's dashboard                       |
+| `/teacher-mode/[unitId]/theory` | Distraction-free projection mode       |
 
 ### URL examples
 
@@ -205,18 +205,20 @@ export const meta: UnitMeta = {
   titles: {
     ar: 'قوانين نيوتن والديناميكا',
     he: 'חוקי ניוטון ודינמיקה',
-    en: "Newton's Laws & Dynamics"
+    en: "Newton's Laws & Dynamics",
   },
   prerequisites: ['kinematics-1d', 'kinematics-2d'],
   estimatedMinutes: {
     theory: 45,
     interactive: 30,
     exam: 45,
-    summary: 5
+    summary: 5,
   },
   bagrutWeight: 'very-high',
-  keyTerms: [/* full bilingual vocab */],
-  interactiveType: 'fbd-builder'
+  keyTerms: [
+    /* full bilingual vocab */
+  ],
+  interactiveType: 'fbd-builder',
 };
 ```
 
@@ -225,24 +227,24 @@ export const meta: UnitMeta = {
 ```ts
 export interface ExamQuestion {
   id: string;
-  year?: number;               // if pulled from real past Bagrut
+  year?: number; // if pulled from real past Bagrut
   season?: 'summer' | 'winter';
-  difficulty: 1 | 2 | 3;       // 1 = basic, 3 = stretch
+  difficulty: 1 | 2 | 3; // 1 = basic, 3 = stretch
   problem: {
-    ar: string;                // Arabic problem statement
-    he: string;                // Hebrew (for Bagrut alignment practice)
+    ar: string; // Arabic problem statement
+    he: string; // Hebrew (for Bagrut alignment practice)
   };
   parts: ExamPart[];
   totalPoints: number;
 }
 
 export interface ExamPart {
-  id: string;                  // 'a', 'b', 'c'...
+  id: string; // 'a', 'b', 'c'...
   prompt: { ar: string; he: string };
-  answer: ExamAnswer;          // expected answer (numeric + tolerance, or symbolic)
+  answer: ExamAnswer; // expected answer (numeric + tolerance, or symbolic)
   points: number;
   hint?: { ar: string };
-  solution: { ar: string };    // full worked solution
+  solution: { ar: string }; // full worked solution
 }
 ```
 
@@ -250,7 +252,7 @@ export interface ExamPart {
 
 ```ts
 interface Progress {
-  userId: string;              // local-only uuid, no auth in v1
+  userId: string; // local-only uuid, no auth in v1
   unitProgress: {
     [unitId: string]: {
       theoryCompleted: boolean;
@@ -260,7 +262,7 @@ interface Progress {
       examScores: { attemptId: string; score: number; date: number }[];
     };
   };
-  streak: number;              // daily use streak
+  streak: number; // daily use streak
   lastActiveAt: number;
 }
 ```
@@ -291,6 +293,7 @@ Everything else (UI toggles, transient form state) is `useState` in components.
 ### How a unit gets rendered
 
 1. **Build time:**
+
    - MDX files in `src/content/units/{unitId}/slides.mdx` are compiled
    - `meta.ts` is imported and registered in `unitRegistry.ts`
    - Static pages pre-render for all unit IDs
@@ -305,12 +308,7 @@ Everything else (UI toggles, transient form state) is `useState` in components.
 Slide MDX files can use these components directly without import:
 
 ```mdx
-<TitleSlide
-  arabic="حركة المقذوف"
-  hebrew="תנועת זריקה"
-  english="Projectile Motion"
-  unit="02"
-/>
+<TitleSlide arabic="حركة المقذوف" hebrew="תנועת זריקה" english="Projectile Motion" unit="02" />
 
 <ConceptSlide>
   <ArabicBody>حركة المقذوف هي اتحاد حركتين...</ArabicBody>
@@ -330,13 +328,14 @@ Slide MDX files can use these components directly without import:
 Physics is in pure TS functions in `src/lib/physics/`. Never in components.
 
 **Example:**
+
 ```ts
 // src/lib/physics/kinematics.ts
 export function projectilePath(
   v0: number,
   angleDeg: number,
   g = 9.8,
-  dt = 0.016
+  dt = 0.016,
 ): ProjectilePoint[] {
   const theta = (angleDeg * Math.PI) / 180;
   const vx = v0 * Math.cos(theta);
@@ -355,6 +354,7 @@ export function projectilePath(
 ```
 
 This separation means:
+
 - Physics can be unit-tested (and it MUST be)
 - UI components become thin
 - Same physics can power theory diagrams, interactives, and exam auto-grading
@@ -374,6 +374,7 @@ This separation means:
 ## 9. Offline & PWA (phase 2)
 
 Plan but don't implement in v1:
+
 - Service worker for offline unit access
 - `manifest.json` for install-to-home-screen
 - IndexedDB already enables offline progress tracking

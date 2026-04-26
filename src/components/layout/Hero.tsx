@@ -13,16 +13,10 @@ export function Hero() {
   const py = (mouse?.y ?? 0) * 12;
 
   return (
-    <section
-      ref={ref}
-      className="relative overflow-hidden border-b border-border py-20 md:py-28"
-    >
+    <section ref={ref} className="relative overflow-hidden border-b border-border py-20 md:py-28">
       {/* Constellation backdrop */}
       <div className="pointer-events-none absolute inset-x-0 top-6 mx-auto h-44 w-full max-w-4xl text-ink-faint">
-        <Constellation
-          className="h-full w-full opacity-60"
-          parallax={{ x: -px, y: -py }}
-        />
+        <Constellation className="h-full w-full opacity-60" parallax={{ x: -px, y: -py }} />
       </div>
 
       {/* Horizon line */}
@@ -70,8 +64,8 @@ export function Hero() {
           dir="ltr"
           className="max-w-2xl font-body text-lg leading-relaxed text-ink-muted"
         >
-          A bilingual physics teaching platform for the Israeli 5-unit Bagrut.
-          Built for Arab-speaking students preparing for the Hebrew exam.
+          A bilingual physics teaching platform for the Israeli 5-unit Bagrut. Built for
+          Arab-speaking students preparing for the Hebrew exam.
         </motion.p>
 
         <motion.div

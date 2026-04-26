@@ -10,21 +10,21 @@ Falak (فَلَك · "orbit") is a physics teaching platform for the Israeli 5-u
 
 ## The project at a glance
 
-| Thing | Value |
-|---|---|
-| Product name | Falak (فَلَك) |
-| Tech stack | Next.js 14 (App Router) + TypeScript + Tailwind + Framer Motion + MDX + KaTeX |
-| Deployment | Vercel (static export) |
-| Languages | Arabic (primary) + Hebrew (terminology) + English (technical labels) |
-| Curriculum | 14 units spanning 3 Bagrut exam sections + lab |
-| Audience | Arab high-schoolers, grades 10–12, 5-unit physics track |
+| Thing        | Value                                                                         |
+| ------------ | ----------------------------------------------------------------------------- |
+| Product name | Falak (فَلَك)                                                                 |
+| Tech stack   | Next.js 14 (App Router) + TypeScript + Tailwind + Framer Motion + MDX + KaTeX |
+| Deployment   | Vercel (static export)                                                        |
+| Languages    | Arabic (primary) + Hebrew (terminology) + English (technical labels)          |
+| Curriculum   | 14 units spanning 3 Bagrut exam sections + lab                                |
+| Audience     | Arab high-schoolers, grades 10–12, 5-unit physics track                       |
 
 ## How to use this repository with Claude Code
 
 ### First session (project setup)
 
 1. **Open Claude Code in this directory.** Claude Code will automatically read `CLAUDE.md`.
-2. **Verify with Claude that it has correctly loaded the context.** Ask: *"Summarize the Falak project in three sentences and list the 14 units by name."* If it can't, something is wrong — don't proceed.
+2. **Verify with Claude that it has correctly loaded the context.** Ask: _"Summarize the Falak project in three sentences and list the 14 units by name."_ If it can't, something is wrong — don't proceed.
 3. **Run `/init`** — let Claude Code generate anything it thinks is missing, then review and trim.
 4. **Read `SPEC.md`** together with Claude as the source of truth for what you're building.
 5. **Do not jump into implementation.** The first session should produce a phase-1 implementation plan and nothing else. Save it to `docs/IMPLEMENTATION_PLAN.md`.

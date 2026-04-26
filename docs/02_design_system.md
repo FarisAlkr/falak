@@ -32,28 +32,28 @@ Falak looks like a **physics journal**, not an edtech app. Warm and editorial ra
 ```css
 :root {
   /* Surfaces */
-  --paper: #FAF6EE;            /* default page background, warm cream */
-  --paper-raised: #FDFBF5;     /* elevated surface (cards when needed) */
-  --paper-inverted: #14110E;   /* dark surfaces (game mode, slide viewer) */
-  --paper-inverted-raised: #1E1A15;
+  --paper: #faf6ee; /* default page background, warm cream */
+  --paper-raised: #fdfbf5; /* elevated surface (cards when needed) */
+  --paper-inverted: #14110e; /* dark surfaces (game mode, slide viewer) */
+  --paper-inverted-raised: #1e1a15;
 
   /* Ink (text and structure) */
-  --ink: #1A1612;              /* primary text on paper */
-  --ink-muted: #6B6257;        /* secondary text, labels */
-  --ink-faint: #A09684;        /* tertiary text, placeholders */
-  --ink-inverted: #FAF6EE;     /* primary text on dark */
+  --ink: #1a1612; /* primary text on paper */
+  --ink-muted: #6b6257; /* secondary text, labels */
+  --ink-faint: #a09684; /* tertiary text, placeholders */
+  --ink-inverted: #faf6ee; /* primary text on dark */
   --ink-inverted-muted: rgba(250, 246, 238, 0.6);
 
   /* Accent (use sparingly) */
-  --accent: #C1272D;           /* crimson — CTAs, equations emphasis, Hebrew labels */
-  --accent-dark: #A01F24;
+  --accent: #c1272d; /* crimson — CTAs, equations emphasis, Hebrew labels */
+  --accent-dark: #a01f24;
   --accent-tint: rgba(193, 39, 45, 0.08);
 
   /* Functional */
-  --success: #3B7A3B;
-  --warning: #C08A2E;
-  --error: #C1272D;            /* same as accent on purpose */
-  --info: #2C5E8F;
+  --success: #3b7a3b;
+  --warning: #c08a2e;
+  --error: #c1272d; /* same as accent on purpose */
+  --info: #2c5e8f;
 
   /* Borders */
   --border: rgba(26, 22, 18, 0.1);
@@ -86,9 +86,9 @@ export default {
       'accent-dark': 'var(--accent-dark)',
       border: 'var(--border)',
       // functional colors...
-    }
-  }
-}
+    },
+  },
+};
 ```
 
 ---
@@ -97,30 +97,30 @@ export default {
 
 ### Font families
 
-| Purpose | Font | Source | Weights |
-|---|---|---|---|
-| Display (titles, headlines) | **Fraunces** | Google Fonts | 400, 500, 700, 900 |
-| Body (prose, UI, English) | **Inter** | Google Fonts | 300, 400, 500, 600, 700 |
-| Mono (equations, code, meta labels) | **JetBrains Mono** | Google Fonts | 400, 500, 600 |
-| Arabic | **Noto Kufi Arabic** | Google Fonts | 400, 500, 600, 700, 800 |
-| Hebrew | **Heebo** | Google Fonts | 400, 500, 600, 700 |
+| Purpose                             | Font                 | Source       | Weights                 |
+| ----------------------------------- | -------------------- | ------------ | ----------------------- |
+| Display (titles, headlines)         | **Fraunces**         | Google Fonts | 400, 500, 700, 900      |
+| Body (prose, UI, English)           | **Inter**            | Google Fonts | 300, 400, 500, 600, 700 |
+| Mono (equations, code, meta labels) | **JetBrains Mono**   | Google Fonts | 400, 500, 600           |
+| Arabic                              | **Noto Kufi Arabic** | Google Fonts | 400, 500, 600, 700, 800 |
+| Hebrew                              | **Heebo**            | Google Fonts | 400, 500, 600, 700      |
 
 **Never substitute these fonts.** Never use Arial, Roboto, or system defaults as fallback — use proper fallbacks in the stack.
 
 ### Type scale
 
 ```css
---text-xs: 0.75rem;    /* 12px — meta labels, footnotes */
---text-sm: 0.875rem;   /* 14px — captions, small body */
---text-base: 1rem;     /* 16px — body text */
---text-lg: 1.125rem;   /* 18px — large body */
---text-xl: 1.25rem;    /* 20px — subtitle */
---text-2xl: 1.5rem;    /* 24px — H3 */
---text-3xl: 1.875rem;  /* 30px — H2 */
---text-4xl: 2.25rem;   /* 36px — H1 */
---text-5xl: 3rem;      /* 48px — display */
---text-6xl: 3.75rem;   /* 60px — hero */
---text-7xl: 4.5rem;    /* 72px — slide title */
+--text-xs: 0.75rem; /* 12px — meta labels, footnotes */
+--text-sm: 0.875rem; /* 14px — captions, small body */
+--text-base: 1rem; /* 16px — body text */
+--text-lg: 1.125rem; /* 18px — large body */
+--text-xl: 1.25rem; /* 20px — subtitle */
+--text-2xl: 1.5rem; /* 24px — H3 */
+--text-3xl: 1.875rem; /* 30px — H2 */
+--text-4xl: 2.25rem; /* 36px — H1 */
+--text-5xl: 3rem; /* 48px — display */
+--text-6xl: 3.75rem; /* 60px — hero */
+--text-7xl: 4.5rem; /* 72px — slide title */
 ```
 
 ### Font pairings by context
@@ -227,12 +227,8 @@ Use KaTeX. Never HTML math entities or Unicode hacks.
 
 ```tsx
 <div dir="rtl" className="space-y-1">
-  <span className="font-hebrew text-sm uppercase tracking-wider text-accent">
-    תאוצה
-  </span>
-  <h2 className="font-arabic text-4xl font-semibold text-ink">
-    التسارع
-  </h2>
+  <span className="font-hebrew text-sm uppercase tracking-wider text-accent">תאוצה</span>
+  <h2 className="font-arabic text-4xl font-semibold text-ink">التسارع</h2>
   <p className="font-mono text-sm text-ink-muted" dir="ltr">
     acceleration
   </p>
@@ -242,27 +238,17 @@ Use KaTeX. Never HTML math entities or Unicode hacks.
 ### Buttons
 
 **Primary button (CTA):**
+
 ```tsx
-<button className="
-  bg-accent hover:bg-accent-dark
-  text-ink-inverted
-  px-6 py-3
-  font-mono text-xs uppercase tracking-[0.2em]
-  transition-colors
-">
+<button className="bg-accent px-6 py-3 font-mono text-xs uppercase tracking-[0.2em] text-ink-inverted transition-colors hover:bg-accent-dark">
   Fire · اطلق
 </button>
 ```
 
 **Secondary button:**
+
 ```tsx
-<button className="
-  border border-border hover:border-ink
-  text-ink hover:text-ink
-  px-5 py-2.5
-  font-mono text-xs uppercase tracking-wider
-  transition-colors
-">
+<button className="border border-border px-5 py-2.5 font-mono text-xs uppercase tracking-wider text-ink transition-colors hover:border-ink hover:text-ink">
   Back
 </button>
 ```
@@ -272,11 +258,13 @@ No rounded buttons (use sharp corners or 2px max). No gradients. No drop shadows
 ### Input controls
 
 **Range slider** (custom-styled to match):
+
 - Track: 2px tall, ink background
 - Thumb: 18px circle, accent color, 2px paper border, 1px ink outline
 - Focus state: thicker outline, no color change
 
 **Number input:**
+
 - Bottom border only (no full box)
 - Focus: border becomes accent color
 

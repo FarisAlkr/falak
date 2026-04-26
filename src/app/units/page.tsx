@@ -27,10 +27,7 @@ export default function UnitsPage() {
         <span className="font-mono text-xs uppercase tracking-meta text-ink-muted">
           Units · الوحدات
         </span>
-        <h1
-          dir="ltr"
-          className="font-display text-4xl font-medium text-ink md:text-5xl"
-        >
+        <h1 dir="ltr" className="font-display text-4xl font-medium text-ink md:text-5xl">
           The 14-unit curriculum
         </h1>
       </header>

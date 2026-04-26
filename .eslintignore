@@ -1,0 +1,8 @@
+.next
+out
+node_modules
+public
+coverage
+*.config.mjs
+*.config.cjs
+*.config.js

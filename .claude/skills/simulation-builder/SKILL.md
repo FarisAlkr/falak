@@ -147,7 +147,7 @@ export function projectilePath(
   v0: number,
   angleDeg: number,
   g = 9.8,
-  dt = 0.016
+  dt = 0.016,
 ): ProjectilePoint[] {
   const theta = (angleDeg * Math.PI) / 180;
   const vx0 = v0 * Math.cos(theta);
@@ -166,6 +166,7 @@ export function projectilePath(
 ```
 
 This separation means:
+
 - Physics is unit-testable
 - Components stay thin
 - Multiple interactives can share helpers
@@ -173,16 +174,21 @@ This separation means:
 ## Rendering choices
 
 ### SVG (default)
+
 Use SVG for 90% of Falak interactives. Fast enough for typical physics (projectile, FBD, orbits, fields). Accessible (aria-label on elements). Easy to style.
 
 ### Canvas
+
 Use Canvas only when:
+
 - Rendering >500 moving particles (interference, field visualization)
 - Real-time pixel manipulation needed (heatmaps)
 - Measured SVG performance is insufficient
 
 ### Matter.js
+
 Use Matter.js only when:
+
 - Rigid-body physics with complex contact (stacked blocks, multi-body collision)
 - Pulley systems with realistic rope/chain dynamics
 - Building the FBD Builder's simulation verification

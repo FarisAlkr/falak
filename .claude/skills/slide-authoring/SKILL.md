@@ -34,6 +34,7 @@ Target: 8–12 slides per unit. More means you're rushing; fewer means you're de
 ## Slide types and when to use each
 
 ### TitleSlide
+
 First slide of every deck. Full bilingual.
 
 ```mdx
@@ -47,21 +48,18 @@ First slide of every deck. Full bilingual.
 ```
 
 ### ConceptSlide
+
 Big idea + one diagram. Short Arabic prose. No more than 60 words.
 
 ```mdx
-<ConceptSlide
-  hebrewLabel="הרעיון המרכזי"
-  arabicTitle="الفكرة المحوريّة"
->
-  <ArabicBody>
-    القوة المحصلة على الجسم تساوي حاصل ضرب كتلته في تسارعه.
-  </ArabicBody>
+<ConceptSlide hebrewLabel="הרעיון המרכזי" arabicTitle="الفكرة المحوريّة">
+  <ArabicBody>القوة المحصلة على الجسم تساوي حاصل ضرب كتلته في تسارعه.</ArabicBody>
   <Diagram type="newton-second-law" />
 </ConceptSlide>
 ```
 
 ### EquationsSlide
+
 1–3 related equations. Each with symbol | = | value. Optional italic note at bottom.
 
 ```mdx
@@ -78,6 +76,7 @@ Big idea + one diagram. Short Arabic prose. No more than 60 words.
 ```
 
 ### VisualSlide
+
 Diagram-dominant. Minimal text. Used when the image IS the point.
 
 ```mdx
@@ -91,13 +90,11 @@ Diagram-dominant. Minimal text. Used when the image IS the point.
 ```
 
 ### KeyQuantitiesSlide
+
 Summary of derived formulas (range, period, etc.) as a quick reference.
 
 ```mdx
-<KeyQuantitiesSlide
-  hebrewLabel="גדלים חשובים"
-  arabicTitle="المقادير المهمّة"
->
+<KeyQuantitiesSlide hebrewLabel="גדלים חשובים" arabicTitle="المقادير المهمّة">
   <QuantityRow ar="زمن الطيران" he="זמן מעוף" formula="T = \frac{2 v_0 \sin\theta}{g}" />
   <QuantityRow ar="الارتفاع الأقصى" he="גובה מרבי" formula="H = \frac{v_0^2 \sin^2\theta}{2g}" />
   <QuantityRow ar="المدى" he="טווח" formula="R = \frac{v_0^2 \sin 2\theta}{g}" />
@@ -106,6 +103,7 @@ Summary of derived formulas (range, period, etc.) as a quick reference.
 ```
 
 ### WorkedExampleSlide
+
 One problem. Full solution. Every step.
 
 ```mdx
@@ -114,7 +112,10 @@ One problem. Full solution. Every step.
   arabicTitle="مثال محلول"
   problem="يُطلق لاعب كرة بسرعة v₀ = 20 m/s بزاوية 30° فوق الأفق. احسب المدى والارتفاع الأقصى وزمن الطيران."
 >
-  <SolutionStep label="تحليل السرعة" work="vₓ = 20·cos30° ≈ 17.3 m/s   ·   vᵧ = 20·sin30° = 10 m/s" />
+  <SolutionStep
+    label="تحليل السرعة"
+    work="vₓ = 20·cos30° ≈ 17.3 m/s   ·   vᵧ = 20·sin30° = 10 m/s"
+  />
   <SolutionStep label="زمن الطيران" work="T = (2·10)/10 = 2 s" />
   <SolutionStep label="الارتفاع الأقصى" work="H = 10²/(2·10) = 5 m" />
   <SolutionStep label="المدى" work="R = vₓ·T = 17.3·2 ≈ 34.6 m" />
@@ -122,13 +123,11 @@ One problem. Full solution. Every step.
 ```
 
 ### MisconceptionSlide
+
 Explicit "don't believe this" slide. Critical for pedagogy.
 
 ```mdx
-<MisconceptionSlide
-  hebrewLabel="טעויות נפוצות"
-  arabicTitle="مفاهيم خاطئة شائعة"
->
+<MisconceptionSlide hebrewLabel="טעויות נפוצות" arabicTitle="مفاهيم خاطئة شائعة">
   <Misconception
     wrong="الأجسام الأثقل تسقط أسرع"
     right="جميع الأجسام تسقط بالتسارع نفسه g (بدون مقاومة الهواء)"
@@ -141,6 +140,7 @@ Explicit "don't believe this" slide. Critical for pedagogy.
 ```
 
 ### VocabSlide
+
 Bilingual terminology summary. Always penultimate slide.
 
 ```mdx
@@ -157,17 +157,18 @@ Bilingual terminology summary. Always penultimate slide.
 ```
 
 ### SummarySlide
+
 Last slide. The 2–3 sentence takeaway.
 
 ```mdx
-<SummarySlide
-  hebrewLabel="סיכום"
-  arabicTitle="الخلاصة"
->
+<SummarySlide hebrewLabel="סיכום" arabicTitle="الخلاصة">
   <Takeaway ar="حركة المقذوف = حركة أفقية منتظمة + حركة عمودية متسارعة. المحوران مستقلان تمامًا." />
   <FormulaCard>
     <Math>x(t) = v_0 \cos\theta \cdot t</Math>
-    <Math>y(t) = v_0 \sin\theta \cdot t - \tfrac{1}{2}gt^2</Math>
+    <Math>
+      y(t) = v_0 \sin\theta \cdot t - \tfrac{1}
+      {2}gt^2
+    </Math>
   </FormulaCard>
 </SummarySlide>
 ```
@@ -175,6 +176,7 @@ Last slide. The 2–3 sentence takeaway.
 ## Writing rules for slides
 
 ### Do
+
 - Every slide has one clear point. If you need a second point, make a second slide.
 - Arabic body text under 80 words per slide
 - Equations in KaTeX with no Unicode hacks
@@ -182,6 +184,7 @@ Last slide. The 2–3 sentence takeaway.
 - Every slide works when projected (tested at 1920×1080)
 
 ### Don't
+
 - Don't put more than 3 equations on one slide
 - Don't put more than 60 words of Arabic body per concept slide
 - Don't use bullet point lists for the body of a concept (bullets are fine for vocabulary slides)

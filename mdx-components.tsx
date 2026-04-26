@@ -10,27 +10,27 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       </h1>
     ),
     h2: ({ children, ...props }) => (
-      <h2 className="font-display text-3xl font-medium text-ink mt-12 mb-4" {...props}>
+      <h2 className="mb-4 mt-12 font-display text-3xl font-medium text-ink" {...props}>
         {children}
       </h2>
     ),
     h3: ({ children, ...props }) => (
-      <h3 className="font-display text-2xl font-medium text-ink mt-8 mb-3" {...props}>
+      <h3 className="mb-3 mt-8 font-display text-2xl font-medium text-ink" {...props}>
         {children}
       </h3>
     ),
     p: ({ children, ...props }) => (
-      <p className="font-body text-lg leading-relaxed text-ink my-4" {...props}>
+      <p className="my-4 font-body text-lg leading-relaxed text-ink" {...props}>
         {children}
       </p>
     ),
     ul: ({ children, ...props }) => (
-      <ul className="list-disc pl-6 my-4 space-y-2 text-ink" {...props}>
+      <ul className="my-4 list-disc space-y-2 pl-6 text-ink" {...props}>
         {children}
       </ul>
     ),
     ol: ({ children, ...props }) => (
-      <ol className="list-decimal pl-6 my-4 space-y-2 text-ink" {...props}>
+      <ol className="my-4 list-decimal space-y-2 pl-6 text-ink" {...props}>
         {children}
       </ol>
     ),

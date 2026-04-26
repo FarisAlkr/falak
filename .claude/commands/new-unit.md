@@ -32,19 +32,25 @@ Scaffold a new Falak unit.
 Execute this task step by step:
 
 ### Step 1 · Parse argument
+
 `$ARGUMENTS` should be a valid unit ID from the curriculum. If not, halt and list valid IDs.
 
 ### Step 2 · Read references
+
 Before creating any file, read:
+
 - `docs/01_curriculum_and_units.md` — full curriculum
 - `docs/05_unit_template.md` — unit template spec
 - `docs/06_interactive_patterns.md` — find the pattern for this unit's interactive type
 
 ### Step 3 · Generate `meta.ts`
+
 Use the curriculum data. Fill in titles, descriptions, prerequisites, key terms, interactive type, summary takeaway. Every field MUST be filled — no TODOs.
 
 ### Step 4 · Generate `slides.mdx`
+
 Include:
+
 - TitleSlide with all three titles (ar/he/en)
 - Concept slide with placeholder Arabic body marked `{/* REVIEW_ARABIC: draft */}`
 - Equations slides for each key equation group
@@ -54,26 +60,33 @@ Include:
 - SummarySlide with takeaway
 
 ### Step 5 · Generate `interactive.tsx`
+
 Use the skeleton from `simulation-builder` skill. Reference the specific pattern for this unit type.
 
 ### Step 6 · Generate `exam.ts`
+
 Three placeholder questions. Each has:
+
 - Problem statement in Arabic AND Hebrew (mark Hebrew as `REVIEW_HEBREW` if not from a real past Bagrut)
 - 2–3 parts per question
 - Expected answers with tolerance
 - Solution walkthrough in Arabic
 
 ### Step 7 · Generate `summary.mdx`
+
 Use the takeaway from meta.ts. Include the formula card and next-unit link.
 
 ### Step 8 · Register
+
 Add the unit to `src/lib/content/unitRegistry.ts`.
 
 ### Step 9 · Verify
+
 Run `pnpm typecheck && pnpm lint`. Fix any issues.
 
 ### Step 10 · Report
-Summarize what was created, what needs REVIEW_* attention, and the next step for the author.
+
+Summarize what was created, what needs REVIEW\_\* attention, and the next step for the author.
 
 ## Output format
 
@@ -107,7 +120,7 @@ Next step:
 
 ## Constraints
 
-- Do not commit REVIEW_* items as resolved unless they are
+- Do not commit REVIEW\_\* items as resolved unless they are
 - Do not skip registering the unit (it won't render)
 - Do not create content that violates `docs/07_content_guidelines.md`
 - Do not invent physics not in the curriculum for this unit

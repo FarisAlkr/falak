@@ -8,7 +8,14 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "typecheck": "tsc --noEmit"
+    "lint:fix": "next lint --fix",
+    "format": "prettier --write \"**/*.{ts,tsx,mdx,json,css,md,yml,yaml}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,mdx,json,css,md,yml,yaml}\"",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "check:reviews": "node scripts/check-review-comments.mjs",
+    "prepare": "husky"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.1",
@@ -29,21 +36,41 @@
     "zustand": "~4.5.7"
   },
   "devDependencies": {
+    "@commitlint/cli": "~19.3.0",
+    "@commitlint/config-conventional": "~19.2.2",
     "@tailwindcss/forms": "^0.5.11",
     "@tailwindcss/typography": "^0.5.19",
+    "@testing-library/jest-dom": "~6.4.8",
+    "@testing-library/react": "~15.0.7",
+    "@testing-library/user-event": "~14.5.2",
     "@types/mdx": "^2.0.13",
     "@types/node": "~20.12.0",
     "@types/react": "~18.3.0",
     "@types/react-dom": "~18.3.0",
+    "@vitejs/plugin-react": "~4.3.4",
     "autoprefixer": "^10.5.0",
+    "eslint": "~8.57.1",
+    "eslint-config-next": "~14.2.35",
+    "fake-indexeddb": "~5.0.2",
+    "husky": "~9.0.11",
+    "jsdom": "~24.0.0",
+    "lint-staged": "~15.2.11",
     "postcss": "^8.5.10",
+    "prettier": "~3.3.3",
+    "prettier-plugin-tailwindcss": "~0.6.14",
     "tailwindcss": "~3.4.19",
     "tailwindcss-rtl": "~0.9.0",
-    "typescript": "~5.4.0"
+    "typescript": "~5.4.0",
+    "vitest": "~1.6.1"
   },
   "engines": {
     "node": ">=20.0.0",
     "pnpm": ">=10.0.0"
   },
-  "packageManager": "pnpm@10.33.2"
+  "packageManager": "pnpm@10.33.2",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  }
 }

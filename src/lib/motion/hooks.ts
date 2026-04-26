@@ -25,9 +25,7 @@ export function useReducedMotion(): boolean {
  * Tracks the mouse position relative to the target element, normalized to [-0.5, 0.5]
  * on each axis. Returns null when the cursor leaves the element. SSR-safe.
  */
-export function useElementMouse(
-  ref: RefObject<HTMLElement | null>,
-): MousePos | null {
+export function useElementMouse(ref: RefObject<HTMLElement | null>): MousePos | null {
   const [pos, setPos] = useState<MousePos | null>(null);
   useEffect(() => {
     const node = ref.current;
@@ -148,10 +146,7 @@ export function useViewportMouse(): MousePos {
  * Triggers `visible` when the element scrolls into view. Idempotent — only fires once.
  * Falls back to immediate-visible if IntersectionObserver isn't available.
  */
-export function useInViewOnce(
-  ref: RefObject<HTMLElement | null>,
-  threshold = 0.15,
-): boolean {
+export function useInViewOnce(ref: RefObject<HTMLElement | null>, threshold = 0.15): boolean {
   const [seen, setSeen] = useState(false);
   const fired = useRef(false);
   useEffect(() => {

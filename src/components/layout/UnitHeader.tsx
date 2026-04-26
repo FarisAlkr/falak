@@ -43,7 +43,7 @@ export function UnitHeader({ unit }: UnitHeaderProps) {
           <ChevronRight
             size={14}
             strokeWidth={1.5}
-            className="rtl:rotate-180 transition-transform duration-base ease-out group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5"
+            className="transition-transform duration-base ease-out group-hover:translate-x-0.5 rtl:rotate-180 rtl:group-hover:-translate-x-0.5"
             aria-hidden
           />
           <span>All units · العودة</span>
@@ -66,11 +66,7 @@ export function UnitHeader({ unit }: UnitHeaderProps) {
           >
             {unit.titles.ar}
           </motion.h1>
-          <motion.p
-            variants={fadeUp}
-            dir="rtl"
-            className="font-hebrew text-base text-accent"
-          >
+          <motion.p variants={fadeUp} dir="rtl" className="font-hebrew text-base text-accent">
             {unit.titles.he}
           </motion.p>
           <motion.p
