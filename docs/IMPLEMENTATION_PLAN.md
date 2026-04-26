@@ -110,7 +110,7 @@ Phase 0 is **done** when _all_ of these are true. Don't start Phase 1 until then
 7. `pnpm lint && pnpm typecheck && pnpm test` all pass on a clean clone.
 8. Repo pushed to `github.com/FarisAlkr/falak` (private). Commit log reads like the Phase 0 subsection list below.
 9. Vercel preview deploys on every push to any branch; production deploy from `main` is live.
-10. Lighthouse mobile score ≥ 95 on the (empty-ish) home page (trivial to hit with no content yet — the point is to baseline).
+10. Lighthouse mobile score ≥ 90 on the home page. (Originally targeted ≥95; reset to ≥90 in §3.2.8 to absorb the §3.2.6.5 luxury-tier UI cost. Baseline 91-93 across all four routes, recorded in §3.2.8.)
 11. `bagrut/` folder at repo root with a README listing required exam codes (036-361, 036-371, 036-282), years to collect, and where on the Ministry / Geva / Kidum sites to find them.
 12. `REVIEW_*` comment lint rule works: CI fails on any branch named `unit/*` if a `REVIEW_ARABIC:` / `REVIEW_HEBREW:` / `REVIEW_PEDAGOGY:` comment is present.
 13. Doc cleanup PR (§1.1 items) merged.

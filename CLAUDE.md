@@ -135,4 +135,4 @@ pnpm verify:a11y      # accessibility audit (important for RTL)
 
 ## Current phase
 
-> **Phase 0 — project setup.** No code yet. First deliverable: `docs/IMPLEMENTATION_PLAN.md` — a Claude-generated phase-1 plan based on the roadmap in `docs/08_build_roadmap.md`. Do this in a planning-only session; switch to a fresh session for execution.
+> **Phase 1 — Unit 3 reference implementation.** Phase 0 closed 2026-04-26. The platform shell is built: 14-unit registry, all 70 unit×mode placeholder routes, design system, mouse-interactive UI elevation, Dexie progress layer, MDX+KaTeX pipeline, ESLint/Prettier/Husky/Commitlint/Vitest/CI quality gates, Lighthouse baseline (mobile perf 91-93, A11y 95, BP 96, SEO 100), past-Bagrut archive scaffold. Phase 1 builds the first real unit — Newton's Laws & Dynamics — including theory slides, FBD Builder interactive, Bagrut-style exam, and Arabic summary takeaway. See `docs/IMPLEMENTATION_PLAN.md` §4 for the Phase 1 plan.
