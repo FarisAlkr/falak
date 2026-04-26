@@ -30,7 +30,18 @@ const sizes: Record<ButtonSize, string> = {
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ variant = 'primary', size = 'md', magnetic = false, className, type = 'button', children, ...props }, forwardedRef) => {
+  (
+    {
+      variant = 'primary',
+      size = 'md',
+      magnetic = false,
+      className,
+      type = 'button',
+      children,
+      ...props
+    },
+    forwardedRef,
+  ) => {
     const innerRef = useRef<HTMLButtonElement | null>(null);
     const setRef = (node: HTMLButtonElement | null) => {
       innerRef.current = node;

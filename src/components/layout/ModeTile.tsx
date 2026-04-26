@@ -61,7 +61,7 @@ export function ModeTile({ unitId, mode, index = 0 }: ModeTileProps) {
           className={cn(
             'relative h-full overflow-hidden rounded-sm border border-border bg-paper-raised p-10',
             'transition-[border-color,box-shadow] duration-base ease-out',
-            'group-hover:border-accent group-focus-visible:border-accent group-hover:shadow-lift',
+            'group-hover:border-accent group-hover:shadow-lift group-focus-visible:border-accent',
           )}
         >
           {/* Cursor-follow spotlight */}
@@ -75,10 +75,7 @@ export function ModeTile({ unitId, mode, index = 0 }: ModeTileProps) {
 
           <div className="relative flex h-full flex-col gap-8">
             <div className="flex items-start justify-between">
-              <span
-                dir="ltr"
-                className="font-mono text-xs uppercase tracking-meta text-ink-faint"
-              >
+              <span dir="ltr" className="font-mono text-xs uppercase tracking-meta text-ink-faint">
                 {MODE_INDEX[mode]}
               </span>
               <Icon
@@ -93,22 +90,13 @@ export function ModeTile({ unitId, mode, index = 0 }: ModeTileProps) {
             </div>
 
             <div className="flex-1 space-y-2">
-              <p
-                dir="rtl"
-                className="font-arabic text-3xl font-semibold leading-tight text-ink"
-              >
+              <p dir="rtl" className="font-arabic text-3xl font-semibold leading-tight text-ink">
                 {label.ar}
               </p>
-              <p
-                dir="rtl"
-                className="font-hebrew text-sm text-accent"
-              >
+              <p dir="rtl" className="font-hebrew text-sm text-accent">
                 {label.he}
               </p>
-              <p
-                dir="ltr"
-                className="font-body text-sm italic text-ink-muted"
-              >
+              <p dir="ltr" className="font-body text-sm italic text-ink-muted">
                 {label.en}
               </p>
             </div>
@@ -119,9 +107,7 @@ export function ModeTile({ unitId, mode, index = 0 }: ModeTileProps) {
                 strokeWidth={1.5}
                 className={cn(
                   'transition-all duration-base ease-out',
-                  isHovered
-                    ? '-translate-x-1.5 text-accent'
-                    : 'translate-x-0 text-ink-muted',
+                  isHovered ? '-translate-x-1.5 text-accent' : 'translate-x-0 text-ink-muted',
                 )}
                 aria-hidden
               />

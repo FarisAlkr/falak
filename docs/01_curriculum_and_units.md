@@ -8,12 +8,12 @@
 
 The 5-unit (מוגבר / ارتفاع) physics Bagrut consists of four separate exam papers (שאלונים):
 
-| Exam | Topic | Code | Duration | Weight |
-|---|---|---|---|---|
-| Mechanics | מכניקה | 036-361 | 2 hours | 30% |
-| Electromagnetism | חשמל ומגנטיות | 036-371 | 2 hours | 25% |
-| Radiation & Matter | קרינה וחומר | 036-282 | 2 hours | 30% |
-| Laboratory | מעבדה / מעבדת חקר | — | 2.5 hours | 15% |
+| Exam               | Topic             | Code    | Duration  | Weight |
+| ------------------ | ----------------- | ------- | --------- | ------ |
+| Mechanics          | מכניקה            | 036-361 | 2 hours   | 30%    |
+| Electromagnetism   | חשמל ומגנטיות     | 036-371 | 2 hours   | 25%    |
+| Radiation & Matter | קרינה וחומר       | 036-282 | 2 hours   | 30%    |
+| Laboratory         | מעבדה / מעבדת חקר | —       | 2.5 hours | 15%    |
 
 Each written exam presents the student with a set of questions; the student selects a subset and answers in depth with full derivations, diagrams, and reasoning.
 
@@ -25,32 +25,32 @@ Falak organizes the curriculum into 14 units. Each maps to a specific segment of
 
 ### SECTION A — Mechanics (Units 1–7)
 
-| # | Unit ID | Arabic | Hebrew | English |
-|---|---|---|---|---|
-| 1 | `kinematics-1d` | الحركة في بُعد واحد | תנועה בציר אחד | 1D Kinematics |
-| 2 | `kinematics-2d` | الحركة في بُعدين والمقذوفات | תנועה במישור וזריקות | 2D Motion & Projectiles |
-| 3 | `newtons-laws` | قوانين نيوتن والديناميكا | חוקי ניוטון ודינמיקה | Newton's Laws & Dynamics |
-| 4 | `work-energy` | العمل والطاقة والقدرة | עבודה, אנרגיה והספק | Work, Energy, Power |
-| 5 | `momentum` | الزخم والدفع | תנע ומתקף | Momentum & Impulse |
-| 6 | `circular-motion` | الحركة الدائرية | תנועה מעגלית | Circular Motion |
-| 7 | `gravitation` | الجاذبية والحركة الهرمونية | גרביטציה ותנועה הרמונית | Gravitation & SHM |
+| #   | Unit ID           | Arabic                      | Hebrew                  | English                  |
+| --- | ----------------- | --------------------------- | ----------------------- | ------------------------ |
+| 1   | `kinematics-1d`   | الحركة في بُعد واحد         | תנועה בציר אחד          | 1D Kinematics            |
+| 2   | `kinematics-2d`   | الحركة في بُعدين والمقذوفات | תנועה במישור וזריקות    | 2D Motion & Projectiles  |
+| 3   | `newtons-laws`    | قوانين نيوتن والديناميكا    | חוקי ניוטון ודינמיקה    | Newton's Laws & Dynamics |
+| 4   | `work-energy`     | العمل والطاقة والقدرة       | עבודה, אנרגיה והספק     | Work, Energy, Power      |
+| 5   | `momentum`        | الزخم والدفع                | תנע ומתקף               | Momentum & Impulse       |
+| 6   | `circular-motion` | الحركة الدائرية             | תנועה מעגלית            | Circular Motion          |
+| 7   | `gravitation`     | الجاذبية والحركة الهرمونية  | גרביטציה ותנועה הרמונית | Gravitation & SHM        |
 
 ### SECTION B — Electromagnetism (Units 8–10)
 
-| # | Unit ID | Arabic | Hebrew | English |
-|---|---|---|---|---|
-| 8 | `electrostatics` | الكهروستاتيكا | אלקטרוסטטיקה | Electrostatics |
-| 9 | `dc-circuits` | الدوائر الكهربائية | זרם חשמלי ומעגלים | DC Circuits |
-| 10 | `magnetism` | المغناطيسية والحث | מגנטיות והשראה | Magnetism & Induction |
+| #   | Unit ID          | Arabic             | Hebrew            | English               |
+| --- | ---------------- | ------------------ | ----------------- | --------------------- |
+| 8   | `electrostatics` | الكهروستاتيكا      | אלקטרוסטטיקה      | Electrostatics        |
+| 9   | `dc-circuits`    | الدوائر الكهربائية | זרם חשמלי ומעגלים | DC Circuits           |
+| 10  | `magnetism`      | المغناطيسية والحث  | מגנטיות והשראה    | Magnetism & Induction |
 
 ### SECTION C — Radiation & Matter (Units 11–14)
 
-| # | Unit ID | Arabic | Hebrew | English |
-|---|---|---|---|---|
-| 11 | `geometric-optics` | البصريات الهندسية | אופטיקה גאומטרית | Geometric Optics |
-| 12 | `physical-optics` | البصريات الفيزيائية والموجات | אופטיקה פיזיקלית וגלים | Physical Optics & Waves |
-| 13 | `modern-physics` | الفيزياء الحديثة | פיזיקה מודרנית | Modern Physics |
-| 14 | `atomic-nuclear` | الذرة والنواة | האטום והגרעין | Atomic & Nuclear |
+| #   | Unit ID            | Arabic                       | Hebrew                 | English                 |
+| --- | ------------------ | ---------------------------- | ---------------------- | ----------------------- |
+| 11  | `geometric-optics` | البصريات الهندسية            | אופטיקה גאומטרית       | Geometric Optics        |
+| 12  | `physical-optics`  | البصريات الفيزيائية والموجات | אופטיקה פיזיקלית וגלים | Physical Optics & Waves |
+| 13  | `modern-physics`   | الفيزياء الحديثة             | פיזיקה מודרנית         | Modern Physics          |
+| 14  | `atomic-nuclear`   | الذرة والنواة                | האטום והגרעין          | Atomic & Nuclear        |
 
 ---
 
@@ -265,7 +265,7 @@ $$\text{Standing wave (string): } f_n = \frac{nv}{2L}$$
 
 ### Unit 13 · Modern Physics
 
-**Concepts:** Photoelectric effect, photon energy, wave-particle duality, de Broglie wavelength, quantization of energy, Compton effect (qualitative), special relativity introduction (time dilation, length contraction, mass-energy) *[note: relativity depth depends on current syllabus version — confirm]*.
+**Concepts:** Photoelectric effect, photon energy, wave-particle duality, de Broglie wavelength, quantization of energy, Compton effect (qualitative), special relativity introduction (time dilation, length contraction, mass-energy) _[note: relativity depth depends on current syllabus version — confirm]_.
 
 **Key equations:**
 $$E_\text{photon} = hf = \frac{hc}{\lambda}$$
@@ -301,12 +301,12 @@ $$E = \Delta m \cdot c^2 \text{ (binding energy)}$$
 
 ## 4. Curriculum-to-exam mapping
 
-| Bagrut exam | Covers units |
-|---|---|
-| Mechanics (30%) | 1, 2, 3, 4, 5, 6, 7 |
-| Electromagnetism (25%) | 8, 9, 10 |
-| Radiation & Matter (30%) | 11, 12, 13, 14 |
-| Lab (15%) | Hands-on — not covered by Falak directly (future: documentation of mandatory experiments) |
+| Bagrut exam              | Covers units                                                                              |
+| ------------------------ | ----------------------------------------------------------------------------------------- |
+| Mechanics (30%)          | 1, 2, 3, 4, 5, 6, 7                                                                       |
+| Electromagnetism (25%)   | 8, 9, 10                                                                                  |
+| Radiation & Matter (30%) | 11, 12, 13, 14                                                                            |
+| Lab (15%)                | Hands-on — not covered by Falak directly (future: documentation of mandatory experiments) |
 
 ## 5. Build priority (pedagogical order)
 

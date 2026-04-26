@@ -87,6 +87,7 @@ When in doubt, cross-reference:
 - PhET simulations (physics is always correct)
 
 Do NOT use:
+
 - Wikipedia as a final source (usually correct but often incomplete)
 - Random YouTube explanations
 - Reddit answers

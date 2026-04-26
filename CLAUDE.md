@@ -16,7 +16,7 @@ A Next.js web platform of 14 units. Each unit has four parts:
 3. **Exam** — Bagrut-style questions with scoring and explanations
 4. **Summary** — 2–3 sentence takeaway the student must memorize
 
-*(Phase 2: video summaries via NotebookLM per unit.)*
+_(Phase 2: video summaries via NotebookLM per unit.)_
 
 ## HOW (technical stack)
 
@@ -59,6 +59,7 @@ falak/
 ## Core conventions
 
 ### Code style
+
 - ES modules only (`import`/`export`), never CommonJS
 - Named exports only, no default exports (except Next.js page files where required)
 - Type everything; no `any`
@@ -68,6 +69,7 @@ falak/
 - Physics calculations go in `src/lib/physics/` — never inline
 
 ### Content conventions
+
 - All physics content verified against `docs/01_curriculum_and_units.md`
 - All Hebrew terminology verified against the official Israeli Ministry of Education glossary
 - All Arabic content written in Modern Standard Arabic (فصحى)
@@ -75,11 +77,13 @@ falak/
 - Every equation wrapped in KaTeX, never ASCII-art or HTML entities for math
 
 ### File creation rules
+
 - New units go under `src/content/units/{unit-id}/` with `meta.ts`, `slides.mdx`, `interactive.tsx`, `exam.ts`, `summary.mdx`
 - Never create unit content without first consulting `docs/units/{unit-id}.md` for the spec
 - Follow the naming in `docs/01_curriculum_and_units.md` — unit IDs are fixed
 
 ### Git workflow
+
 - Branch per unit: `unit/03-newton-laws`
 - Commit per phase: `feat(unit-03): theory slides`, `feat(unit-03): interactive sim`, `feat(unit-03): exam`, `test(unit-03): physics accuracy`
 - One unit = one PR

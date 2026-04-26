@@ -4,29 +4,29 @@
 
 :root {
   /* Surfaces */
-  --paper: #FAF6EE;
-  --paper-raised: #FDFBF5;
-  --paper-inverted: #14110E;
-  --paper-inverted-raised: #1E1A15;
+  --paper: #faf6ee;
+  --paper-raised: #fdfbf5;
+  --paper-inverted: #14110e;
+  --paper-inverted-raised: #1e1a15;
 
   /* Ink (text and structure) */
-  --ink: #1A1612;
-  --ink-muted: #6B6257;
-  --ink-faint: #A09684;
-  --ink-inverted: #FAF6EE;
+  --ink: #1a1612;
+  --ink-muted: #6b6257;
+  --ink-faint: #a09684;
+  --ink-inverted: #faf6ee;
   --ink-inverted-muted: rgba(250, 246, 238, 0.6);
 
   /* Accent (use sparingly) */
-  --accent: #C1272D;
-  --accent-dark: #A01F24;
+  --accent: #c1272d;
+  --accent-dark: #a01f24;
   --accent-tint: rgba(193, 39, 45, 0.08);
   --accent-glow: rgba(193, 39, 45, 0.18);
 
   /* Functional */
-  --success: #3B7A3B;
-  --warning: #C08A2E;
-  --error: #C1272D;
-  --info: #2C5E8F;
+  --success: #3b7a3b;
+  --warning: #c08a2e;
+  --error: #c1272d;
+  --info: #2c5e8f;
 
   /* Borders */
   --border: rgba(26, 22, 18, 0.1);

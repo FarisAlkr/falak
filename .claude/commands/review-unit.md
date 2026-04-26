@@ -17,7 +17,9 @@ Invokes all four Falak skills in sequence on the specified unit and produces a c
 ## Execution steps
 
 ### Step 1 · Locate unit
+
 Read `src/content/units/{unit-id}/` — confirm all required files exist:
+
 - `meta.ts`
 - `slides.mdx`
 - `interactive.tsx`
@@ -27,10 +29,13 @@ Read `src/content/units/{unit-id}/` — confirm all required files exist:
 Halt with an error list if any are missing.
 
 ### Step 2 · Verify metadata
-Confirm `meta.ts` has all required fields per `docs/05_unit_template.md`. No missing fields, no TODOs, no REVIEW_* placeholders.
+
+Confirm `meta.ts` has all required fields per `docs/05_unit_template.md`. No missing fields, no TODOs, no REVIEW\_\* placeholders.
 
 ### Step 3 · Physics review
+
 Invoke the `physics-accuracy` skill.
+
 - For every equation in slides.mdx: dimensional check, sign convention, standard form
 - For every worked example: redo calculation, check units, check reasonableness
 - For every exam answer: verify
@@ -38,14 +43,18 @@ Invoke the `physics-accuracy` skill.
 - For physics helpers used: confirm unit tests exist
 
 ### Step 4 · Bilingual review
+
 Invoke the `bilingual-content` skill.
+
 - Arabic: MSA register, standard terminology, grammar
 - Hebrew: matches Ministry of Education standard, verified against past Bagrut
 - Bilingual rendering: dir attributes, font classes, layout
-- No REVIEW_* comments unresolved
+- No REVIEW\_\* comments unresolved
 
 ### Step 5 · Slide review
+
 Invoke the `slide-authoring` skill.
+
 - Canonical slide sequence followed
 - 8–12 slides total
 - Each slide has single clear point
@@ -55,7 +64,9 @@ Invoke the `slide-authoring` skill.
 - Misconception slide present
 
 ### Step 6 · Simulation review
+
 Invoke the `simulation-builder` skill.
+
 - Universal structure (problem, canvas, controls, readout, preview, result)
 - Real physics from `/lib/physics/`
 - Live readout updates
@@ -66,7 +77,9 @@ Invoke the `simulation-builder` skill.
 - Keyboard accessible
 
 ### Step 7 · Exam review
+
 Confirm:
+
 - At least 3 questions
 - Mix of difficulty 1, 2, 3
 - At least one from a real past Bagrut (with year attribution)
@@ -75,6 +88,7 @@ Confirm:
 - All numeric answers have tolerance
 
 ### Step 8 · Accessibility review
+
 - RTL tested in actual browser
 - Keyboard navigation works end-to-end
 - Contrast passes WCAG AA
@@ -82,11 +96,13 @@ Confirm:
 - Screen reader tested on at least the theory route
 
 ### Step 9 · Performance review
+
 - Lighthouse score ≥ 90 on mobile for `/units/{unit-id}/theory`
 - Interactive runs at 60fps on a mid-range laptop
 - Bundle size not inflated by this unit (diff the build)
 
 ### Step 10 · Integration review
+
 - Unit registered in `unitRegistry.ts`
 - Shows up in home grid
 - Progress tracking works (completing theory updates progress)

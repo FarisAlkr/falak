@@ -76,7 +76,7 @@ export function UnitCard({ unit, index = 0 }: UnitCardProps) {
           {/* Highlight ring for very-high yield units */}
           {isHighlight && (
             <div
-              className="pointer-events-none absolute inset-0 opacity-50 group-hover:opacity-100 transition-opacity duration-slow ease-out"
+              className="pointer-events-none absolute inset-0 opacity-50 transition-opacity duration-slow ease-out group-hover:opacity-100"
               style={{
                 background:
                   'linear-gradient(135deg, transparent 0%, var(--accent-tint) 60%, transparent 100%)',
@@ -88,37 +88,22 @@ export function UnitCard({ unit, index = 0 }: UnitCardProps) {
 
           <div className="relative flex h-full flex-col gap-6">
             <div className="flex items-center justify-between">
-              <span
-                dir="ltr"
-                className="font-mono text-xs uppercase tracking-meta text-ink-muted"
-              >
+              <span dir="ltr" className="font-mono text-xs uppercase tracking-meta text-ink-muted">
                 UNIT {unitNumber}
               </span>
-              <Badge
-                tone={STATUS_TONE[unit.status]}
-                dot={unit.status !== 'not-started'}
-              >
+              <Badge tone={STATUS_TONE[unit.status]} dot={unit.status !== 'not-started'}>
                 {STATUS_LABEL[unit.status]}
               </Badge>
             </div>
 
             <div className="flex-1 space-y-2">
-              <h2
-                dir="rtl"
-                className="font-arabic text-2xl font-semibold leading-tight text-ink"
-              >
+              <h2 dir="rtl" className="font-arabic text-2xl font-semibold leading-tight text-ink">
                 {unit.titles.ar}
               </h2>
-              <p
-                dir="rtl"
-                className="font-hebrew text-sm text-accent"
-              >
+              <p dir="rtl" className="font-hebrew text-sm text-accent">
                 {unit.titles.he}
               </p>
-              <p
-                dir="ltr"
-                className="font-body text-sm italic text-ink-muted"
-              >
+              <p dir="ltr" className="font-body text-sm italic text-ink-muted">
                 {unit.titles.en}
               </p>
             </div>
@@ -137,9 +122,7 @@ export function UnitCard({ unit, index = 0 }: UnitCardProps) {
                 strokeWidth={1.5}
                 className={cn(
                   'transition-all duration-base ease-out',
-                  isHovered
-                    ? '-translate-x-1.5 text-accent'
-                    : 'translate-x-0 text-ink-muted',
+                  isHovered ? '-translate-x-1.5 text-accent' : 'translate-x-0 text-ink-muted',
                 )}
                 aria-hidden
               />

@@ -5,6 +5,7 @@
 > **Sources:** `docs/08_build_roadmap.md` (the roadmap), `docs/05_unit_template.md` (the shape of a unit), and the session-zero interview captured in §1.
 >
 > **How to use this file:**
+>
 > 1. Read §1–§2 once.
 > 2. Then work §3 as a checklist — one subsection per focused session.
 > 3. When Phase 0's gate check (§3.1) passes, move to §4.
@@ -14,31 +15,31 @@
 
 ## 1. Session-zero facts (what we locked in)
 
-| Topic | Decision / fact | Source |
-|---|---|---|
-| Author | Faris Alkrenawe, physics teacher (5-unit Bagrut), Arab-school classroom | user |
-| Dev environment | Linux, fish shell, Node 20.20.2, pnpm 10.33.2 (via Corepack), git 2.53, GitHub CLI 2.90, Docker present, no Vercel CLI | `node --version` + `pnpm --version` |
-| Next.js background | First time with Next.js — plan and future sessions explain stack choices in plain language | interview Q1 |
-| GitHub | Push to `github.com/FarisAlkr/falak` as a **private** repo during Phase 0 | interview Q2 |
-| Vercel | Account in hand — Phase 0 links the repo for preview deploys | interview Q8 |
-| Arabic review pool | **Faris himself is the Arabic native-speaker reviewer** (confirmed 2026-04-23, post-interview). He is both author and reviewer. Per-unit protocol: draft → 48h cool-off → re-read → commit. Student spot-reading still sought where possible. | post-interview clarification |
-| Hebrew review | Faris reviews against recent past Bagrut exams | `docs/07` §8 |
-| Physics review | Faris as primary; a second physics teacher is a risk-reduction item (not blocking) | interview Q8 |
-| Past-Bagrut archive | Sources known; nothing downloaded yet. Phase 0 includes an archive-gathering task | interview Q4 |
-| Existing code / prototypes | **None.** No projectile prototype exists. Unit 3 is Falak's first UI implementation | interview Q5 |
-| Tempo | ~15+ hours/week ("heavy") | interview Q6 |
-| Classroom target | No fixed deadline — ship when ready. Phase gates, not calendar gates | interview Q7 |
-| Hardware / network quirks | None flagged | interview Q8 |
+| Topic                      | Decision / fact                                                                                                                                                                                                                               | Source                              |
+| -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
+| Author                     | Faris Alkrenawe, physics teacher (5-unit Bagrut), Arab-school classroom                                                                                                                                                                       | user                                |
+| Dev environment            | Linux, fish shell, Node 20.20.2, pnpm 10.33.2 (via Corepack), git 2.53, GitHub CLI 2.90, Docker present, no Vercel CLI                                                                                                                        | `node --version` + `pnpm --version` |
+| Next.js background         | First time with Next.js — plan and future sessions explain stack choices in plain language                                                                                                                                                    | interview Q1                        |
+| GitHub                     | Push to `github.com/FarisAlkr/falak` as a **private** repo during Phase 0                                                                                                                                                                     | interview Q2                        |
+| Vercel                     | Account in hand — Phase 0 links the repo for preview deploys                                                                                                                                                                                  | interview Q8                        |
+| Arabic review pool         | **Faris himself is the Arabic native-speaker reviewer** (confirmed 2026-04-23, post-interview). He is both author and reviewer. Per-unit protocol: draft → 48h cool-off → re-read → commit. Student spot-reading still sought where possible. | post-interview clarification        |
+| Hebrew review              | Faris reviews against recent past Bagrut exams                                                                                                                                                                                                | `docs/07` §8                        |
+| Physics review             | Faris as primary; a second physics teacher is a risk-reduction item (not blocking)                                                                                                                                                            | interview Q8                        |
+| Past-Bagrut archive        | Sources known; nothing downloaded yet. Phase 0 includes an archive-gathering task                                                                                                                                                             | interview Q4                        |
+| Existing code / prototypes | **None.** No projectile prototype exists. Unit 3 is Falak's first UI implementation                                                                                                                                                           | interview Q5                        |
+| Tempo                      | ~15+ hours/week ("heavy")                                                                                                                                                                                                                     | interview Q6                        |
+| Classroom target           | No fixed deadline — ship when ready. Phase gates, not calendar gates                                                                                                                                                                          | interview Q7                        |
+| Hardware / network quirks  | None flagged                                                                                                                                                                                                                                  | interview Q8                        |
 
 ### 1.1 Doc-cleanup items surfaced while reading
 
 Three sentences in the docs **incorrectly imply** that a projectile-motion prototype already exists. They must be fixed in Phase 0 so future Claude sessions don't hunt for code that isn't there:
 
-| File | Line | Current wording | Action |
-|---|---|---|---|
-| `docs/01_curriculum_and_units.md` | 87 | "Uses the existing Falak projectile prototype as the reference implementation." | Replace: "Reuses the SimulationCanvas / ControlPanel / LiveReadout primitives built in Phase 1 (Unit 3)." |
-| `docs/06_interactive_patterns.md` | 87 | "*(This is the existing prototype. Use it as the reference implementation for other interactives.)*" | Delete the parenthetical. |
-| `docs/08_build_roadmap.md` | 76 | "Unit 2 · 2D Motion & Projectiles (1 week — prototype already exists, needs full integration)" | Change to: "Unit 2 · 2D Motion & Projectiles (1 week — rebuilds the projectile interactive on top of Phase 1 primitives)." |
+| File                              | Line | Current wording                                                                                      | Action                                                                                                                     |
+| --------------------------------- | ---- | ---------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `docs/01_curriculum_and_units.md` | 87   | "Uses the existing Falak projectile prototype as the reference implementation."                      | Replace: "Reuses the SimulationCanvas / ControlPanel / LiveReadout primitives built in Phase 1 (Unit 3)."                  |
+| `docs/06_interactive_patterns.md` | 87   | "_(This is the existing prototype. Use it as the reference implementation for other interactives.)_" | Delete the parenthetical.                                                                                                  |
+| `docs/08_build_roadmap.md`        | 76   | "Unit 2 · 2D Motion & Projectiles (1 week — prototype already exists, needs full integration)"       | Change to: "Unit 2 · 2D Motion & Projectiles (1 week — rebuilds the projectile interactive on top of Phase 1 primitives)." |
 
 ### 1.2 Content flags surfaced while reading
 
@@ -49,7 +50,7 @@ Three sentences in the docs **incorrectly imply** that a projectile-motion proto
 
 ## 2. Working agreements — grammar of every execution session
 
-*(Read once; it frames how every future Claude session should behave.)*
+_(Read once; it frames how every future Claude session should behave.)_
 
 ### 2.1 Session discipline
 
@@ -98,7 +99,7 @@ Per-unit quality gate (from `docs/05_unit_template.md` checklist):
 
 ### 3.1 Phase 0 exit criteria
 
-Phase 0 is **done** when *all* of these are true. Don't start Phase 1 until then.
+Phase 0 is **done** when _all_ of these are true. Don't start Phase 1 until then.
 
 1. `pnpm dev` starts and serves `http://localhost:3000`.
 2. Home page (`/`) renders a 14-unit grid sourced from `src/lib/content/unitRegistry.ts` — no hardcoded titles in JSX.
@@ -126,6 +127,7 @@ Each subsection is sized as **one focused session ≈ one commit**. Every subsec
 **Goal:** A running Next.js 14 App Router skeleton, pushed to a private GitHub repo, deploying to Vercel on push.
 
 **Stack background (first-time primer):**
+
 - **Next.js** is a React framework. It adds file-based routing, optimized bundling, image/font handling, and a build system on top of React.
 - **App Router** is the newer routing model where folders under `src/app/` become URL paths. File `src/app/units/[unitId]/page.tsx` → URL `/units/<something>`. The `[unitId]` is a dynamic segment.
 - **Static export** (`output: 'export'`) tells Next to produce plain HTML/CSS/JS at build time. No Node.js server needed at runtime. Falak is a static site; this keeps hosting free on Vercel.
@@ -133,6 +135,7 @@ Each subsection is sized as **one focused session ≈ one commit**. Every subsec
 - **pnpm** is a faster npm alternative with a better disk layout. Already installed via Corepack.
 
 **Files to create:**
+
 ```
 package.json
 pnpm-lock.yaml          (generated by pnpm install)
@@ -147,6 +150,7 @@ src/app/globals.css
 ```
 
 **Commands (future Claude runs these with your approval):**
+
 ```bash
 # Project init
 pnpm init
@@ -193,12 +197,14 @@ git push -u origin main
 **Goal:** The design system from `docs/02` is loaded: CSS variables for colors, Tailwind classes mapped to those vars, all five fonts self-hosted via `next/font`, RTL utilities available.
 
 **Primer:**
+
 - **Tailwind CSS** is utility-first CSS: instead of writing `.my-card { padding: 16px; background: cream }` you write `<div class="p-4 bg-paper">`. Small bundle, consistent look.
 - **CSS variables** (`--paper`, `--ink`, `--accent`) let us define the palette once and switch themes (light/dark, paper/inverted) by swapping variables rather than rewriting classes.
 - **`next/font`** downloads Google Fonts at build time, embeds them in the bundle, so the browser never contacts Google at runtime. Fast and privacy-friendly.
 - **`tailwindcss-rtl`** plugin: adds `rtl:` variants so `<div class="ml-4 rtl:mr-4 rtl:ml-0">` becomes `<div class="ms-4">` (margin-start, direction-aware). Critical for Arabic/Hebrew.
 
 **Files:**
+
 ```
 tailwind.config.ts
 postcss.config.mjs
@@ -208,6 +214,7 @@ src/app/layout.tsx         (updated: applies font classes to <html>, sets dir="r
 ```
 
 **Commands:**
+
 ```bash
 pnpm add -D tailwindcss@~3.4.0 autoprefixer postcss tailwindcss-rtl@~0.9.0 @tailwindcss/typography
 pnpm dlx tailwindcss init -p
@@ -241,6 +248,7 @@ pnpm dlx tailwindcss init -p
 **Primer on "types":** In TypeScript strict mode, every piece of data has a defined shape. `type UnitMeta` declares that a unit's metadata must have an `id`, `number`, `titles: { ar, he, en }`, etc. If any code forgets a field, the compiler errors out before it runs.
 
 **Files:**
+
 ```
 src/types/unit.ts           (UnitMeta, UnitSection, UnitId)
 src/types/slide.ts          (SlideFrontmatter, SlideComponentProps unions)
@@ -257,6 +265,7 @@ src/lib/utils/cn.ts         (classnames helper: tailwind-merge + clsx)
 **Types pulled from docs:** paste the `UnitMeta`, `ExamQuestion`, `ExamPart`, and `Progress` interfaces directly from `docs/03_architecture.md` §4 and `docs/05_unit_template.md` §1 — they're the source of truth. Add `as const` where appropriate; no `any`.
 
 **Commands:**
+
 ```bash
 pnpm add clsx@~2.1.0 tailwind-merge@~2.3.0
 # Everything else is TypeScript files, no deps.
@@ -274,6 +283,7 @@ pnpm typecheck  # should pass
 **Goal:** A `unitRegistry.ts` file lists all 14 units (id, section, titles, Bagrut weight) with no code content. The home page renders a grid of `UnitCard`s from this registry — so adding a real unit later means filling in data, not editing the home page.
 
 **Files:**
+
 ```
 src/lib/content/unitRegistry.ts   (array of 14 UnitMeta entries, content-free)
 src/components/layout/UnitCard.tsx  (matches docs/02 §5 "Unit card" pattern)
@@ -283,6 +293,7 @@ src/app/units/page.tsx             (renders UnitsGrid, optionally with section f
 ```
 
 **Content of `unitRegistry.ts`:** 14 entries, each minimal:
+
 ```ts
 {
   id: 'newtons-laws',
@@ -293,6 +304,7 @@ src/app/units/page.tsx             (renders UnitsGrid, optionally with section f
   bagrutWeight: 'very-high',
 }
 ```
+
 All 14 in order from `docs/01_curriculum_and_units.md` §2. All `status: 'not-started'` initially.
 
 **Verification:** Home page shows a 14-card grid with Arabic titles large, Hebrew subtitles in accent color, English italic. Hovering a card shifts border to accent crimson. Clicking one navigates to `/units/<id>` (which 404s for now — that's §3.2.5's job).
@@ -306,6 +318,7 @@ All 14 in order from `docs/01_curriculum_and_units.md` §2. All `status: 'not-st
 **Goal:** Every unit has functioning (placeholder) routes for its four modes.
 
 **Files:**
+
 ```
 src/app/units/[unitId]/layout.tsx       (shell with nav: Theory / Interactive / Exam / Summary)
 src/app/units/[unitId]/page.tsx         (unit home: four mode tiles)
@@ -329,11 +342,13 @@ src/lib/content/loadUnit.ts             (reads from unitRegistry by ID; throws i
 **Goal:** IndexedDB (via Dexie) is ready to store progress. A `useProgress(unitId)` hook is available and tested, even though nothing writes to it yet in Phase 0.
 
 **Primer:**
+
 - **IndexedDB** is a key-value database inside the browser. It survives tab close, reboot, and browser updates. It's what `localStorage` wishes it was.
 - **Dexie** is a library that makes IndexedDB pleasant to use (Promises, schema versioning, TypeScript types).
 - **Why not localStorage?** `localStorage` has a 5 MB cap, is synchronous (blocks UI), and lacks structured queries. For Falak's progress-tracking (20+ units × scores × attempts), IndexedDB wins.
 
 **Files:**
+
 ```
 src/lib/db/schema.ts       (Dexie class + v1 schema)
 src/lib/db/hooks.ts        (useProgress, useSettings — React hooks using dexie-react-hooks)
@@ -343,9 +358,10 @@ src/lib/db/__tests__/schema.test.ts  (vitest: create, read, update, migration st
 ```
 
 **Schema v1 (matches `docs/03` §4):**
+
 ```ts
 class FalakDB extends Dexie {
-  progress!: Table<Progress, string>;    // keyed by userId
+  progress!: Table<Progress, string>; // keyed by userId
   settings!: Table<Settings, 'singleton'>;
   constructor() {
     super('falak');
@@ -358,6 +374,7 @@ class FalakDB extends Dexie {
 ```
 
 **Commands:**
+
 ```bash
 pnpm add dexie@~4.0.0 dexie-react-hooks@~1.1.0 zustand@~4.5.0
 # Tests are set up in §3.2.9, but for now scaffold the test file.
@@ -374,11 +391,13 @@ pnpm add dexie@~4.0.0 dexie-react-hooks@~1.1.0 zustand@~4.5.0
 **Goal:** MDX files compile with KaTeX math rendering. A smoke-test MDX file in `src/content/_smoketest/hello.mdx` renders Arabic text + a KaTeX equation correctly in RTL.
 
 **Primer:**
-- **MDX** is Markdown + JSX. You can write paragraphs like Markdown *and* drop React components inline. Slides will be MDX so the content author (you) writes prose and drops `<EquationSlide>` without learning TSX syntax.
+
+- **MDX** is Markdown + JSX. You can write paragraphs like Markdown _and_ drop React components inline. Slides will be MDX so the content author (you) writes prose and drops `<EquationSlide>` without learning TSX syntax.
 - **KaTeX** renders LaTeX math (`$v = v_0 + at$`) into crisp HTML at build time. Faster and smaller than MathJax.
 - **`remark-math` + `rehype-katex`** are plugins that find `$...$` in MDX and hand them to KaTeX.
 
 **Files:**
+
 ```
 next.config.mjs               (updated: withMDX + remark-math + rehype-katex)
 mdx-components.tsx            (registers global MDX components — ArabicBody, Math, etc.)
@@ -388,6 +407,7 @@ src/components/math/Math.tsx  (KaTeX wrapper — InlineMath / BlockMath)
 ```
 
 **Commands:**
+
 ```bash
 pnpm add @next/mdx@~14.2.0 @mdx-js/react @mdx-js/loader
 pnpm add remark-math@~6.0.0 rehype-katex@~7.0.0 katex@~0.16.0
@@ -405,6 +425,7 @@ pnpm add remark-math@~6.0.0 rehype-katex@~7.0.0 katex@~0.16.0
 **Goal:** Confirm every prior step deploys to Vercel preview. Record Lighthouse mobile baseline in this doc's §5.
 
 **Actions:**
+
 - Push `main` → Vercel builds → preview URL live.
 - Run Lighthouse (Chrome DevTools → Lighthouse → Mobile) on: `/`, `/units`, `/units/newtons-laws`, `/units/newtons-laws/theory`.
 - Record scores in the tracking table below.
@@ -413,14 +434,15 @@ pnpm add remark-math@~6.0.0 rehype-katex@~7.0.0 katex@~0.16.0
 
 Mobile preset · headless Chromium · Lighthouse 13 · production URL `falak-flame.vercel.app`. Scores: Performance / Accessibility / Best Practices / SEO.
 
-| Route | LCP (ms) | FCP (ms) | TBT (ms) | CLS | P / A / BP / SEO | Date |
-|---|---|---|---|---|---|---|
-| `/` | 3357 | 1279 | 37 | 0.002 | **91** / 95 / 96 / 100 | 2026-04-25 |
-| `/units` | 3132 | 1032 | 29 | 0.000 | **93** / 95 / 96 / 100 | 2026-04-25 |
-| `/units/newtons-laws` | 3321 | 1071 | 39 | 0.000 | **92** / 95 / 96 / 100 | 2026-04-25 |
-| `/units/newtons-laws/theory` | 3244 | 994 | 38 | 0.000 | **93** / 95 / 96 / 100 | 2026-04-25 |
+| Route                        | LCP (ms) | FCP (ms) | TBT (ms) | CLS   | P / A / BP / SEO       | Date       |
+| ---------------------------- | -------- | -------- | -------- | ----- | ---------------------- | ---------- |
+| `/`                          | 3357     | 1279     | 37       | 0.002 | **91** / 95 / 96 / 100 | 2026-04-25 |
+| `/units`                     | 3132     | 1032     | 29       | 0.000 | **93** / 95 / 96 / 100 | 2026-04-25 |
+| `/units/newtons-laws`        | 3321     | 1071     | 39       | 0.000 | **92** / 95 / 96 / 100 | 2026-04-25 |
+| `/units/newtons-laws/theory` | 3244     | 994      | 38       | 0.000 | **93** / 95 / 96 / 100 | 2026-04-25 |
 
 **Reading the baseline:**
+
 - **Performance 91–93** — below the originally-stated 95 target. The plan called 95 "trivially true with no content"; that assumed the conservative UI in §3.2.4–§3.2.5. The §3.2.6.5 elevation pass added framer-motion (~50 KB), entrance/parallax animations, and the constellation SVG — costing roughly 5 perf points. This is an explicit and approved tradeoff for the luxury-tier UI direction; we score in Lighthouse's "Good" band (≥90) on every route.
 - **LCP ~3.0–3.4 s** — bottleneck. Element is the hero tagline paragraph at mobile viewport. Mobile-throttle simulation is ~4× CPU + slow 3G; on real mid-range mobile hardware this would be ~1.5–2.0 s. Future optimization opportunities: lazy-load framer-motion via `LazyMotion`, swap less-used fonts to `display: optional`, defer the constellation SVG until after first paint.
 - **TBT 29–39 ms** and **CLS 0.000–0.002** — excellent. No layout shift, no main-thread blocking.
@@ -432,11 +454,12 @@ Mobile preset · headless Chromium · Lighthouse 13 · production URL `falak-fla
 
 ---
 
-#### 3.2.9 Developer tooling: ESLint, Prettier, Husky, Commitlint, Vitest, REVIEW_* rule (1 session, ~3 h)
+#### 3.2.9 Developer tooling: ESLint, Prettier, Husky, Commitlint, Vitest, REVIEW\_\* rule (1 session, ~3 h)
 
 **Goal:** Every commit runs through format/lint/type/test gates. `REVIEW_*` comments block PRs into `main` from unit branches. CI is wired up (GitHub Actions).
 
 **Files:**
+
 ```
 .eslintrc.json
 .prettierrc
@@ -450,6 +473,7 @@ scripts/check-review-comments.mjs   (fails if REVIEW_* appears in staged content
 ```
 
 **Commands:**
+
 ```bash
 pnpm add -D eslint@~8.57.0 eslint-config-next@~14.2.0 prettier@~3.3.0
 pnpm add -D husky@~9.0.0 lint-staged@~15.2.0
@@ -458,7 +482,8 @@ pnpm add -D vitest@~1.6.0 @testing-library/react@~15.0.0 jsdom @vitejs/plugin-re
 pnpm dlx husky init
 ```
 
-**REVIEW_* rule logic (plain English):**
+**REVIEW\_\* rule logic (plain English):**
+
 - On `unit/*` branches, CI greps all `.ts/.tsx/.mdx` files for `REVIEW_ARABIC:` / `REVIEW_HEBREW:` / `REVIEW_PEDAGOGY:`. Any hit = CI fail.
 - On `setup/*` and `main`, the rule is informational (prints a warning but doesn't fail) — placeholder comments in Phase 0 are OK.
 
@@ -473,6 +498,7 @@ pnpm dlx husky init
 **Goal:** Correct the three doc sentences from §1.1 that imply a prototype exists. Scaffold `bagrut/` so the archive has a home. Put a named action on the calendar to identify an Arabic reviewer.
 
 **Files:**
+
 ```
 docs/01_curriculum_and_units.md  (line 87 — edit)
 docs/06_interactive_patterns.md  (line 87 — edit)
@@ -482,6 +508,7 @@ docs/IMPLEMENTATION_PLAN.md      (update §6 open items with reviewer-identifica
 ```
 
 **`bagrut/README.md` contents (outline):**
+
 - The four exam codes: 036-361 (mechanics), 036-371 (EM), 036-282 (radiation & matter), no code (lab).
 - Target years: 2020, 2021, 2022, 2023, 2024, 2025 (six years). Both winter + summer sittings if available.
 - Sources: Ministry of Education, Weizmann PTC, Geva, Kidum, High-Q.
@@ -532,8 +559,9 @@ main
 **Estimated effort:** ~90–120 hours of focused work → ~6–8 calendar weeks at 15 h/week. The FBD Builder alone is ~1.5–2 weeks.
 
 **Why Unit 3 (not Unit 1):**
-1. *Pedagogical:* Newton's 2nd law is the backbone of mechanics (Units 4, 5, 6, 7 all apply it). Teaching FBDs well sets up every downstream concept.
-2. *Engineering:* The FBD Builder is the hardest interactive in the project. If we can design `SimulationCanvas` + `ControlPanel` + `LiveReadout` primitives that support drag-drop force placement and live-recomputed F=ma, every easier interactive (Motion Graphs, Projectile Target, Energy Coaster) trivially reuses them.
+
+1. _Pedagogical:_ Newton's 2nd law is the backbone of mechanics (Units 4, 5, 6, 7 all apply it). Teaching FBDs well sets up every downstream concept.
+2. _Engineering:_ The FBD Builder is the hardest interactive in the project. If we can design `SimulationCanvas` + `ControlPanel` + `LiveReadout` primitives that support drag-drop force placement and live-recomputed F=ma, every easier interactive (Motion Graphs, Projectile Target, Energy Coaster) trivially reuses them.
 
 ### 4.1 Phase 1 exit criteria
 
@@ -610,6 +638,7 @@ Each with Storybook-style demo in a `/dev/components` route (not shipped to prod
 This is the risky chunk. Budget generously.
 
 **Build order (from `docs/06` §Building your first interactive):**
+
 1. Scenario renderer — SVG of box-on-incline, Atwood, stacked masses (5 scenarios total).
 2. Force palette — drag source for weight/normal/tension/friction/applied.
 3. Force placement + magnitude adjustment logic.
@@ -622,6 +651,7 @@ This is the risky chunk. Budget generously.
 10. Streak persistence via `useProgress`.
 
 **Technical watchouts:**
+
 - 60 fps on a 5-year-old laptop → budget ≤ 16 ms per frame. Avoid re-renders on drag; use refs for transient positions and commit to state on drop.
 - Drag-and-drop on touch devices (classroom iPads) — use pointer events, not mouse events.
 - RTL: force arrow labels use JetBrains Mono LTR; Arabic hint text RTL. Test both.
@@ -660,48 +690,48 @@ This is the risky chunk. Budget generously.
 
 ### 4.3 The shared component manifest (built during Phase 1, used for all units)
 
-This is effectively the Falak design-system-as-code. Maintain this table — every future unit shouldn't need new primitives, only new *content*.
+This is effectively the Falak design-system-as-code. Maintain this table — every future unit shouldn't need new primitives, only new _content_.
 
-| Component | Purpose | Location |
-|---|---|---|
-| `SlideViewer` | Keyboard-nav deck player | `src/components/slide/SlideViewer.tsx` |
-| `SlideFrame` | 16:10 container, top-right meta mark | `src/components/slide/SlideFrame.tsx` |
-| `TitleSlide` | First slide, bilingual | `src/components/slide/TitleSlide.tsx` |
-| `ConceptSlide` | The big idea | `src/components/slide/ConceptSlide.tsx` |
-| `EquationsSlide` | 1–3 equations max | `src/components/slide/EquationsSlide.tsx` |
-| `VisualSlide` | Diagrams | `src/components/slide/VisualSlide.tsx` |
-| `WorkedExampleSlide` | Fully-solved problem | `src/components/slide/WorkedExampleSlide.tsx` |
-| `VocabSlide` | Bilingual term table | `src/components/slide/VocabSlide.tsx` |
-| `SimulationCanvas` | SVG sim container | `src/components/interactive/SimulationCanvas.tsx` |
-| `ControlPanel` | Sliders + PLAY | `src/components/interactive/ControlPanel.tsx` |
-| `LiveReadout` | Real-time values table | `src/components/interactive/LiveReadout.tsx` |
-| `AnswerInput` | Numeric / selection inputs | `src/components/interactive/AnswerInput.tsx` |
-| `ResultBanner` | Success / failure + hint | `src/components/interactive/ResultBanner.tsx` |
-| `ProblemStatement` | Arabic problem + Hebrew terms | `src/components/interactive/ProblemStatement.tsx` |
-| `ExamQuestion` | Multi-part question renderer | `src/components/exam/ExamQuestion.tsx` |
-| `ExamNavigator` | Scroll-to-next question | `src/components/exam/ExamNavigator.tsx` |
-| `SolutionReveal` | Hidden-until-asked solution | `src/components/exam/SolutionReveal.tsx` |
-| `ArabicTitle` | `font-arabic text-Xl` wrapper | `src/components/bilingual/ArabicTitle.tsx` |
-| `HebrewLabel` | `font-hebrew text-sm text-accent uppercase` | `src/components/bilingual/HebrewLabel.tsx` |
-| `TermBlock` | Hebrew label + Arabic title + English caption | `src/components/bilingual/TermBlock.tsx` |
-| `Math` / `InlineMath` / `BlockMath` | KaTeX wrappers | `src/components/math/Math.tsx` |
+| Component                           | Purpose                                       | Location                                          |
+| ----------------------------------- | --------------------------------------------- | ------------------------------------------------- |
+| `SlideViewer`                       | Keyboard-nav deck player                      | `src/components/slide/SlideViewer.tsx`            |
+| `SlideFrame`                        | 16:10 container, top-right meta mark          | `src/components/slide/SlideFrame.tsx`             |
+| `TitleSlide`                        | First slide, bilingual                        | `src/components/slide/TitleSlide.tsx`             |
+| `ConceptSlide`                      | The big idea                                  | `src/components/slide/ConceptSlide.tsx`           |
+| `EquationsSlide`                    | 1–3 equations max                             | `src/components/slide/EquationsSlide.tsx`         |
+| `VisualSlide`                       | Diagrams                                      | `src/components/slide/VisualSlide.tsx`            |
+| `WorkedExampleSlide`                | Fully-solved problem                          | `src/components/slide/WorkedExampleSlide.tsx`     |
+| `VocabSlide`                        | Bilingual term table                          | `src/components/slide/VocabSlide.tsx`             |
+| `SimulationCanvas`                  | SVG sim container                             | `src/components/interactive/SimulationCanvas.tsx` |
+| `ControlPanel`                      | Sliders + PLAY                                | `src/components/interactive/ControlPanel.tsx`     |
+| `LiveReadout`                       | Real-time values table                        | `src/components/interactive/LiveReadout.tsx`      |
+| `AnswerInput`                       | Numeric / selection inputs                    | `src/components/interactive/AnswerInput.tsx`      |
+| `ResultBanner`                      | Success / failure + hint                      | `src/components/interactive/ResultBanner.tsx`     |
+| `ProblemStatement`                  | Arabic problem + Hebrew terms                 | `src/components/interactive/ProblemStatement.tsx` |
+| `ExamQuestion`                      | Multi-part question renderer                  | `src/components/exam/ExamQuestion.tsx`            |
+| `ExamNavigator`                     | Scroll-to-next question                       | `src/components/exam/ExamNavigator.tsx`           |
+| `SolutionReveal`                    | Hidden-until-asked solution                   | `src/components/exam/SolutionReveal.tsx`          |
+| `ArabicTitle`                       | `font-arabic text-Xl` wrapper                 | `src/components/bilingual/ArabicTitle.tsx`        |
+| `HebrewLabel`                       | `font-hebrew text-sm text-accent uppercase`   | `src/components/bilingual/HebrewLabel.tsx`        |
+| `TermBlock`                         | Hebrew label + Arabic title + English caption | `src/components/bilingual/TermBlock.tsx`          |
+| `Math` / `InlineMath` / `BlockMath` | KaTeX wrappers                                | `src/components/math/Math.tsx`                    |
 
 ---
 
 ## 5. Risk register (updated with session-zero intel)
 
-*Updates from the roadmap's risk register using what we learned in the interview.*
+_Updates from the roadmap's risk register using what we learned in the interview._
 
-| Risk | Likelihood | Impact | Mitigation (updated) |
-|---|---|---|---|
-| Arabic review bottleneck | **Medium** (author is the reviewer) | Medium | Faris is a native Arabic speaker and the reviewer. The 48-hour cool-off re-read rule is now the primary check (not a fallback) since there is no second pair of eyes. Student spot-reading sought opportunistically. |
-| FBD Builder complexity | High | High | §4.2.5 allocates 3–5 sessions (~20–30 h). Stop and reach for Matter.js only after step 4 of the 10-step build if hand-rolled physics becomes fragile. Scenarios ordered easiest → hardest so an MVP can ship with scenarios 1–3 if 4–5 stall. |
-| Physics accuracy errors | Medium | Very high | Author is a physics teacher — first line of defense. `physics-accuracy` skill on every equation. Unit-tested helpers. Second-teacher peer review is a future mitigation (§6). |
-| Scope creep | High | High | Phase gates are hard. The plan deliberately defers features (teacher accounts, adaptive difficulty, TTS, PWA) to Phase 7+. |
-| Burnout (solo project) | High | High | Tempo is 15+ h/week, not 40. Real-classroom dry run at end of Phase 1 (§4.2.8) provides a concrete win. |
-| Perf regressions | Low | Medium | Lighthouse baselined in §3.2.8; re-run on every unit's theory/interactive route. Perf budget 150 KB JS gzipped from `docs/03` §10 is a hard limit. |
-| **Past-Bagrut copyright / usage rights** (new) | Medium | Medium | `bagrut/README.md` documents usage note. Before pasting a verbatim problem into `exam.ts`, Faris confirms educational fair use is adequate; otherwise the question is paraphrased and attributed. |
-| **Drift between docs and code** (new, because docs mention a nonexistent prototype) | Medium | Low | §3.2.10 fixes today. Future: a doc-lint step (Phase 5 or earlier) that cross-references `docs/units/*.md` against `src/content/units/*/meta.ts`. |
+| Risk                                                                                | Likelihood                          | Impact    | Mitigation (updated)                                                                                                                                                                                                                          |
+| ----------------------------------------------------------------------------------- | ----------------------------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Arabic review bottleneck                                                            | **Medium** (author is the reviewer) | Medium    | Faris is a native Arabic speaker and the reviewer. The 48-hour cool-off re-read rule is now the primary check (not a fallback) since there is no second pair of eyes. Student spot-reading sought opportunistically.                          |
+| FBD Builder complexity                                                              | High                                | High      | §4.2.5 allocates 3–5 sessions (~20–30 h). Stop and reach for Matter.js only after step 4 of the 10-step build if hand-rolled physics becomes fragile. Scenarios ordered easiest → hardest so an MVP can ship with scenarios 1–3 if 4–5 stall. |
+| Physics accuracy errors                                                             | Medium                              | Very high | Author is a physics teacher — first line of defense. `physics-accuracy` skill on every equation. Unit-tested helpers. Second-teacher peer review is a future mitigation (§6).                                                                 |
+| Scope creep                                                                         | High                                | High      | Phase gates are hard. The plan deliberately defers features (teacher accounts, adaptive difficulty, TTS, PWA) to Phase 7+.                                                                                                                    |
+| Burnout (solo project)                                                              | High                                | High      | Tempo is 15+ h/week, not 40. Real-classroom dry run at end of Phase 1 (§4.2.8) provides a concrete win.                                                                                                                                       |
+| Perf regressions                                                                    | Low                                 | Medium    | Lighthouse baselined in §3.2.8; re-run on every unit's theory/interactive route. Perf budget 150 KB JS gzipped from `docs/03` §10 is a hard limit.                                                                                            |
+| **Past-Bagrut copyright / usage rights** (new)                                      | Medium                              | Medium    | `bagrut/README.md` documents usage note. Before pasting a verbatim problem into `exam.ts`, Faris confirms educational fair use is adequate; otherwise the question is paraphrased and attributed.                                             |
+| **Drift between docs and code** (new, because docs mention a nonexistent prototype) | Medium                              | Low       | §3.2.10 fixes today. Future: a doc-lint step (Phase 5 or earlier) that cross-references `docs/units/*.md` against `src/content/units/*/meta.ts`.                                                                                              |
 
 ---
 
@@ -724,13 +754,13 @@ Track these here. Mark done (✓) when resolved; add new items as they appear.
 
 Listed as orientation, not a commitment. Build out detail when Phase 1 completes.
 
-| Phase | Units / features | Estimated weeks @ 15h/week |
-|---|---|---|
-| **Phase 2 · Mechanics core** | Units 1, 2, 4, 5, 6, 7 | ~12–16 |
-| **Phase 3 · Electromagnetism** | Units 8, 9, 10 (Circuit Builder is the hard one) | ~8–10 |
-| **Phase 4 · Radiation & Matter** | Units 11, 12, 13, 14 | ~8–10 |
-| **Phase 5 · Cross-unit** | Glossary, Bagrut simulator, progress dashboard, print/export | ~4 |
-| **Phase 6 · Review & launch** | Reviewer passes, WCAG audit, domain, first classroom use | ~6–8 (ongoing) |
+| Phase                            | Units / features                                             | Estimated weeks @ 15h/week |
+| -------------------------------- | ------------------------------------------------------------ | -------------------------- |
+| **Phase 2 · Mechanics core**     | Units 1, 2, 4, 5, 6, 7                                       | ~12–16                     |
+| **Phase 3 · Electromagnetism**   | Units 8, 9, 10 (Circuit Builder is the hard one)             | ~8–10                      |
+| **Phase 4 · Radiation & Matter** | Units 11, 12, 13, 14                                         | ~8–10                      |
+| **Phase 5 · Cross-unit**         | Glossary, Bagrut simulator, progress dashboard, print/export | ~4                         |
+| **Phase 6 · Review & launch**    | Reviewer passes, WCAG audit, domain, first classroom use     | ~6–8 (ongoing)             |
 
 Critical path from Phase 1 end to v1: ~9–12 calendar months at the stated tempo.
 
@@ -744,8 +774,8 @@ Critical path from Phase 1 end to v1: ~9–12 calendar months at the stated temp
 - **Static export** — `next build` + `output: 'export'` produces an `out/` folder with plain HTML/CSS/JS. No Node.js at runtime. Hostable anywhere.
 - **Server Component vs Client Component** — App Router components are server-side by default (rendered on build). Adding `"use client"` at the top makes a component client-side (for hooks like `useState`, interactive UI). Falak's slide content is mostly server; interactives are client.
 - **`generateStaticParams`** — for dynamic routes (`[unitId]`), this function tells Next which values to build pages for. We return all 14 unit IDs.
-- **`next/font`** — Next's built-in font loader. It downloads Google Fonts *at build time*, self-hosts them, and inlines critical CSS. No runtime request to Google.
-- **MDX** — Markdown + JSX. Write `## Heading` *and* `<CustomComponent />` in the same file. Slides are MDX.
+- **`next/font`** — Next's built-in font loader. It downloads Google Fonts _at build time_, self-hosts them, and inlines critical CSS. No runtime request to Google.
+- **MDX** — Markdown + JSX. Write `## Heading` _and_ `<CustomComponent />` in the same file. Slides are MDX.
 - **KaTeX** — a math typesetting library. Renders `$E = mc^2$` to pretty HTML. Faster than MathJax.
 - **Zustand** — a small state-management library. Acts like a global hook. We use it for progress and settings.
 - **Dexie** — a friendly wrapper over IndexedDB (browser-side database). Versioned schema, Promises, TypeScript.
@@ -757,4 +787,4 @@ Critical path from Phase 1 end to v1: ~9–12 calendar months at the stated temp
 
 ---
 
-*End of plan. Update this file whenever the reality of the project diverges from what's written here. A stale plan is worse than no plan.*
+_End of plan. Update this file whenever the reality of the project diverges from what's written here. A stale plan is worse than no plan._

@@ -16,10 +16,7 @@ export function UnitModeNav({ unitId }: UnitModeNavProps) {
   const activeMode = detectActiveMode(pathname);
 
   return (
-    <nav
-      aria-label="Unit modes"
-      className="flex flex-wrap gap-1 border-b border-border"
-    >
+    <nav aria-label="Unit modes" className="flex flex-wrap gap-1 border-b border-border">
       {MODE_ORDER.map((mode) => {
         const href = `/units/${unitId}/${mode}`;
         const active = mode === activeMode;

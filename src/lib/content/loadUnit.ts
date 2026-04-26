@@ -1,9 +1,7 @@
 import { UNIT_LISTING } from './unitRegistry';
 import type { UnitId, UnitListing } from '@/types/unit';
 
-const UNIT_BY_ID: ReadonlyMap<UnitId, UnitListing> = new Map(
-  UNIT_LISTING.map((u) => [u.id, u]),
-);
+const UNIT_BY_ID: ReadonlyMap<UnitId, UnitListing> = new Map(UNIT_LISTING.map((u) => [u.id, u]));
 
 export function getUnit(id: UnitId): UnitListing {
   const unit = UNIT_BY_ID.get(id);

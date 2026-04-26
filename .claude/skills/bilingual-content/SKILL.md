@@ -33,18 +33,18 @@ Physics content in Falak is bilingual by design. This skill ensures Arabic is Mo
 
 Before using ANY physics term in Arabic, verify it against the terminology table in `docs/07_content_guidelines.md`. Common errors to avoid:
 
-| Wrong / Non-standard | Correct |
-|---|---|
-| الإكسلرايشن | التسارع |
-| الفورس | القوّة |
-| الشدّة (for force) | القوّة |
-| الوزن (for mass) | الكتلة |
-| الكتلة (for weight) | الوزن |
-| التنع (Hebrew loanword form) | الزخم |
-| المتكف (Hebrew loanword form) | الدفع |
-| الجول (for joule) | الجول (transliteration OK for units) |
-| الدوائر (for circular, informal) | الدائريّة |
-| السرعة (without qualifier for velocity) | السرعة المتجهة |
+| Wrong / Non-standard                    | Correct                              |
+| --------------------------------------- | ------------------------------------ |
+| الإكسلرايشن                             | التسارع                              |
+| الفورس                                  | القوّة                               |
+| الشدّة (for force)                      | القوّة                               |
+| الوزن (for mass)                        | الكتلة                               |
+| الكتلة (for weight)                     | الوزن                                |
+| التنع (Hebrew loanword form)            | الزخم                                |
+| المتكف (Hebrew loanword form)           | الدفع                                |
+| الجول (for joule)                       | الجول (transliteration OK for units) |
+| الدوائر (for circular, informal)        | الدائريّة                            |
+| السرعة (without qualifier for velocity) | السرعة المتجهة                       |
 
 ### Step 3 · Grammar & syntax check
 
@@ -87,6 +87,7 @@ Every Hebrew term MUST come from a verified source:
 If there's any doubt, flag with `REVIEW_HEBREW:` comment. Do not guess.
 
 Example:
+
 ```tsx
 <HebrewLabel>
   {/* REVIEW_HEBREW: Is "תאוצה צנטריפטלית" or "תאוצה מרכזית" the current standard? */}
@@ -97,6 +98,7 @@ Example:
 ### Step 3 · No full Hebrew sentences
 
 Hebrew appears as:
+
 - **Term labels** above Arabic titles ("חוקי ניוטון")
 - **Inline brackets** when introducing a term in Arabic prose
 - **Full exam problem statements** when quoting a real past Bagrut question (with attribution)
@@ -109,13 +111,9 @@ Never write tutorial-level Hebrew prose. That's not Falak's job.
 
 ```tsx
 <div dir="rtl" className="space-y-2">
-  <div className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
-    UNIT 03
-  </div>
-  <div className="font-hebrew text-sm uppercase tracking-[0.15em] text-accent">
-    חוקי ניוטון
-  </div>
-  <h1 className="font-arabic text-5xl font-semibold text-ink leading-tight">
+  <div className="font-mono text-xs uppercase tracking-[0.2em] text-accent">UNIT 03</div>
+  <div className="font-hebrew text-sm uppercase tracking-[0.15em] text-accent">חוקי ניוטון</div>
+  <h1 className="font-arabic text-5xl font-semibold leading-tight text-ink">
     قوانين نيوتن والديناميكا
   </h1>
   <p className="font-body italic text-ink-muted" dir="ltr">
@@ -128,11 +126,11 @@ Never write tutorial-level Hebrew prose. That's not Falak's job.
 
 ```tsx
 <div className="space-y-3" dir="rtl">
-  <div className="flex justify-between items-baseline">
+  <div className="flex items-baseline justify-between">
     <h3 className="font-arabic text-xl">قانون نيوتن الثاني</h3>
     <span className="font-hebrew text-sm text-ink-muted">חוק ניוטון השני</span>
   </div>
-  <div dir="ltr" className="bg-paper-raised p-6 rounded">
+  <div dir="ltr" className="rounded bg-paper-raised p-6">
     <Math>{`\\vec{F}_{net} = m\\vec{a}`}</Math>
   </div>
 </div>
@@ -142,8 +140,8 @@ Never write tutorial-level Hebrew prose. That's not Falak's job.
 
 ```tsx
 <div className="grid grid-cols-2 gap-6" dir="rtl">
-  {terms.map(term => (
-    <div className="flex justify-between py-2 border-b border-border">
+  {terms.map((term) => (
+    <div className="flex justify-between border-b border-border py-2">
       <span className="font-arabic text-lg">{term.ar}</span>
       <span className="font-hebrew text-base text-ink-muted">{term.he}</span>
     </div>
@@ -203,6 +201,7 @@ RTL rendering:
 ## Escalation
 
 When uncertain about:
+
 - Arabic word choice → add `REVIEW_ARABIC:` comment, use best guess, flag in PR
 - Hebrew term → add `REVIEW_HEBREW:` comment, use best guess, flag in PR
 - Grammar construction → draft with alternates, ask the human

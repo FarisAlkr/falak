@@ -32,9 +32,9 @@ A unit is considered **complete** when:
 import { UnitMeta } from '@/types/unit';
 
 export const meta: UnitMeta = {
-  id: 'newtons-laws',            // kebab-case, matches curriculum doc
-  number: 3,                     // 1-14
-  section: 'mechanics',          // 'mechanics' | 'electromagnetism' | 'radiation-matter'
+  id: 'newtons-laws', // kebab-case, matches curriculum doc
+  number: 3, // 1-14
+  section: 'mechanics', // 'mechanics' | 'electromagnetism' | 'radiation-matter'
 
   titles: {
     ar: 'قوانين نيوتن والديناميكا',
@@ -57,7 +57,7 @@ export const meta: UnitMeta = {
     summary: 5,
   },
 
-  bagrutWeight: 'very-high',     // 'low' | 'medium' | 'high' | 'very-high'
+  bagrutWeight: 'very-high', // 'low' | 'medium' | 'high' | 'very-high'
 
   keyTerms: [
     { ar: 'قوة', he: 'כוח', en: 'Force' },
@@ -70,7 +70,7 @@ export const meta: UnitMeta = {
   summaryTakeaway: {
     ar: 'القوة المحصلة على جسم تساوي حاصل ضرب كتلته في تسارعه. بدون قوة محصلة، لا يوجد تسارع.',
     he: 'הכוח השקול על גוף שווה למכפלת המסה בתאוצה. בלי כוח שקול, אין תאוצה.',
-    en: "Net force on an object equals its mass times its acceleration. No net force, no acceleration.",
+    en: 'Net force on an object equals its mass times its acceleration. No net force, no acceleration.',
   },
 };
 ```
@@ -109,13 +109,8 @@ unitId: newtons-laws
   meta="الوحدة الثالثة · 5 יח״ל · מכניקה"
 />
 
-<ConceptSlide
-  hebrewLabel="הרעיון המרכזי"
-  arabicTitle="الفكرة المحوريّة"
->
-  <ArabicBody>
-    القوة هي السبب المسؤول عن تغيير حالة الحركة...
-  </ArabicBody>
+<ConceptSlide hebrewLabel="הרעיון המרכזי" arabicTitle="الفكرة المحوريّة">
+  <ArabicBody>القوة هي السبب المسؤول عن تغيير حالة الحركة...</ArabicBody>
   <Diagram type="newton-first-law" />
 </ConceptSlide>
 
@@ -292,11 +287,15 @@ unitId: newtons-laws
     he="הכוח השקול על גוף = מסה × תאוצה. ללא כוח שקול, אין תאוצה. לכל פעולה יש תגובה שווה בגודל והפוכה בכיוון, הפועלות על גופים שונים."
   />
 
-  <FormulaCard>
-    <Math>\vec{F}_{net} = m\vec{a}</Math>
-    <Math>W = mg</Math>
-    <Math>f_k = \mu_k N</Math>
-  </FormulaCard>
+{' '}
+
+<FormulaCard>
+  <Math>
+    \vec{F}_{net} = m\vec{a}
+  </Math>
+  <Math>W = mg</Math>
+  <Math>f_k = \mu_k N</Math>
+</FormulaCard>
 
   <NextSteps>
     <Link to="/units/work-energy">التالي: العمل والطاقة</Link>
@@ -323,33 +322,39 @@ Every unit ships with:
 When Claude Code builds a unit, follow this order:
 
 1. **Research phase** (fresh session)
+
    - Read curriculum doc and unit spec
    - Read past Bagrut problems for this unit
    - Draft the outline of slides + interactive + exam in a markdown file
    - Get approval on the outline before coding
 
 2. **Content phase**
+
    - Write `meta.ts`
    - Write `slides.mdx`
    - Write `summary.mdx`
    - Native speaker reviews Arabic at this point
 
 3. **Physics phase**
+
    - Implement any new physics helpers in `src/lib/physics/`
    - Write unit tests for them
    - Commit
 
 4. **Interactive phase**
+
    - Build `interactive.tsx`
    - Verify it works at 60fps
    - Verify the live readout matches the physics
 
 5. **Exam phase**
+
    - Write `exam.ts` with 3–5 questions
    - Include at least one real past Bagrut question
    - Verify solutions
 
 6. **Integration phase**
+
    - Register unit in `unitRegistry.ts`
    - Link from progress tracker
    - Add to glossary

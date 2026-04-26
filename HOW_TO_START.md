@@ -1,6 +1,7 @@
 # HOW TO START FALAK WITH CLAUDE CODE
 
 > **This file has three sections:**
+>
 > 1. **Setup steps** — what to do BEFORE opening Claude Code
 > 2. **THE PROMPT** — copy/paste this as your first message
 > 3. **What happens next** — how to run subsequent sessions
@@ -86,6 +87,7 @@ Claude Code starts up. It will automatically detect and read `CLAUDE.md`. You sh
 ### Step 1.6 · Verify skills are loaded
 
 In the Claude Code session, type:
+
 ```
 /skills
 ```
@@ -172,6 +174,7 @@ Dig into the hard parts I might not have thought about. Don't ask questions with
 After the interview, create this file. Structure:
 
 ```
+
 # Implementation Plan
 
 ## Phase 0 · Setup (1 week)
@@ -179,6 +182,7 @@ After the interview, create this file. Structure:
 ### Session 0.1 (today, already done) — context loaded, interview complete, plan produced
 
 ### Session 0.2 — environment setup
+
 - [ ] Install Node 20+, pnpm, etc.
 - [ ] Initialize Next.js app in `src/`
 - [ ] Configure Tailwind with design tokens
@@ -188,6 +192,7 @@ After the interview, create this file. Structure:
 - [ ] Verify Vercel preview deploy works
 
 ### Session 0.3 — route skeleton
+
 - [ ] Build empty routes for home, /units, /units/[unitId], modes
 - [ ] Build unitRegistry.ts with all 14 units (metadata placeholders OK)
 - [ ] Home page renders grid of all 14 unit cards
@@ -195,6 +200,7 @@ After the interview, create this file. Structure:
 - [ ] Git commit, deploy preview working
 
 ### Session 0.4 — shared infrastructure
+
 - [ ] Build all slide templates (TitleSlide, ConceptSlide, etc.)
 - [ ] Build all interactive primitives (SimulationCanvas, ControlPanel, etc.)
 - [ ] Build Math component (KaTeX wrapper)
@@ -203,6 +209,7 @@ After the interview, create this file. Structure:
 - [ ] Tests for primitives
 
 ### Session 0.5 — phase 0 gate check
+
 - [ ] Lighthouse score baseline
 - [ ] All routes navigable
 - [ ] All primitives have Storybook-like example page (for manual review)
@@ -211,23 +218,35 @@ After the interview, create this file. Structure:
 ## Phase 1 · Unit 3 Reference Implementation (2 weeks)
 
 ### Session 1.1 — research & outline
+
 ### Session 1.2 — meta.ts + slides.mdx draft
+
 ### Session 1.3 — slides.mdx polish + Arabic review round 1
+
 ### Session 1.4 — physics helpers (dynamics.ts) with tests
+
 ### Session 1.5 — FBD Builder interactive part 1 (problem scenarios + rendering)
+
 ### Session 1.6 — FBD Builder interactive part 2 (drag forces + physics verification)
+
 ### Session 1.7 — FBD Builder interactive part 3 (result, hints, difficulty ramp)
+
 ### Session 1.8 — exam.ts with 3–5 Bagrut questions
+
 ### Session 1.9 — summary.mdx + integration + /review-unit pass
+
 ### Session 1.10 — final review, staff engineer pass (fresh session), merge
 
 Each session is 2–4 hours of focused work.
 
 ## Risks & mitigations
+
 [fill in]
 
 ## Decisions log
+
 [fill in with every major choice made and why]
+
 ```
 
 ## HARD RULES FOR THIS SESSION
@@ -273,18 +292,19 @@ Start with step 1 of the reading protocol. Work through all 12 files. Then verif
 ### 3.1 · During this first session
 
 Claude will:
+
 1. Read all the docs (takes 5–10 minutes as it works through each file)
 2. Answer the 4 sanity-check questions — **verify them carefully**
 3. Interview you with maybe 5–10 questions — answer honestly
 4. Produce `docs/IMPLEMENTATION_PLAN.md`
 
-**At the end, say:** *"Commit the implementation plan and summarize this session into `docs/SESSION_LOG.md`. Then we're done for today."*
+**At the end, say:** _"Commit the implementation plan and summarize this session into `docs/SESSION_LOG.md`. Then we're done for today."_
 
 ### 3.2 · Review the implementation plan
 
 Before starting session 2, read `docs/IMPLEMENTATION_PLAN.md` carefully. Edit anything you disagree with. This is your blueprint — don't accept something you don't understand.
 
-If Claude's plan feels wrong, you can say (in a new session): *"Review the implementation plan in `docs/IMPLEMENTATION_PLAN.md` and tell me what's weak, what's missing, or what might break."* That's a cheap way to get a second opinion from a fresh context.
+If Claude's plan feels wrong, you can say (in a new session): _"Review the implementation plan in `docs/IMPLEMENTATION_PLAN.md` and tell me what's weak, what's missing, or what might break."_ That's a cheap way to get a second opinion from a fresh context.
 
 ### 3.3 · Starting subsequent sessions
 
@@ -292,24 +312,25 @@ If Claude's plan feels wrong, you can say (in a new session): *"Review the imple
 
 #### Good opening prompts for later sessions:
 
-- *"We're starting Session 0.2 from the implementation plan — environment setup. Read `CLAUDE.md` and `docs/IMPLEMENTATION_PLAN.md`, then walk me through what we're doing today before you start."*
+- _"We're starting Session 0.2 from the implementation plan — environment setup. Read `CLAUDE.md` and `docs/IMPLEMENTATION_PLAN.md`, then walk me through what we're doing today before you start."_
 
-- *"Session 0.4 today — shared infrastructure. Build the slide template components. Start with `TitleSlide.tsx` and pause for my review before continuing to the next."*
+- _"Session 0.4 today — shared infrastructure. Build the slide template components. Start with `TitleSlide.tsx` and pause for my review before continuing to the next."_
 
-- *"Session 1.4 — physics helpers for Unit 3 (Newton's Laws). Write `src/lib/physics/dynamics.ts` along with tests in `__tests__/dynamics.test.ts`. Use TDD: tests first, then implementation."*
+- _"Session 1.4 — physics helpers for Unit 3 (Newton's Laws). Write `src/lib/physics/dynamics.ts` along with tests in `__tests__/dynamics.test.ts`. Use TDD: tests first, then implementation."_
 
-- *"Review mode today. No code changes. Invoke `/review-unit newtons-laws` and walk me through the findings."*
+- _"Review mode today. No code changes. Invoke `/review-unit newtons-laws` and walk me through the findings."_
 
 #### Bad opening prompts (avoid these):
 
-- ❌ *"Continue where we left off"* — Claude doesn't have memory between sessions. Always state the session number and goal.
-- ❌ *"Build all of Unit 3 today"* — too big. One sub-session at a time.
-- ❌ *"Make it prettier"* — vague. Specify exactly what to change.
-- ❌ *"Fix the bugs"* — which bugs? Be specific or ask Claude to list them first.
+- ❌ _"Continue where we left off"_ — Claude doesn't have memory between sessions. Always state the session number and goal.
+- ❌ _"Build all of Unit 3 today"_ — too big. One sub-session at a time.
+- ❌ _"Make it prettier"_ — vague. Specify exactly what to change.
+- ❌ _"Fix the bugs"_ — which bugs? Be specific or ask Claude to list them first.
 
 ### 3.4 · When things go wrong
 
 **If Claude breaks something:**
+
 ```bash
 git status            # see what changed
 git diff              # see the actual changes
@@ -322,16 +343,18 @@ Then start a fresh session and tell Claude what happened. Don't try to debug in 
 Start a new session. Point Claude at `CLAUDE.md`, the session log, and the specific file you're working on. Don't try to recover a confused session.
 
 **If you want a second opinion:**
-Start a fresh session and ask: *"Review this code/plan/decision as a senior engineer who wasn't involved. Don't be nice. Tell me what's wrong."* The fresh context acts as a staff engineer review.
+Start a fresh session and ask: _"Review this code/plan/decision as a senior engineer who wasn't involved. Don't be nice. Tell me what's wrong."_ The fresh context acts as a staff engineer review.
 
 ### 3.5 · Maintenance rhythm
 
 Once a week:
+
 - Review `docs/SESSION_LOG.md` to track progress
 - Edit `CLAUDE.md` if project norms have drifted (keep it under 200 lines)
 - Tag a release if you've shipped a unit: `git tag v0.1-unit-03 && git push --tags`
 
 Every time you complete a unit:
+
 - Run `/review-unit {unit-id}` in a fresh session
 - Fix any issues the review surfaces
 - Merge the unit branch
