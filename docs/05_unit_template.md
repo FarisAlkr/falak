@@ -1,7 +1,21 @@
 # Unit Template
 
-> The canonical shape of every Falak unit.
-> Every one of the 14 units is an instance of this template.
+> The canonical **rendered shape** of every Falak unit.
+> Every one of the 12 units is an instance of this template.
+
+---
+
+## Source of truth
+
+**The scientific content for this unit is sourced from `docs/content/{NN}_{unit}.md` per the schema in `docs/content/_format_spec.md`.**
+
+This template defines the **rendered output** (the `meta.ts`, `slides.mdx`, `interactive.tsx`, `exam.ts`, `summary.mdx` files in `src/content/units/{unitId}/`). The **source content** — concept blocks, equations, examples, misconceptions, bilingual phrasings, past Bagrut questions — lives in the baseline file under `docs/content/`. When building a unit:
+
+1. Read `docs/content/{NN}_{unit}.md` first — this is the canonical source.
+2. Read `docs/content/_format_spec.md` to understand the baseline schema (frontmatter, concept blocks, example blocks, misconception blocks, Bagrut blocks, the Arabic flag system, the quality bar).
+3. Use `docs/content/03_newtons_laws.md` as the structural reference for what a "FULL" baseline file looks like.
+4. **Render** from the baseline into the files specified below — never invent concepts, equations, or Arabic/Hebrew phrasing in the rendered files.
+5. Surface any baseline `⚑` Arabic flags in the rendered output for the human reviewer.
 
 ---
 
@@ -33,7 +47,7 @@ import { UnitMeta } from '@/types/unit';
 
 export const meta: UnitMeta = {
   id: 'newtons-laws', // kebab-case, matches curriculum doc
-  number: 3, // 1-14
+  number: 3, // 1-12
   section: 'mechanics', // 'mechanics' | 'electromagnetism' | 'radiation-matter'
 
   titles: {
@@ -323,9 +337,9 @@ When Claude Code builds a unit, follow this order:
 
 1. **Research phase** (fresh session)
 
-   - Read curriculum doc and unit spec
-   - Read past Bagrut problems for this unit
-   - Draft the outline of slides + interactive + exam in a markdown file
+   - Read `docs/content/{NN}_{unit}.md` (the canonical scientific baseline) and `docs/content/_format_spec.md` (the schema)
+   - Read past Bagrut problems referenced in the baseline file's `## Past Bagrut Questions` section
+   - Draft the outline of slides + interactive + exam in a markdown file, **composing from the baseline's concept blocks** (no invention)
    - Get approval on the outline before coding
 
 2. **Content phase**

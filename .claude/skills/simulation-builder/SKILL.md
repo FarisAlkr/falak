@@ -7,6 +7,10 @@ description: Design patterns and implementation guidelines for building interact
 
 Falak interactives are where students transition from "understanding" to "applying." They must be pedagogically rigorous, physically accurate, and delightful to use. No cheap gamification, no fake physics.
 
+## Source content
+
+The interactive concept and the physics it teaches come from the unit's baseline file under `docs/content/`. Look for the `interactive_concept` field in the frontmatter and the `concept` blocks the interactive is meant to exercise. Schema: `docs/content/_format_spec.md`. Reference unit: `docs/content/03_newtons_laws.md`. The interactive must use the same equations defined in the baseline's `key_equations` — no shortcuts, no inventing.
+
 ## When to trigger this skill
 
 - Building a new `interactive.tsx` for a unit

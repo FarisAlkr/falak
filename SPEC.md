@@ -40,7 +40,7 @@ Falak solves all four by being Arabic-first for instruction, Hebrew-parallel for
 
 ## 3. Core features
 
-### 3.1 Unit structure (all 14 units follow this)
+### 3.1 Unit structure (all 12 units follow this)
 
 Each unit has **four modes**, accessible from a unit home screen:
 
@@ -135,7 +135,7 @@ See `docs/02_design_system.md` for the full system.
 
 Falak v1 succeeds if:
 
-- [ ] All 14 units shipped with all 4 modes
+- [ ] All 12 units shipped with all 4 modes
 - [ ] A teacher can teach a 45-minute class using only the theory slides with zero prep
 - [ ] A student who completes all 14 interactives can solve 70%+ of past Bagrut mechanics problems
 - [ ] All physics content verified by at least one expert reviewer
