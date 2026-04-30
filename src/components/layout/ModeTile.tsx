@@ -46,7 +46,7 @@ export function ModeTile({ unitId, mode, index = 0 }: ModeTileProps) {
       transition={{ ...TRANSITION.slow, delay: 0.06 * index }}
     >
       <Link
-        href={`/units/${unitId}/${mode}`}
+        href={`/units/${unitId}/${mode}/`}
         className="group block focus-visible:outline-none"
         aria-label={label.en}
       >

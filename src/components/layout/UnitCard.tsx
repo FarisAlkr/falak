@@ -45,7 +45,7 @@ export function UnitCard({ unit, index = 0 }: UnitCardProps) {
       transition={{ ...TRANSITION.slow, delay: 0.04 * index }}
     >
       <Link
-        href={`/units/${unit.id}`}
+        href={`/units/${unit.id}/`}
         className="group block focus-visible:outline-none"
         aria-label={unit.titles.ar}
       >
