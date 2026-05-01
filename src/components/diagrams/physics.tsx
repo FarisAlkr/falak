@@ -703,3 +703,154 @@ export function FBDStepsDiagram({ step }: { step: 1 | 2 | 3 }) {
     </DiagramFrame>
   );
 }
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * Diagrams added for the new Newton-I and Newton-III examples.
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+/** Hanging-sign equilibrium: a mass suspended from two ropes meeting at the
+ *  top hook, each at angle θ from vertical. Newton I in 2D. */
+export function HangingSignDiagram({ angleDeg = 30 }: { angleDeg?: number }) {
+  const theta = (angleDeg * Math.PI) / 180;
+  const ropeLen = 110;
+  const hookX = 240;
+  const hookY = 70;
+  const massX = hookX;
+  const massY = hookY + ropeLen * Math.cos(theta);
+  const leftAnchorX = hookX - ropeLen * Math.sin(theta);
+  const rightAnchorX = hookX + ropeLen * Math.sin(theta);
+
+  return (
+    <DiagramFrame width={480} height={300} ariaLabel="Hanging sign in equilibrium">
+      {/* Ceiling */}
+      <Ground x1={leftAnchorX - 30} x2={rightAnchorX + 30} y={hookY} hatchAbove />
+      {/* Two ropes */}
+      <line x1={leftAnchorX} y1={hookY} x2={massX} y2={massY} stroke={INK} strokeWidth={1.8} />
+      <line x1={rightAnchorX} y1={hookY} x2={massX} y2={massY} stroke={INK} strokeWidth={1.8} />
+      {/* Sign block */}
+      <Block x={massX - 35} y={massY} w={70} h={50} label="m" />
+      {/* Tension arrows on the mass — along each rope, away from the mass */}
+      <Arrow
+        x1={massX}
+        y1={massY}
+        x2={massX - 60 * Math.sin(theta)}
+        y2={massY - 60 * Math.cos(theta)}
+        color={SUCCESS}
+        label="T₁"
+      />
+      <Arrow
+        x1={massX}
+        y1={massY}
+        x2={massX + 60 * Math.sin(theta)}
+        y2={massY - 60 * Math.cos(theta)}
+        color={SUCCESS}
+        label="T₂"
+      />
+      {/* Weight */}
+      <Arrow x1={massX} y1={massY + 50} x2={massX} y2={massY + 110} color={ACCENT} label="W = mg" />
+      {/* Angle markers */}
+      <text
+        x={leftAnchorX + 24}
+        y={hookY + 22}
+        fontFamily="monospace"
+        fontSize="13"
+        fill={INK_MUTED}
+      >
+        θ
+      </text>
+      <text
+        x={rightAnchorX - 32}
+        y={hookY + 22}
+        fontFamily="monospace"
+        fontSize="13"
+        fill={INK_MUTED}
+      >
+        θ
+      </text>
+    </DiagramFrame>
+  );
+}
+
+/** Block on incline, pushed by a horizontal force F, with friction.
+ *  Used by ex-incline-constant-velocity. Shows W, N, F, f_k. */
+export function InclineHorizontalForceFBD({ angleDeg = 30 }: { angleDeg?: number }) {
+  const sinT = Math.sin((angleDeg * Math.PI) / 180);
+  const cosT = Math.cos((angleDeg * Math.PI) / 180);
+  return (
+    <DiagramFrame width={520} height={320} ariaLabel="Incline with horizontal applied force">
+      <BlockOnIncline angleDeg={angleDeg} />
+      {/* Block center is approximately (244, 170). Adjust per BlockOnIncline. */}
+      {/* Weight straight down */}
+      <Arrow x1={244} y1={185} x2={244} y2={275} color={ACCENT} label="W" />
+      {/* Normal perpendicular to surface, away from slope */}
+      <Arrow x1={244} y1={170} x2={244 - 70 * sinT} y2={170 - 70 * cosT} color={INK} label="N" />
+      {/* Friction down the slope (opposing upward motion) */}
+      <Arrow
+        x1={244}
+        y1={170}
+        x2={244 - 60 * cosT}
+        y2={170 + 60 * sinT}
+        color={WARNING}
+        label="f_k"
+      />
+      {/* Horizontal applied force, into the page direction */}
+      <Arrow x1={185} y1={170} x2={244} y2={170} color={INFO} label="F" />
+      <text
+        x={260}
+        y={310}
+        fontFamily="monospace"
+        fontSize="11"
+        fill={INK_MUTED}
+        textAnchor="middle"
+      >
+        ΣF = 0 (constant velocity)
+      </text>
+    </DiagramFrame>
+  );
+}
+
+/** Two boxes in contact, force F pushes A which pushes B. Newton III pair. */
+export function TwoBoxesContactDiagram() {
+  return (
+    <DiagramFrame width={520} height={260} ariaLabel="Two boxes in contact">
+      <Ground x1={40} x2={480} y={200} />
+      <Block x={170} y={140} w={70} h={60} label="A" />
+      <Block x={240} y={130} w={90} h={70} label="B" />
+      {/* Applied force F */}
+      <Arrow x1={100} y1={170} x2={170} y2={170} color={INFO} label="F" />
+      {/* Action-reaction pair at the interface */}
+      <Arrow x1={232} y1={158} x2={262} y2={158} color={ACCENT} label="F_AB" labelOffset={18} />
+      <Arrow x1={248} y1={184} x2={218} y2={184} color={ACCENT} label="F_BA" labelOffset={18} />
+      <text
+        x={260}
+        y={240}
+        textAnchor="middle"
+        fontFamily="monospace"
+        fontSize="11"
+        fill={INK_MUTED}
+      >
+        F_AB = − F_BA (Newton III)
+      </text>
+    </DiagramFrame>
+  );
+}
+
+/** Three boxes in contact, force F pushes m₁; multi-pair Newton III. */
+export function ThreeBoxesStackDiagram() {
+  return (
+    <DiagramFrame width={560} height={260} ariaLabel="Three boxes pushed together">
+      <Ground x1={30} x2={530} y={210} />
+      <Block x={140} y={170} w={50} h={40} label="m₁" />
+      <Block x={190} y={155} w={70} h={55} label="m₂" />
+      <Block x={260} y={135} w={100} h={75} label="m₃" />
+      {/* Applied force */}
+      <Arrow x1={80} y1={190} x2={140} y2={190} color={INFO} label="F" />
+      {/* First contact pair */}
+      <Arrow x1={184} y1={180} x2={208} y2={180} color={ACCENT} label="F₁₂" labelOffset={14} />
+      {/* Second contact pair */}
+      <Arrow x1={254} y1={170} x2={278} y2={170} color={ACCENT} label="F₂₃" labelOffset={14} />
+      {/* a indicator */}
+      <Arrow x1={400} y1={120} x2={460} y2={120} color={INK_MUTED} label="a" dashed width={1.6} />
+    </DiagramFrame>
+  );
+}

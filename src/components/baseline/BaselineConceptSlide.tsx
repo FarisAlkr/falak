@@ -3,6 +3,8 @@ import { BlockMath } from '@/components/math/Math';
 import { BaselineSlideFrame } from './SlideFrame';
 import { SlideKicker } from './SlideKicker';
 import { TrilingualBlock } from './Trilingual';
+import { DiagramRenderer } from './DiagramRenderer';
+import { hasDiagram } from './DiagramRegistry';
 import { I18n } from '@/components/i18n/I18n';
 import type { ArabicFlag, ConceptType } from '@/lib/content/types';
 
@@ -43,38 +45,47 @@ export async function BaselineConceptSlide({
           </h2>
         </header>
 
-        <div className="flex-1 space-y-6">
-          <TrilingualBlock value={c.statement} size="lead" />
+        <div className="grid flex-1 grid-cols-1 gap-6 md:grid-cols-[1fr_auto] md:items-start">
+          <div className="min-w-0 space-y-6">
+            <TrilingualBlock value={c.statement} size="lead" />
 
-          {c.equations.length > 0 && (
-            <div className="bg-accent-tint/30 rounded-sm border-s-2 border-accent px-6 py-4">
-              {c.equations.slice(0, 2).map((eq, i) => (
-                <BlockMath key={i}>{eq.tex}</BlockMath>
-              ))}
-            </div>
-          )}
+            {c.equations.length > 0 && (
+              <div className="bg-accent-tint/30 rounded-sm border-s-2 border-accent px-6 py-4">
+                {c.equations.slice(0, 2).map((eq, i) => (
+                  <BlockMath key={i}>{eq.tex}</BlockMath>
+                ))}
+              </div>
+            )}
 
-          {c.studentDifficulty && (
-            <div className="border-t border-border pt-3">
-              <I18n
-                k="watchOut"
-                className="me-2 inline-block text-[10px] uppercase tracking-meta text-warning"
-              />
-              <span dir="rtl" className="font-arabic text-sm leading-arabic text-ink-muted">
-                <ParagraphFirstLine text={c.studentDifficulty} />
-              </span>
-            </div>
-          )}
+            {c.studentDifficulty && (
+              <div className="border-t border-border pt-3">
+                <I18n
+                  k="watchOut"
+                  className="me-2 inline-block text-[10px] uppercase tracking-meta text-warning"
+                />
+                <span dir="rtl" className="font-arabic text-sm leading-arabic text-ink-muted">
+                  <ParagraphFirstLine text={c.studentDifficulty} />
+                </span>
+              </div>
+            )}
+          </div>
 
-          {showVisualPlaceholder && c.visualName && (
-            <div data-lang="en" className="border-t border-border pt-3">
-              <span
-                dir="ltr"
-                className="font-mono text-[10px] uppercase tracking-meta text-ink-faint"
-              >
-                Visual: {c.visualName}
-              </span>
+          {hasDiagram(c.id) ? (
+            <div className="flex justify-center md:max-w-md md:justify-end">
+              <DiagramRenderer id={c.id} />
             </div>
+          ) : (
+            showVisualPlaceholder &&
+            c.visualName && (
+              <div data-lang="en" className="border-t border-border pt-3 md:border-t-0 md:pt-0">
+                <span
+                  dir="ltr"
+                  className="font-mono text-[10px] uppercase tracking-meta text-ink-faint"
+                >
+                  Visual: {c.visualName}
+                </span>
+              </div>
+            )
           )}
         </div>
       </div>

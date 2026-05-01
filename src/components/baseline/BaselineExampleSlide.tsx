@@ -2,6 +2,8 @@ import { findExample, loadUnit } from '@/lib/content/baseline';
 import { BaselineSlideFrame } from './SlideFrame';
 import { SlideKicker } from './SlideKicker';
 import { TrilingualBlock } from './Trilingual';
+import { DiagramRenderer } from './DiagramRenderer';
+import { hasDiagram } from './DiagramRegistry';
 import { I18n } from '@/components/i18n/I18n';
 import { LOCALE_DIR } from '@/lib/i18n/constants';
 import type { ArabicFlag, Difficulty } from '@/lib/content/types';
@@ -58,9 +60,19 @@ export async function BaselineExampleSlide({ unit, id, slideNumber }: BaselineEx
           </span>
         </header>
 
-        <section className="space-y-3">
-          <I18n k="problem" className="block text-[10px] uppercase tracking-meta text-ink-muted" />
-          <TrilingualBlock value={ex.problem} size="lead" />
+        <section className="grid grid-cols-1 gap-6 md:grid-cols-[1fr_auto] md:items-start">
+          <div className="min-w-0 space-y-3">
+            <I18n
+              k="problem"
+              className="block text-[10px] uppercase tracking-meta text-ink-muted"
+            />
+            <TrilingualBlock value={ex.problem} size="lead" />
+          </div>
+          {hasDiagram(ex.id) && (
+            <div className="flex justify-center md:max-w-md md:justify-end">
+              <DiagramRenderer id={ex.id} />
+            </div>
+          )}
         </section>
 
         {ex.solution && (
