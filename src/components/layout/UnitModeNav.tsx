@@ -30,11 +30,13 @@ export function UnitModeNav({ unitId }: UnitModeNavProps) {
               active ? 'text-ink' : 'text-ink-muted hover:text-ink',
             )}
           >
-            <span dir="rtl" className="font-arabic text-base font-semibold">
+            <span data-lang="ar" dir="rtl" className="font-arabic text-base font-semibold">
               {MODE_LABELS[mode].ar}
             </span>
-            <span className="mx-2 text-ink-faint">·</span>
-            <span className="font-mono text-xs uppercase tracking-meta">
+            <span data-lang="he" dir="rtl" className="font-hebrew text-base font-semibold">
+              {MODE_LABELS[mode].he}
+            </span>
+            <span data-lang="en" dir="ltr" className="font-mono text-xs uppercase tracking-meta">
               {MODE_LABELS[mode].en}
             </span>
             {active && (

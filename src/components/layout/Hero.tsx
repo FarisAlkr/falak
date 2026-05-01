@@ -33,39 +33,47 @@ export function Hero() {
         animate="visible"
         className="relative space-y-6"
       >
-        <motion.span
-          variants={fadeUp}
-          dir="ltr"
-          className="inline-block font-mono text-xs uppercase tracking-meta text-ink-muted"
-        >
-          5 יח״ל · 5 وحدات · Israeli Bagrut
+        <motion.span variants={fadeUp} className="inline-block text-xs text-ink-muted">
+          <span data-lang="ar" dir="rtl" className="font-arabic">
+            5 وحدات · بجروت إسرائيل
+          </span>
+          <span data-lang="he" dir="rtl" className="font-hebrew">
+            5 יח״ל · בגרות בפיזיקה
+          </span>
+          <span data-lang="en" dir="ltr" className="font-mono uppercase tracking-meta">
+            5 units · Israeli Bagrut
+          </span>
         </motion.span>
 
         <motion.h1
           variants={fadeUp}
-          dir="ltr"
           style={{ x: px * 0.4, y: py * 0.2 }}
-          className="font-display text-7xl font-medium leading-none text-ink md:text-8xl"
+          className="text-7xl font-medium leading-none text-ink md:text-8xl"
         >
-          Falak
+          <span data-lang="ar" dir="rtl" className="font-arabic">
+            فَلَك
+          </span>
+          <span data-lang="he" dir="rtl" className="font-hebrew">
+            פלאק
+          </span>
+          <span data-lang="en" dir="ltr" className="font-display">
+            Falak
+          </span>
         </motion.h1>
 
-        <motion.p
-          variants={fadeUp}
-          dir="rtl"
-          style={{ x: -px * 0.25, y: py * 0.15 }}
-          className="font-arabic text-3xl font-medium text-ink md:text-4xl"
-        >
-          فَلَك
-        </motion.p>
-
-        <motion.p
-          variants={fadeUp}
-          dir="ltr"
-          className="max-w-2xl font-body text-lg leading-relaxed text-ink-muted"
-        >
-          A bilingual physics teaching platform for the Israeli 5-unit Bagrut. Built for
-          Arab-speaking students preparing for the Hebrew exam.
+        <motion.p variants={fadeUp} className="max-w-2xl text-lg leading-relaxed text-ink-muted">
+          <span data-lang="ar" dir="rtl" className="font-arabic leading-arabic">
+            منصّة فيزياء ثنائيّة اللغة لبجروت الفيزياء الإسرائيلي بمستوى الـ 5 وحدات. مبنيّة لطلّاب
+            العربيّة الذين يستعدّون للامتحان بالعبرية.
+          </span>
+          <span data-lang="he" dir="rtl" className="font-hebrew">
+            פלטפורמת פיזיקה דו-לשונית לבגרות הישראלית במתמטיקה ברמה של 5 יח״ל. בנויה לתלמידים דוברי
+            ערבית המתכוננים לבחינה בעברית.
+          </span>
+          <span data-lang="en" dir="ltr" className="font-body">
+            A bilingual physics teaching platform for the Israeli 5-unit Bagrut. Built for
+            Arab-speaking students preparing for the Hebrew exam.
+          </span>
         </motion.p>
 
         <motion.div
@@ -75,8 +83,16 @@ export function Hero() {
           className="flex items-center gap-3 pt-4 text-xs"
         >
           <span className="h-px w-8 bg-border-strong" />
-          <span dir="ltr" className="font-mono uppercase tracking-meta text-ink-faint">
-            14 units · 4 modes each · physics in Arabic, Bagrut in Hebrew
+          <span className="text-ink-faint">
+            <span data-lang="ar" dir="rtl" className="font-arabic">
+              12 وحدة · 4 أنماط لكلّ وحدة
+            </span>
+            <span data-lang="he" dir="rtl" className="font-hebrew">
+              12 יחידות · 4 מצבים לכל יחידה
+            </span>
+            <span data-lang="en" dir="ltr" className="font-mono uppercase tracking-meta">
+              12 units · 4 modes each
+            </span>
           </span>
         </motion.div>
       </motion.div>

@@ -2,6 +2,8 @@ import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import { fraunces, inter, jetbrainsMono, notoKufiArabic, heebo } from './fonts';
 import { PageTransition } from '@/components/layout/PageTransition';
+import { AppHeader } from '@/components/layout/AppHeader';
+import { LanguageBootstrap } from '@/components/i18n/LanguageBootstrap';
 import './globals.css';
 import 'katex/dist/katex.min.css';
 
@@ -22,6 +24,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="ar" dir="rtl" className={fontVariables}>
       <body className="paper-grain">
+        <LanguageBootstrap />
+        <AppHeader />
         <PageTransition>{children}</PageTransition>
       </body>
     </html>

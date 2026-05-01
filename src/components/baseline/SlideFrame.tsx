@@ -9,8 +9,9 @@ export interface BaselineSlideFrameProps extends HTMLAttributes<HTMLElement> {
   slideNumber?: string;
   /** Highest-severity Arabic flag observed on this slide. Surfaced as a ribbon in dev. */
   arabicFlag?: ArabicFlag;
-  /** A short label rendered above the slide title (e.g. "CONCEPT · LAW"). */
-  kicker?: string;
+  /** A short label rendered above the slide title. Pass a `<SlideKicker>` for
+   *  the full localized treatment, or a string for ad-hoc use. */
+  kicker?: ReactNode;
 }
 
 export function BaselineSlideFrame({
@@ -30,10 +31,7 @@ export function BaselineSlideFrame({
       )}
       {...props}
     >
-      <div
-        dir="ltr"
-        className="absolute left-5 top-5 flex items-center gap-3 font-mono text-xs uppercase tracking-meta text-ink-faint"
-      >
+      <div className="absolute left-5 top-5 flex items-center gap-3">
         {kicker && <span className="text-ink-muted">{kicker}</span>}
       </div>
       <div

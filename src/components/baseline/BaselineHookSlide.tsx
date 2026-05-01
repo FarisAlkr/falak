@@ -1,27 +1,37 @@
 import { loadUnit } from '@/lib/content/baseline';
 import { BaselineSlideFrame } from './SlideFrame';
+import { SlideKicker } from './SlideKicker';
 
 interface BaselineHookSlideProps {
   unit: string;
   slideNumber?: string;
 }
 
+const HOOK_KICKER = {
+  ar: 'سؤال الانطلاق',
+  he: 'שאלת פתיחה',
+  en: 'OPENING QUESTION',
+};
+
 /**
- * The "hook" slide — the question that motivates the unit. Pulled from the
- * baseline's `## Introduction` section. We render the introduction's first
- * substantive paragraph, surfaced as a single big question.
+ * The hook slide renders the deep question that motivates the unit. Pulled
+ * from the baseline's `## Introduction` section. Currently the introduction
+ * text is Arabic-only in `03_newtons_laws.md` so the hook displays Arabic
+ * regardless of active locale (no Hebrew/English variant exists in the
+ * baseline). Once introductions become trilingual in the baseline, this slide
+ * will pick the active-locale variant automatically.
  */
 export async function BaselineHookSlide({ unit, slideNumber }: BaselineHookSlideProps) {
   const u = await loadUnit(unit);
   const intro = extractFirstQuestion(u.introduction) ?? firstNonEmptyParagraph(u.introduction);
-  const en = u.frontmatter.titles.en;
   return (
-    <BaselineSlideFrame unitNumber={unit} slideNumber={slideNumber} kicker="HOOK · سؤال الانطلاق">
+    <BaselineSlideFrame
+      unitNumber={unit}
+      slideNumber={slideNumber}
+      kicker={<SlideKicker text={HOOK_KICKER} />}
+    >
       <div className="flex h-full flex-col justify-center gap-8">
-        <span dir="ltr" className="font-mono text-xs uppercase tracking-meta text-ink-faint">
-          {en} · the question that drives this unit
-        </span>
-        <p dir="ltr" className="font-display text-3xl italic leading-snug text-ink md:text-4xl">
+        <p dir="rtl" className="font-arabic text-3xl font-medium leading-snug text-ink md:text-5xl">
           {intro}
         </p>
       </div>
@@ -44,7 +54,6 @@ function firstNonEmptyParagraph(text: string): string {
 }
 
 function extractFirstQuestion(text: string): string | undefined {
-  // Look for **bold** highlighted question.
   const bold = text.match(/\*\*([^*]+\?)\*\*/);
   if (bold) return (bold[1] ?? '').trim();
   return undefined;

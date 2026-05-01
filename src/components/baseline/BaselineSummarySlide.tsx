@@ -1,13 +1,16 @@
 import { loadUnit } from '@/lib/content/baseline';
 import { BlockMath } from '@/components/math/Math';
 import { BaselineSlideFrame } from './SlideFrame';
+import { SlideKicker } from './SlideKicker';
+import { LOCALE_DIR } from '@/lib/i18n/constants';
 
 interface BaselineSummarySlideProps {
   unit: string;
   slideNumber?: string;
-  /** Which key_equations to highlight, by id. Default: first three. */
   highlightEquations?: string[];
 }
+
+const SUMMARY_KICKER = { ar: 'الخلاصة', he: 'סיכום', en: 'SUMMARY' };
 
 export async function BaselineSummarySlide({
   unit,
@@ -22,21 +25,36 @@ export async function BaselineSummarySlide({
     .filter((e): e is NonNullable<typeof e> => Boolean(e));
   const outcomes = u.frontmatter.learningOutcomes.slice(0, 3);
   return (
-    <BaselineSlideFrame unitNumber={unit} slideNumber={slideNumber} kicker="SUMMARY · الخلاصة">
+    <BaselineSlideFrame
+      unitNumber={unit}
+      slideNumber={slideNumber}
+      kicker={<SlideKicker text={SUMMARY_KICKER} />}
+    >
       <div className="flex h-full flex-col gap-6 pt-8">
         <header className="space-y-1">
-          <span dir="rtl" className="font-hebrew text-sm uppercase tracking-meta text-accent">
-            {t.he}
-          </span>
-          <h2
-            dir="rtl"
-            className="font-arabic text-3xl font-semibold leading-tight text-ink md:text-4xl"
-          >
-            {t.ar}
+          <h2 className="leading-tight">
+            <span
+              data-lang="ar"
+              dir={LOCALE_DIR.ar}
+              className="block font-arabic text-3xl font-semibold text-ink md:text-4xl"
+            >
+              {t.ar}
+            </span>
+            <span
+              data-lang="he"
+              dir={LOCALE_DIR.he}
+              className="block font-hebrew text-3xl font-semibold text-ink md:text-4xl"
+            >
+              {t.he}
+            </span>
+            <span
+              data-lang="en"
+              dir={LOCALE_DIR.en}
+              className="block font-display text-3xl font-medium text-ink md:text-4xl"
+            >
+              {t.en}
+            </span>
           </h2>
-          <p dir="ltr" className="font-display italic text-ink-muted">
-            {t.en}
-          </p>
         </header>
 
         {eqs.length > 0 && (

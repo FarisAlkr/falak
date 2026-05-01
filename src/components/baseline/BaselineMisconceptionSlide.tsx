@@ -1,13 +1,23 @@
 import { findMisconception, loadUnit } from '@/lib/content/baseline';
 import { BaselineSlideFrame } from './SlideFrame';
+import { SlideKicker } from './SlideKicker';
 import { TrilingualBlock } from './Trilingual';
-import type { ArabicFlag } from '@/lib/content/types';
+import { I18n } from '@/components/i18n/I18n';
+import type { ArabicFlag, Severity } from '@/lib/content/types';
 
 interface BaselineMisconceptionSlideProps {
   unit: string;
   id: string;
   slideNumber?: string;
 }
+
+const MISCONCEPTION_KICKER = { ar: 'مفهوم خاطئ', he: 'מושג מוטעה', en: 'MISCONCEPTION' };
+
+const SEVERITY_LABEL: Record<Severity, { ar: string; he: string; en: string }> = {
+  high: { ar: 'حرج', he: 'גבוה', en: 'HIGH' },
+  medium: { ar: 'متوسّط', he: 'בינוני', en: 'MEDIUM' },
+  low: { ar: 'منخفض', he: 'נמוך', en: 'LOW' },
+};
 
 export async function BaselineMisconceptionSlide({
   unit,
@@ -22,7 +32,7 @@ export async function BaselineMisconceptionSlide({
       unitNumber={unit}
       slideNumber={slideNumber}
       arabicFlag={flag}
-      kicker={`MISCONCEPTION · ${m.severity.toUpperCase()}`}
+      kicker={<SlideKicker text={MISCONCEPTION_KICKER} trailing={SEVERITY_LABEL[m.severity]} />}
     >
       <div className="flex h-full flex-col gap-6 pt-8">
         <header>
@@ -32,38 +42,34 @@ export async function BaselineMisconceptionSlide({
         </header>
 
         <section className="space-y-2">
-          <span
-            dir="ltr"
-            className="block font-mono text-[10px] uppercase tracking-meta text-error"
-          >
-            What students say · الخطأ
-          </span>
+          <I18n
+            k="whatStudentsSay"
+            className="block text-[10px] uppercase tracking-meta text-error"
+          />
           <div className="bg-error/5 rounded-sm border-s-2 border-error px-4 py-3">
             <TrilingualBlock value={m.wrong} tone="danger" />
           </div>
         </section>
 
         <section className="space-y-2">
-          <span
-            dir="ltr"
-            className="block font-mono text-[10px] uppercase tracking-meta text-success"
-          >
-            What&rsquo;s actually true · الصحيح
-          </span>
+          <I18n
+            k="actuallyTrue"
+            className="block text-[10px] uppercase tracking-meta text-success"
+          />
           <div className="bg-success/5 rounded-sm border-s-2 border-success px-4 py-3">
             <TrilingualBlock value={m.right} tone="success" size="lead" />
           </div>
         </section>
 
         {m.whyStudentsFall && (
-          <section
-            dir="ltr"
-            className="border-t border-border pt-3 font-body text-sm italic leading-relaxed text-ink-muted"
-          >
-            <span className="me-2 font-mono text-[10px] uppercase tracking-meta text-ink-faint">
-              Why students fall for it
+          <section className="border-t border-border pt-3">
+            <I18n
+              k="whyTheyFall"
+              className="me-2 inline-block text-[10px] uppercase tracking-meta text-ink-faint"
+            />
+            <span className="font-body text-sm italic leading-relaxed text-ink-muted">
+              {firstSentence(m.whyStudentsFall)}
             </span>
-            <span>{firstSentence(m.whyStudentsFall)}</span>
           </section>
         )}
       </div>
