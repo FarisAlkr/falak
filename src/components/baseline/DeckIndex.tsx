@@ -1,6 +1,10 @@
+'use client';
+
+import { useEffect, useState } from 'react';
 import type { TocEntry } from '@/content/units/newtons-laws/toc';
 import { I18n } from '@/components/i18n/I18n';
 import { LOCALE_DIR } from '@/lib/i18n/constants';
+import { cn } from '@/lib/utils/cn';
 
 interface DeckIndexProps {
   entries: TocEntry[];
@@ -17,6 +21,7 @@ interface DeckIndexProps {
  * active one.
  */
 export function DeckIndex({ entries, totalSlides }: DeckIndexProps) {
+  const activeSection = useActiveSection(entries);
   return (
     <nav
       aria-label="Table of contents"
@@ -45,25 +50,91 @@ export function DeckIndex({ entries, totalSlides }: DeckIndexProps) {
 
       <ol className="space-y-3">
         {entries.map((entry) => (
-          <TocItem key={entry.id} entry={entry} />
+          <TocItem key={entry.id} entry={entry} activeId={activeSection} />
         ))}
       </ol>
     </nav>
   );
 }
 
-function TocItem({ entry, depth = 0 }: { entry: TocEntry; depth?: number }) {
+/**
+ * Tracks the section currently in view as the user scrolls. Picks the
+ * topmost intersecting section anchor; works with the invisible
+ * `<span id="section-{id}">` markers placed by the deck renderer.
+ */
+function useActiveSection(entries: TocEntry[]): string | null {
+  const [active, setActive] = useState<string | null>(null);
+  useEffect(() => {
+    const ids: string[] = [];
+    for (const top of entries) {
+      ids.push(top.id);
+      for (const c of top.children ?? []) ids.push(c.id);
+    }
+    const targets = ids
+      .map((id) => document.getElementById(`section-${id}`))
+      .filter((el): el is HTMLElement => el !== null);
+    if (targets.length === 0) return;
+
+    const visible = new Map<string, number>();
+    const observer = new IntersectionObserver(
+      (records) => {
+        for (const r of records) {
+          const id = r.target.id.replace(/^section-/, '');
+          if (r.isIntersecting) {
+            visible.set(id, r.intersectionRatio);
+          } else {
+            visible.delete(id);
+          }
+        }
+        // Pick the entry with the highest visibility ratio.
+        let best: string | null = null;
+        let bestRatio = 0;
+        for (const [id, ratio] of visible) {
+          if (ratio > bestRatio) {
+            best = id;
+            bestRatio = ratio;
+          }
+        }
+        if (best) setActive(best);
+      },
+      {
+        // Heavy bottom margin so a section is "active" while it occupies the
+        // top half of the viewport, not just when it crosses the very top.
+        rootMargin: '-20% 0% -60% 0%',
+        threshold: [0, 0.25, 0.5, 0.75, 1],
+      },
+    );
+    for (const t of targets) observer.observe(t);
+    return () => observer.disconnect();
+  }, [entries]);
+  return active;
+}
+
+function TocItem({
+  entry,
+  depth = 0,
+  activeId,
+}: {
+  entry: TocEntry;
+  depth?: number;
+  activeId: string | null;
+}) {
   const range =
     entry.slides[0] === entry.slides[1]
       ? String(entry.slides[0])
       : `${entry.slides[0]}–${entry.slides[1]}`;
   const isChild = depth > 0;
+  const isActive = activeId === entry.id;
 
   return (
     <li>
       <a
         href={`#section-${entry.id}`}
-        className="group flex items-baseline gap-3 py-1.5 text-ink transition-colors duration-fast ease-out hover:text-accent focus-visible:text-accent"
+        aria-current={isActive ? 'location' : undefined}
+        className={cn(
+          'group flex items-baseline gap-3 py-1.5 transition-colors duration-fast ease-out hover:text-accent focus-visible:text-accent',
+          isActive ? 'text-accent' : 'text-ink',
+        )}
       >
         {isChild && (
           <span aria-hidden className="font-mono text-xs text-ink-faint">
@@ -95,7 +166,7 @@ function TocItem({ entry, depth = 0 }: { entry: TocEntry; depth?: number }) {
       {entry.children && (
         <ol className="mt-1 space-y-1 ps-6">
           {entry.children.map((c) => (
-            <TocItem key={c.id} entry={c} depth={depth + 1} />
+            <TocItem key={c.id} entry={c} depth={depth + 1} activeId={activeId} />
           ))}
         </ol>
       )}

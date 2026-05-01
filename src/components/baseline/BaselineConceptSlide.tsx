@@ -47,7 +47,7 @@ export async function BaselineConceptSlide({
 
         <div className="grid flex-1 grid-cols-1 gap-6 md:grid-cols-[1fr_auto] md:items-start">
           <div className="min-w-0 space-y-6">
-            <TrilingualBlock value={c.statement} size="lead" />
+            <TrilingualBlock value={c.statement} size="lead" glossary={u.glossary} />
 
             {c.equations.length > 0 && (
               <div className="bg-accent-tint/30 rounded-sm border-s-2 border-accent px-6 py-4">

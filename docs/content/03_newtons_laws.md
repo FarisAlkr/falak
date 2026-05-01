@@ -416,7 +416,7 @@ example:
 #### Problem
 
 > **Arabic:** لافتة كتلتها 5 kg معلّقة بحبلين متماثلين، كلّ حبل يصنع زاوية 30° مع الاتّجاه العمودي. أوجد الشدّ في كلّ حبل. (g = 10 m/s²) ⚑
-> **Hebrew:** שלט במסה 5 kg תלוי בשני חבלים זהים, כל חבל בזווית 30° מהאנך. מצא את המתיחות בכל חבל. (g = 10 m/s²)
+> **Hebrew:** שלט במסה 5 kg תלוי בשני חבלים זהים, כל חבל בזווית 30° מהאנך. מצא את המתיחות בכל חבל. (g = 10 m/s²) ⚑
 > **English:** A 5 kg sign hangs from two identical ropes, each making a 30° angle with the vertical. Find the tension in each rope. (g = 10 m/s²)
 
 #### Solution
@@ -455,7 +455,7 @@ example:
 #### Problem
 
 > **Arabic:** كتلة m = 4 kg على مستوى مائل بزاوية θ = 30°، ومعامل الاحتكاك الحركي بينها وبين السطح μₖ = 0.20. ندفعها لأعلى المستوى بقوّة أفقيّة F، فتتحرّك بسرعةٍ ثابتة. أوجد F. (g = 10 m/s²) ⚑
-> **Hebrew:** גוף במסה m = 4 kg על מישור משופע בזווית θ = 30°, מקדם חיכוך קינטי μₖ = 0.20. דוחפים אותו במעלה המישור בכוח אופקי F, והוא נע במהירות קבועה. מצא את F. (g = 10 m/s²)
+> **Hebrew:** גוף במסה m = 4 kg על מישור משופע בזווית θ = 30°, מקדם חיכוך קינטי μₖ = 0.20. דוחפים אותו במעלה המישור בכוח אופקי F, והוא נע במהירות קבועה. מצא את F. (g = 10 m/s²) ⚑
 > **English:** A 4 kg block on a 30° incline (μₖ = 0.20) is pushed up the slope by a horizontal force F so that it moves at constant velocity. Find F. (g = 10 m/s²)
 
 #### Solution
@@ -814,7 +814,7 @@ example:
 > ب) قوّة التماس بين A و B. ⚑
 > **Hebrew:** שני ארגזים A ו-B צמודים זה לזה על משטח אופקי חלק. m_A = 2 kg, m_B = 3 kg. דוחפים את A בכוח אופקי F = 10 N לעבר B. מצא:
 > א) את התאוצה של המערכת.
-> ב) את כוח המגע בין A ל-B.
+> ב) את כוח המגע בין A ל-B. ⚑
 > **English:** Two boxes A and B are in contact on a frictionless horizontal surface. m_A = 2 kg, m_B = 3 kg. A horizontal force F = 10 N pushes A into B. Find:
 > (a) the system's acceleration.
 > (b) the contact force between A and B.
@@ -864,7 +864,7 @@ example:
 > **Hebrew:** שלושה ארגזים צמודים זה לזה על משטח אופקי חלק: m₁ = 1 kg, m₂ = 2 kg, m₃ = 3 kg. דוחפים את m₁ בכוח אופקי F = 12 N. מצא:
 > א) את התאוצה של המערכת.
 > ב) את כוח המגע בין m₁ ל-m₂.
-> ג) את כוח המגע בין m₂ ל-m₃.
+> ג) את כוח המגע בין m₂ ל-m₃. ⚑
 > **English:** Three boxes in contact on a frictionless horizontal surface: m₁ = 1 kg, m₂ = 2 kg, m₃ = 3 kg. A horizontal force F = 12 N pushes m₁. Find:
 > (a) the system's acceleration.
 > (b) the contact force between m₁ and m₂.
@@ -1376,7 +1376,7 @@ The other two forces are already aligned with the new axes:
 
 **On y' axis (no acceleration perpendicular to incline):**
 \[
-\Sigma F*{y'} = m a*{y'} \;\Rightarrow\; N - mg\cos\theta = 0 \;\Rightarrow\; N = mg\cos\theta
+\Sigma F\_{y'} = m a\_{y'} \;\Rightarrow\; N - mg\cos\theta = 0 \;\Rightarrow\; N = mg\cos\theta
 \]
 \[
 N = 4 \times 9.8 \times 0.866 \approx 33.95 \text{ N}
@@ -1384,7 +1384,7 @@ N = 4 \times 9.8 \times 0.866 \approx 33.95 \text{ N}
 
 **On x' axis (motion happens here):**
 \[
-\Sigma F*{x'} = m a*{x'} \;\Rightarrow\; mg\sin\theta - f_k = ma
+\Sigma F\_{x'} = m a\_{x'} \;\Rightarrow\; mg\sin\theta - f_k = ma
 \]
 
 Substitute fₖ = μₖN = μₖ mg cos θ:

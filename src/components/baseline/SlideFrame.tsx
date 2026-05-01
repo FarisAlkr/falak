@@ -26,7 +26,9 @@ export function BaselineSlideFrame({
   return (
     <article
       className={cn(
-        'relative mx-auto aspect-[16/10] w-full max-w-5xl overflow-hidden rounded-sm border border-border bg-paper p-12 md:p-20',
+        // Mobile: free-flow height with comfortable padding so the slide
+        // doesn't get squeezed into a 16:10 letterbox on small screens.
+        'relative mx-auto w-full max-w-5xl overflow-hidden rounded-sm border border-border bg-paper p-6 sm:p-10 md:aspect-[16/10] md:p-20',
         className,
       )}
       {...props}

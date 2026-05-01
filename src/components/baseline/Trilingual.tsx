@@ -1,7 +1,9 @@
 import type { Trilingual } from '@/lib/content/types';
+import type { GlossaryEntry } from '@/lib/content/types';
 import { cn } from '@/lib/utils/cn';
 import { LOCALE_DIR } from '@/lib/i18n/constants';
 import { Term } from '@/components/i18n/Term';
+import { termizeText } from '@/components/i18n/TermizedText';
 
 interface TrilingualBlockProps {
   value: Trilingual;
@@ -10,12 +12,11 @@ interface TrilingualBlockProps {
   /** Heading-style sizing. Defaults to body. */
   size?: 'body' | 'lead';
   /**
-   * Glossary terms (from the parent concept). When provided, the active
-   * locale's text gets glossary terms wrapped with hover-translate `<Term>`.
-   * Currently we render the headline term as one Term wrapper; finer-grained
-   * substring matching is a future refinement.
+   * Glossary entries scoped to this block (typically the parent unit's full
+   * glossary). When provided, the rendered prose has every glossary-matched
+   * substring wrapped in a `<Term>` for hover-translate.
    */
-  glossary?: Array<{ ar: string; he: string; en?: string }>;
+  glossary?: GlossaryEntry[];
 }
 
 /**
@@ -28,7 +29,12 @@ interface TrilingualBlockProps {
  * because the Trilingual block is used for short statements where the whole
  * line is essentially the term.)
  */
-export function TrilingualBlock({ value, tone = 'neutral', size = 'body' }: TrilingualBlockProps) {
+export function TrilingualBlock({
+  value,
+  tone = 'neutral',
+  size = 'body',
+  glossary,
+}: TrilingualBlockProps) {
   const arClass = cn(
     'font-arabic leading-arabic',
     size === 'lead' ? 'text-2xl font-medium md:text-3xl' : 'text-base md:text-lg',
@@ -47,21 +53,24 @@ export function TrilingualBlock({ value, tone = 'neutral', size = 'body' }: Tril
     tone === 'danger' && 'text-error line-through opacity-70',
     (tone === 'success' || tone === 'neutral') && 'text-ink-muted',
   );
+  const renderText = (text: string, locale: 'ar' | 'he' | 'en') =>
+    glossary && glossary.length > 0 ? termizeText({ text, glossary, locale }) : text;
+
   return (
     <div className="space-y-2">
       {value.ar && (
         <p data-lang="ar" dir={LOCALE_DIR.ar} className={arClass}>
-          {value.ar}
+          {renderText(value.ar, 'ar')}
         </p>
       )}
       {value.he && (
         <p data-lang="he" dir={LOCALE_DIR.he} className={heClass}>
-          {value.he}
+          {renderText(value.he, 'he')}
         </p>
       )}
       {value.en && (
         <p data-lang="en" dir={LOCALE_DIR.en} className={enClass}>
-          {value.en}
+          {renderText(value.en, 'en')}
         </p>
       )}
     </div>
