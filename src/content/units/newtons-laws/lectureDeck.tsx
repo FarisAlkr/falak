@@ -37,9 +37,11 @@ export const UNIT_03_DECK: Unit03DeckSlide[] = [
   { type: 'concept', id: 'net-force-sigma' },
   { type: 'example', id: 'ex-three-forces-1d' },
 
-  // Newton I
+  // Newton I — easy / medium / hard examples per pedagogy Rule 2
   { type: 'concept', id: 'newton-first-law' },
-  { type: 'example', id: 'ex-book-on-table' },
+  { type: 'example', id: 'ex-book-on-table' }, // 🟢 basic
+  { type: 'example', id: 'ex-hanging-sign-equilibrium' }, // 🟡 intermediate
+  { type: 'example', id: 'ex-incline-constant-velocity' }, // 🔴 advanced
 
   // Newton II — the engine
   { type: 'concept', id: 'newton-second-vector' },
@@ -49,9 +51,11 @@ export const UNIT_03_DECK: Unit03DeckSlide[] = [
   { type: 'concept', id: 'newton-second-per-axis' },
   { type: 'example', id: 'ex-2d-perpendicular-forces' },
 
-  // Newton III
+  // Newton III — easy / medium / hard examples per pedagogy Rule 2
   { type: 'concept', id: 'newton-third-law' },
-  { type: 'example', id: 'ex-swimming' },
+  { type: 'example', id: 'ex-swimming' }, // 🟢 basic
+  { type: 'example', id: 'ex-two-boxes-contact' }, // 🟡 intermediate
+  { type: 'example', id: 'ex-three-boxes-stack' }, // 🔴 advanced
 
   // The four mechanical forces
   { type: 'concept', id: 'weight' },

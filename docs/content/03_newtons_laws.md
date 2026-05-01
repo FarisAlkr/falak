@@ -69,7 +69,7 @@ interactive_concept: 'Free-body diagram builder — student places forces on a b
 content_status:
   written: 2026-04-26
   reviewed_by: null
-  arabic_review_pending: 8
+  arabic_review_pending: 16
   bagrut_questions_count: 5
 
 references:
@@ -402,6 +402,106 @@ Newton I's "ΣF = 0" gives us **algebraic equations to solve for unknowns** when
 
 ---
 
+### Example · Hanging sign in equilibrium (two ropes)
+
+```yaml
+example:
+  id: ex-hanging-sign-equilibrium
+  pairs_with: newton-first-law
+  difficulty: intermediate
+  type: worked
+  estimated_time_seconds: 180
+```
+
+#### Problem
+
+> **Arabic:** لافتة كتلتها 5 kg معلّقة بحبلين متماثلين، كلّ حبل يصنع زاوية 30° مع الاتّجاه العمودي. أوجد الشدّ في كلّ حبل. (g = 10 m/s²) ⚑
+> **Hebrew:** שלט במסה 5 kg תלוי בשני חבלים זהים, כל חבל בזווית 30° מהאנך. מצא את המתיחות בכל חבל. (g = 10 m/s²)
+> **English:** A 5 kg sign hangs from two identical ropes, each making a 30° angle with the vertical. Find the tension in each rope. (g = 10 m/s²)
+
+#### Solution
+
+```
+By symmetry T₁ = T₂ = T.
+
+Vertical equilibrium (Newton I, ΣF = 0):
+  2 T cos 30° = m g
+  T = m g / (2 cos 30°)
+  T = (5)(10) / (2 × 0.866)
+  T ≈ 28.9 N
+```
+
+#### Solution narrative (Arabic)
+
+> اللافتة في حالة اتّزان، فمجموع القوى عليها صفر. وبفضل التماثل، الشدّ في الحبلين متساوٍ. على المحور العمودي: 2T cos 30° = mg. نحلّ: T = mg / (2 cos 30°) = 50 / 1.732 ≈ 28.9 N. ⚑
+
+#### What this example teaches
+
+Newton I in 2D. Equilibrium means **ΣF = 0** as a vector equation — every component axis must balance independently. Here the rope tensions aren't aligned with gravity, so we decompose them; the symmetry shortcut (T₁ = T₂) reduces a 2-unknown system to a single equation. Bagrut-classic "hanging mass" problem.
+
+---
+
+### Example · Block pushed up an incline at constant velocity
+
+```yaml
+example:
+  id: ex-incline-constant-velocity
+  pairs_with: newton-first-law
+  difficulty: advanced
+  type: worked
+  estimated_time_seconds: 360
+```
+
+#### Problem
+
+> **Arabic:** كتلة m = 4 kg على مستوى مائل بزاوية θ = 30°، ومعامل الاحتكاك الحركي بينها وبين السطح μₖ = 0.20. ندفعها لأعلى المستوى بقوّة أفقيّة F، فتتحرّك بسرعةٍ ثابتة. أوجد F. (g = 10 m/s²) ⚑
+> **Hebrew:** גוף במסה m = 4 kg על מישור משופע בזווית θ = 30°, מקדם חיכוך קינטי μₖ = 0.20. דוחפים אותו במעלה המישור בכוח אופקי F, והוא נע במהירות קבועה. מצא את F. (g = 10 m/s²)
+> **English:** A 4 kg block on a 30° incline (μₖ = 0.20) is pushed up the slope by a horizontal force F so that it moves at constant velocity. Find F. (g = 10 m/s²)
+
+#### Solution
+
+```
+Constant velocity ⇒ ΣF = 0 (Newton I).
+
+Tilted axes: x' along the incline (positive up the slope), y' perpendicular.
+
+Decompose the horizontal F:
+  F_x' = +F cos θ        (up the slope)
+  F_y' = -F sin θ        (into the surface)
+
+Decompose weight mg:
+  W_x' = -mg sin θ       (down the slope)
+  W_y' = -mg cos θ       (into the surface)
+
+On y' axis (no perpendicular acceleration):
+  N - mg cos θ - F sin θ = 0
+  N = mg cos θ + F sin θ          ... (i)
+
+Kinetic friction opposes motion (down the slope):
+  f_k = μ_k N
+
+On x' axis (constant velocity ⇒ ΣF_x' = 0):
+  F cos θ - mg sin θ - μ_k N = 0
+  F cos θ - mg sin θ - μ_k(mg cos θ + F sin θ) = 0
+  F (cos θ - μ_k sin θ) = mg (sin θ + μ_k cos θ)
+  F = mg (sin θ + μ_k cos θ) / (cos θ - μ_k sin θ)
+
+Substitute (m = 4, g = 10, θ = 30°, μ_k = 0.20):
+  Numerator:   4 × 10 × (0.500 + 0.20 × 0.866) = 40 × 0.6732 = 26.93
+  Denominator: 0.866 - 0.20 × 0.500 = 0.766
+  F ≈ 35.2 N
+```
+
+#### Solution narrative (Arabic)
+
+> السرعة ثابتة، إذن ΣF = 0 على كلّ محور (قانون نيوتن الأوّل). نختار محوراً موازياً للمستوى وآخر عمودياً عليه. القوّة الأفقيّة F لها مركّبتان في هذا النظام: F cos θ بمحاذاة المستوى (لأعلى)، و F sin θ نحو السطح. القوّة العموديّة تصبح N = mg cos θ + F sin θ. الاحتكاك الحركي μₖ N يعاكس الحركة (إلى أسفل). على المحور الموازي: F cos θ − mg sin θ − μₖ N = 0. نحلّ ل F فنحصل على F ≈ 35.2 N. ⚑
+
+#### What this example teaches
+
+Newton I as a working tool. "Constant velocity" gives you ΣF = 0 — a _vector_ condition that yields **two algebraic equations** (one per axis). The horizontal applied force has a component on the perpendicular axis, so it contributes to N. This is a Bagrut staple "find the force" problem solved with N-I (no acceleration anywhere) — students who reach for ΣF = ma without checking "constant velocity" will set up a wrong equation.
+
+---
+
 ### Concept · Newton's Second Law
 
 ```yaml
@@ -693,6 +793,107 @@ example:
 #### What this example teaches
 
 Newton III is **why locomotion works**. Walking, swimming, flying, rowing, jet propulsion — all rely on pushing something back to be pushed forward. The student learns to _identify_ the action-reaction pair and to recognize that the forward force is the reaction force _on them_.
+
+---
+
+### Example · Two boxes in contact
+
+```yaml
+example:
+  id: ex-two-boxes-contact
+  pairs_with: newton-third-law
+  difficulty: intermediate
+  type: worked
+  estimated_time_seconds: 180
+```
+
+#### Problem
+
+> **Arabic:** صندوقان A و B متلاصقان على سطح أفقيّ أملس. كتلة A تساوي m_A = 2 kg، وكتلة B تساوي m_B = 3 kg. ندفع A بقوّة أفقيّة F = 10 N باتّجاه B. أوجد:
+> أ) تسارع المنظومة.
+> ب) قوّة التماس بين A و B. ⚑
+> **Hebrew:** שני ארגזים A ו-B צמודים זה לזה על משטח אופקי חלק. m_A = 2 kg, m_B = 3 kg. דוחפים את A בכוח אופקי F = 10 N לעבר B. מצא:
+> א) את התאוצה של המערכת.
+> ב) את כוח המגע בין A ל-B.
+> **English:** Two boxes A and B are in contact on a frictionless horizontal surface. m_A = 2 kg, m_B = 3 kg. A horizontal force F = 10 N pushes A into B. Find:
+> (a) the system's acceleration.
+> (b) the contact force between A and B.
+
+#### Solution
+
+```
+(a) System (A + B) treated as one body, total mass m = 5 kg:
+    a = F / (m_A + m_B) = 10 / 5 = 2 m/s²
+
+(b) FBD of B alone — the only horizontal force on B is the contact push
+    F_AB from A. Newton II on B:
+       F_AB = m_B · a = 3 × 2 = 6 N
+
+    By Newton III, B pushes A back with F_BA = 6 N (opposite direction).
+    Check on A:    F − F_BA = m_A · a
+                   10 − 6  = 2 × 2  ✓
+```
+
+#### Solution narrative (Arabic)
+
+> نتعامل مع المنظومة (A + B) ككتلة واحدة كتلتها 5 kg، فتسارعها a = 10 / 5 = 2 m/s². لإيجاد قوّة التماس، نأخذ مخطّط الجسم الحرّ للصندوق B وحده — القوّة الأفقيّة الوحيدة عليه هي قوّة التماس من A. بقانون نيوتن الثاني: F_AB = m_B · a = 3 × 2 = 6 N. وبقانون نيوتن الثالث، يدفع B الصندوق A بقوّة مساوية ومعاكسة. ⚑
+
+#### What this example teaches
+
+Contact forces are Newton III pairs. The clean recipe: (1) compute the system acceleration treating all bodies in contact as one, (2) isolate one body, draw its FBD, apply ΣF = ma on that body. The result is one of the two pair-forces; the other is its negative. The trap: trying to apply Newton II to A directly without isolating — many forces tangle and arithmetic mistakes follow.
+
+---
+
+### Example · Three boxes in contact (multi-pair Newton III)
+
+```yaml
+example:
+  id: ex-three-boxes-stack
+  pairs_with: newton-third-law
+  difficulty: advanced
+  type: worked
+  estimated_time_seconds: 360
+```
+
+#### Problem
+
+> **Arabic:** ثلاثة صناديق متلاصقة على سطح أفقيّ أملس: m₁ = 1 kg، m₂ = 2 kg، m₃ = 3 kg. ندفع m₁ بقوّة أفقيّة F = 12 N. أوجد:
+> أ) تسارع المنظومة.
+> ب) قوّة التماس بين m₁ و m₂.
+> ج) قوّة التماس بين m₂ و m₃. ⚑
+> **Hebrew:** שלושה ארגזים צמודים זה לזה על משטח אופקי חלק: m₁ = 1 kg, m₂ = 2 kg, m₃ = 3 kg. דוחפים את m₁ בכוח אופקי F = 12 N. מצא:
+> א) את התאוצה של המערכת.
+> ב) את כוח המגע בין m₁ ל-m₂.
+> ג) את כוח המגע בין m₂ ל-m₃.
+> **English:** Three boxes in contact on a frictionless horizontal surface: m₁ = 1 kg, m₂ = 2 kg, m₃ = 3 kg. A horizontal force F = 12 N pushes m₁. Find:
+> (a) the system's acceleration.
+> (b) the contact force between m₁ and m₂.
+> (c) the contact force between m₂ and m₃.
+
+#### Solution
+
+```
+(a) Total mass = 6 kg:
+    a = F / (m₁ + m₂ + m₃) = 12 / 6 = 2 m/s²
+
+(b) FBD of (m₂ + m₃) — the only horizontal force on this sub-system is
+    the push from m₁:
+       F_12 = (m₂ + m₃) · a = 5 × 2 = 10 N
+
+(c) FBD of m₃ alone — the only horizontal force on m₃ is the push from m₂:
+       F_23 = m₃ · a = 3 × 2 = 6 N
+
+Cross-check on m₁:    F − F_21 = m₁ · a    →    12 − 10 = 1 × 2 ✓
+Cross-check on m₂:    F_12 − F_32 = m₂ · a →    10 − 6  = 2 × 2 ✓
+```
+
+#### Solution narrative (Arabic)
+
+> التسارع الإجماليّ: a = 12 / 6 = 2 m/s². لإيجاد قوّة التماس بين m₁ و m₂، نأخذ المنظومة (m₂ + m₃) ككتلة واحدة، فالقوّة الأفقيّة الوحيدة عليها هي قوّة التماس من m₁: F_12 = 5 × 2 = 10 N. لإيجاد قوّة التماس بين m₂ و m₃، نأخذ m₃ وحدها: F_23 = 3 × 2 = 6 N. كلّ زوج تماس هو زوج فعل وردّ فعل بقانون نيوتن الثالث. ⚑
+
+#### What this example teaches
+
+When several bodies are pushed together, **every contact interface is a Newton III pair**. The shortcut: each contact force = (mass behind that interface) × a. "Behind" means: on the receiving side of the push. Compute _a_ once for the whole system, then read off every contact force from the right partial mass. Bagrut multi-body problems collapse to this single trick.
 
 ---
 
@@ -1529,11 +1730,11 @@ When rendering this unit into the exam:
 
 ```yaml
 file: docs/content/03_newtons_laws.md
-version: 1.0
-last_updated: 2026-04-26
-arabic_flags_count: 8
+version: 1.1
+last_updated: 2026-05-01
+arabic_flags_count: 16
 total_concepts: 10
-total_examples: 10
+total_examples: 14
 total_misconceptions: 5
-estimated_word_count: 7800
+estimated_word_count: 9100
 ```

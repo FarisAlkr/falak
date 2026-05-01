@@ -3,18 +3,19 @@
  *
  * Mirrors the slide manifest in `lectureDeck.tsx`. Each section maps to a
  * contiguous range of slide numbers and is mounted as an anchor target by the
- * deck renderer. The DeckIndex component renders this structure as a clickable
- * editorial-style table of contents.
+ * deck renderer.
+ *
+ * Per pedagogy Rule 2, every Newton-law section ships easy / mid / hard
+ * examples in difficulty order. Newton I and Newton III now have all three
+ * tiers; Newton II has its 🟢 + 🟡 + a 🔴 picked up by the cumulative section
+ * that follows.
  */
 
 export interface TocEntry {
-  /** Anchor id (without the leading `#`). Used both as the DOM id of the
-   *  section's first slide wrapper and as the link target. */
   id: string;
   title: { ar: string; he: string; en: string };
   /** Inclusive slide range, 1-indexed. */
   slides: [number, number];
-  /** Sub-entries (one level deep — sub-topics within a section). */
   children?: TocEntry[];
 }
 
@@ -36,7 +37,36 @@ export const UNIT_03_TOC: TocEntry[] = [
       he: 'חוק ראשון · התמדה',
       en: "Newton's First Law · Inertia",
     },
-    slides: [7, 8],
+    slides: [7, 10],
+    children: [
+      {
+        id: 'newton-first-easy',
+        title: {
+          ar: 'مثال أساسيّ · كتاب على طاولة',
+          he: 'דוגמה בסיסית',
+          en: 'Easy · Book on table',
+        },
+        slides: [8, 8],
+      },
+      {
+        id: 'newton-first-mid',
+        title: {
+          ar: 'مثال متوسّط · لافتة معلّقة',
+          he: 'דוגמה בינונית',
+          en: 'Medium · Hanging sign',
+        },
+        slides: [9, 9],
+      },
+      {
+        id: 'newton-first-hard',
+        title: {
+          ar: 'مثال متقدّم · مستوى مائل بسرعة ثابتة',
+          he: 'דוגמה מתקדמת',
+          en: 'Hard · Constant-velocity incline',
+        },
+        slides: [10, 10],
+      },
+    ],
   },
   {
     id: 'newton-second',
@@ -45,7 +75,7 @@ export const UNIT_03_TOC: TocEntry[] = [
       he: 'חוק שני · המנוע',
       en: "Newton's Second Law · The engine",
     },
-    slides: [9, 12],
+    slides: [11, 14],
   },
   {
     id: 'newton-third',
@@ -54,7 +84,32 @@ export const UNIT_03_TOC: TocEntry[] = [
       he: 'חוק שלישי · פעולה ותגובה',
       en: "Newton's Third Law · Action–reaction",
     },
-    slides: [13, 14],
+    slides: [15, 18],
+    children: [
+      {
+        id: 'newton-third-easy',
+        title: { ar: 'مثال أساسيّ · السباحة', he: 'דוגמה בסיסית', en: 'Easy · Swimming' },
+        slides: [16, 16],
+      },
+      {
+        id: 'newton-third-mid',
+        title: {
+          ar: 'مثال متوسّط · صندوقان متلاصقان',
+          he: 'דוגמה בינונית',
+          en: 'Medium · Two boxes',
+        },
+        slides: [17, 17],
+      },
+      {
+        id: 'newton-third-hard',
+        title: {
+          ar: 'مثال متقدّم · ثلاثة صناديق',
+          he: 'דוגמה מתקדמת',
+          en: 'Hard · Three-box stack',
+        },
+        slides: [18, 18],
+      },
+    ],
   },
   {
     id: 'forces',
@@ -63,27 +118,27 @@ export const UNIT_03_TOC: TocEntry[] = [
       he: 'ארבעת הכוחות המכניים',
       en: 'The four mechanical forces',
     },
-    slides: [15, 22],
+    slides: [19, 26],
     children: [
       {
         id: 'force-weight',
         title: { ar: 'الوزن', he: 'משקל', en: 'Weight' },
-        slides: [15, 16],
+        slides: [19, 20],
       },
       {
         id: 'force-normal',
         title: { ar: 'القوّة العموديّة', he: 'כוח נורמלי', en: 'Normal force' },
-        slides: [17, 18],
+        slides: [21, 22],
       },
       {
         id: 'force-tension',
         title: { ar: 'الشدّ', he: 'מתיחות', en: 'Tension' },
-        slides: [19, 20],
+        slides: [23, 24],
       },
       {
         id: 'force-friction',
         title: { ar: 'الاحتكاك', he: 'חיכוך', en: 'Friction' },
-        slides: [21, 22],
+        slides: [25, 26],
       },
     ],
   },
@@ -94,7 +149,7 @@ export const UNIT_03_TOC: TocEntry[] = [
       he: 'דוגמה מצטברת · מישור משופע עם חיכוך',
       en: 'Cumulative · Incline with friction',
     },
-    slides: [23, 23],
+    slides: [27, 27],
   },
   {
     id: 'misconceptions',
@@ -103,12 +158,12 @@ export const UNIT_03_TOC: TocEntry[] = [
       he: 'טעויות נפוצות',
       en: 'Common misconceptions',
     },
-    slides: [24, 28],
+    slides: [28, 32],
   },
   {
     id: 'summary',
     title: { ar: 'الخلاصة', he: 'סיכום', en: 'Summary' },
-    slides: [29, 29],
+    slides: [33, 33],
   },
 ];
 

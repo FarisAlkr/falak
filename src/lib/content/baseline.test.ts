@@ -60,11 +60,22 @@ describe("loadUnit · Unit 03 (Newton's Laws)", () => {
     expect(ids).toContain('friction');
   });
 
-  it('finds 11 example blocks (10 paired + 1 cumulative)', async () => {
+  it('finds 15 example blocks across difficulty tiers', async () => {
     const u = await getUnit03();
-    expect(u.examples.length).toBe(11);
+    expect(u.examples.length).toBe(15);
     expect(u.examples.filter((e) => e.type === 'cumulative').length).toBe(1);
     expect(u.examples.filter((e) => e.type === 'tiny').length).toBe(10);
+    expect(u.examples.filter((e) => e.type === 'worked').length).toBe(4);
+    // Newton I now has easy + medium + hard
+    const newtonI = u.examples.filter((e) => e.pairsWith === 'newton-first-law');
+    expect(newtonI.map((e) => e.difficulty).sort()).toEqual(['advanced', 'basic', 'intermediate']);
+    // Newton III now has easy + medium + hard
+    const newtonIII = u.examples.filter((e) => e.pairsWith === 'newton-third-law');
+    expect(newtonIII.map((e) => e.difficulty).sort()).toEqual([
+      'advanced',
+      'basic',
+      'intermediate',
+    ]);
   });
 
   it('finds 5 misconception blocks', async () => {
