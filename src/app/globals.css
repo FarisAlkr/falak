@@ -55,6 +55,13 @@
     min-height: 100vh;
   }
 
+  html {
+    /* Account for the sticky AppHeader so anchor scrolls don't tuck a section
+       title behind the bar. */
+    scroll-padding-top: 96px;
+    scroll-behavior: smooth;
+  }
+
   body {
     background-color: var(--paper);
     color: var(--ink);
@@ -110,6 +117,25 @@
   .paper-grain > * {
     position: relative;
     z-index: 1;
+  }
+
+  /* Editorial leader dots — used in the deck index between section title and
+     slide-number range. The pseudo-element fills the flex space with a
+     repeating dot pattern that respects the active text color. */
+  .leader-dots {
+    align-self: end;
+    background-image: radial-gradient(circle, currentColor 1px, transparent 1px);
+    background-position: bottom;
+    background-repeat: repeat-x;
+    background-size: 6px 1px;
+    height: 1px;
+    opacity: 0.5;
+    transition: opacity var(--duration-fast) var(--ease-out);
+  }
+
+  .group:hover .leader-dots,
+  .group:focus-visible .leader-dots {
+    opacity: 1;
   }
 
   /* A subtle radial accent — used by the cursor-spotlight effect on cards. */

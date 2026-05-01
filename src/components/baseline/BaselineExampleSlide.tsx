@@ -46,7 +46,11 @@ export async function BaselineExampleSlide({ unit, id, slideNumber }: BaselineEx
     >
       <div className="flex h-full flex-col gap-6 pt-8">
         <header className="flex items-baseline justify-between gap-4">
-          <h2 dir="ltr" className="font-display text-xl uppercase tracking-meta text-ink-faint">
+          <h2
+            data-lang="en"
+            dir="ltr"
+            className="font-display text-xl uppercase tracking-meta text-ink-faint"
+          >
             {ex.title}
           </h2>
           <span dir="ltr" className={`text-[10px] ${diff.color}`} aria-label={diff.kicker.en}>
@@ -60,7 +64,7 @@ export async function BaselineExampleSlide({ unit, id, slideNumber }: BaselineEx
         </section>
 
         {ex.solution && (
-          <section className="space-y-2">
+          <section data-lang="en" className="space-y-2">
             <I18n
               k="solution"
               className="block text-[10px] uppercase tracking-meta text-ink-muted"

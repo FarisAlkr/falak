@@ -35,7 +35,7 @@ export async function BaselineMisconceptionSlide({
       kicker={<SlideKicker text={MISCONCEPTION_KICKER} trailing={SEVERITY_LABEL[m.severity]} />}
     >
       <div className="flex h-full flex-col gap-6 pt-8">
-        <header>
+        <header data-lang="en">
           <h2 dir="ltr" className="font-display text-xl uppercase tracking-meta text-ink-faint">
             {m.title}
           </h2>

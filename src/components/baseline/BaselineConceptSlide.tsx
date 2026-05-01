@@ -37,7 +37,7 @@ export async function BaselineConceptSlide({
       kicker={<SlideKicker text={KICKER_TEXT[c.type]} />}
     >
       <div className="flex h-full flex-col gap-6 pt-8">
-        <header className="space-y-1">
+        <header data-lang="en" className="space-y-1">
           <h2 dir="ltr" className="font-display text-xl uppercase tracking-meta text-ink-faint">
             {c.title}
           </h2>
@@ -67,7 +67,7 @@ export async function BaselineConceptSlide({
           )}
 
           {showVisualPlaceholder && c.visualName && (
-            <div className="border-t border-border pt-3">
+            <div data-lang="en" className="border-t border-border pt-3">
               <span
                 dir="ltr"
                 className="font-mono text-[10px] uppercase tracking-meta text-ink-faint"

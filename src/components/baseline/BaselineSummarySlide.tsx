@@ -76,7 +76,7 @@ export async function BaselineSummarySlide({
         )}
 
         {outcomes.length > 0 && (
-          <ul dir="ltr" className="space-y-2 font-body text-sm text-ink">
+          <ul data-lang="en" dir="ltr" className="space-y-2 font-body text-sm text-ink">
             {outcomes.map((o, i) => (
               <li key={i} className="flex gap-3">
                 <span className="font-mono text-xs text-accent">
