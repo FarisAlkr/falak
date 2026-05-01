@@ -4,8 +4,9 @@ import { SlideKicker } from './SlideKicker';
 import { TrilingualBlock } from './Trilingual';
 import { DiagramRenderer } from './DiagramRenderer';
 import { hasDiagram } from './DiagramRegistry';
+import { SolutionBlock } from './SolutionBlock';
+import { NarrativeBlock } from './NarrativeBlock';
 import { I18n } from '@/components/i18n/I18n';
-import { LOCALE_DIR } from '@/lib/i18n/constants';
 import type { ArabicFlag, Difficulty } from '@/lib/content/types';
 
 interface BaselineExampleSlideProps {
@@ -75,36 +76,9 @@ export async function BaselineExampleSlide({ unit, id, slideNumber }: BaselineEx
           )}
         </section>
 
-        {ex.solution && (
-          <section data-lang="en" className="space-y-2">
-            <I18n
-              k="solution"
-              className="block text-[10px] uppercase tracking-meta text-ink-muted"
-            />
-            <pre
-              dir="ltr"
-              className="overflow-x-auto whitespace-pre-wrap rounded-sm border border-border bg-paper-raised p-4 font-mono text-sm leading-relaxed text-ink"
-            >
-              {ex.solution}
-            </pre>
-          </section>
-        )}
+        {ex.solution && <SolutionBlock text={ex.solution} lang="en" />}
 
-        {ex.solutionNarrativeAr && (
-          <section className="space-y-2">
-            <I18n
-              k="narrative"
-              className="block text-[10px] uppercase tracking-meta text-ink-muted"
-            />
-            <p
-              data-lang="ar"
-              dir={LOCALE_DIR.ar}
-              className="font-arabic text-base leading-arabic text-ink md:text-lg"
-            >
-              {ex.solutionNarrativeAr}
-            </p>
-          </section>
-        )}
+        {ex.solutionNarrativeAr && <NarrativeBlock text={ex.solutionNarrativeAr} lang="ar" />}
       </div>
     </BaselineSlideFrame>
   );
