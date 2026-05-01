@@ -9,6 +9,56 @@
 
 **The scientific content for this unit is sourced from `docs/content/{NN}_{unit}.md` per the schema in `docs/content/_format_spec.md`.**
 
+---
+
+## Cloning a new unit (the cheap path)
+
+Once a unit's baseline file exists in `docs/content/{NN}_{slug}.md` and conforms to the format spec, **the rendered theory deck can be stood up with one or two files**. The reference implementation is Unit 03 (Newton's Laws); follow its shape.
+
+### One-file path (auto-derived deck)
+
+For a unit with a complete baseline, the generic `buildDeckFromBaseline()` helper in `src/lib/content/buildDeck.ts` produces a sensible default deck and TOC obeying the three pedagogy rules:
+
+```ts
+// src/app/units/[unitId]/theory/page.tsx (illustrative branch)
+import { loadUnit } from '@/lib/content/baseline';
+import { buildDeckFromBaseline } from '@/lib/content/buildDeck';
+
+export default async function TheoryPage({ params }) {
+  const unit = await loadUnit(unitNumberFor(params.unitId));
+  const { slides, toc } = buildDeckFromBaseline(unit);
+  return <UnitTheory unit={unit} slides={slides} toc={toc} />;
+}
+```
+
+The auto-deck shape:
+
+1. Title slide
+2. Hook slide (only if `## Introduction` has a question)
+3. For each concept (in baseline order): the concept slide, then its paired examples sorted by difficulty (basic → intermediate → advanced)
+4. Cumulative example(s)
+5. Misconception block — sorted by severity (high → low)
+6. Summary slide
+
+### Two-file path (hand-curated grouping)
+
+When the unit benefits from grouping multiple concepts under a single section heading (e.g., Unit 03's "The four mechanical forces" covers Weight + Normal + Tension + Friction as four sub-entries under one TOC group), author a hand-curated manifest + TOC instead. Use `src/content/units/newtons-laws/lectureDeck.tsx` and `src/content/units/newtons-laws/toc.ts` as the templates.
+
+Either way, **diagrams** auto-attach via `src/components/baseline/DiagramRegistry.ts` — add an entry mapping each new concept/example ID to the SVG component you want to render. If no entry exists, the slide falls through to a prose `Visual:` placeholder (in EN mode only).
+
+### Pedagogy verification
+
+`src/lib/content/pedagogy.test.ts` runs as part of `pnpm test` and enforces:
+
+- Rule 1 — every concept has at least one paired example
+- Rule 2 — every example carries a difficulty marker; the unit covers all three tiers; cumulative is advanced; per-concept difficulty progresses easy → hard
+- Rule 3 — misconceptions are quarantined to the deck's tail
+- Quality-bar checks from `_format_spec.md` — glossary ≥ 30 entries, references cite Sayakim + an Israeli textbook + an international one
+
+To enable the verifier for a new unit, append its number to the `UNITS_TO_VERIFY` array in `pedagogy.test.ts`.
+
+---
+
 This template defines the **rendered output** (the `meta.ts`, `slides.mdx`, `interactive.tsx`, `exam.ts`, `summary.mdx` files in `src/content/units/{unitId}/`). The **source content** — concept blocks, equations, examples, misconceptions, bilingual phrasings, past Bagrut questions — lives in the baseline file under `docs/content/`. When building a unit:
 
 1. Read `docs/content/{NN}_{unit}.md` first — this is the canonical source.
