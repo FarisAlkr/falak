@@ -1147,6 +1147,76 @@ export function FrictionOpposesMotionMiscDiagram() {
   );
 }
 
+/**
+ * Hook diagram — visualizes the unit's opening question "why do things move
+ * the way they move?". Two scenes: a stationary block (top) and a sliding
+ * block with motion lines (bottom), connected by a large "?" mark.
+ */
+export function HookMotionDiagram() {
+  return (
+    <DiagramFrame width={520} height={300} ariaLabel="Why do things move the way they move?">
+      {/* Top scene — at rest */}
+      <Ground x1={40} x2={240} y={100} />
+      <Block x={120} y={70} w={50} h={30} label="m" />
+      <text
+        x={140}
+        y={140}
+        textAnchor="middle"
+        fontFamily="monospace"
+        fontSize="11"
+        fill={INK_MUTED}
+      >
+        at rest
+      </text>
+
+      {/* Bottom scene — in motion */}
+      <Ground x1={280} x2={500} y={200} />
+      <Block x={360} y={170} w={50} h={30} label="m" />
+      <Arrow x1={415} y1={185} x2={485} y2={185} color={INK_MUTED} dashed width={1.6} label="v" />
+      {/* Motion lines trailing the block */}
+      <line x1={350} y1={178} x2={335} y2={178} stroke={INK_MUTED} strokeWidth={0.8} />
+      <line x1={350} y1={188} x2={330} y2={188} stroke={INK_MUTED} strokeWidth={0.8} />
+      <line x1={350} y1={195} x2={335} y2={195} stroke={INK_MUTED} strokeWidth={0.8} />
+      <text
+        x={400}
+        y={240}
+        textAnchor="middle"
+        fontFamily="monospace"
+        fontSize="11"
+        fill={INK_MUTED}
+      >
+        in motion
+      </text>
+
+      {/* Big question mark connecting the two scenes */}
+      <text
+        x={250}
+        y={170}
+        textAnchor="middle"
+        fontFamily="serif"
+        fontSize="68"
+        fill={ACCENT}
+        fontStyle="italic"
+        opacity="0.85"
+      >
+        ?
+      </text>
+
+      {/* Caption beneath */}
+      <text
+        x={260}
+        y={285}
+        textAnchor="middle"
+        fontFamily="monospace"
+        fontSize="11"
+        fill={INK_MUTED}
+      >
+        what makes the difference?
+      </text>
+    </DiagramFrame>
+  );
+}
+
 /** misc-rest-no-forces: book on table — forces ARE present, they balance. */
 export function RestHasForcesMiscDiagram() {
   return (

@@ -1,6 +1,7 @@
 import { loadUnit } from '@/lib/content/baseline';
 import { BaselineSlideFrame } from './SlideFrame';
 import { SlideKicker } from './SlideKicker';
+import { HookMotionDiagram } from '@/components/diagrams/physics';
 
 interface BaselineHookSlideProps {
   unit: string;
@@ -20,6 +21,10 @@ const HOOK_KICKER = {
  * regardless of active locale (no Hebrew/English variant exists in the
  * baseline). Once introductions become trilingual in the baseline, this slide
  * will pick the active-locale variant automatically.
+ *
+ * Pairs the question with `HookMotionDiagram` — two contrasted scenes (at
+ * rest vs in motion) connected by a large "?" — so the slide answers
+ * "what's the question?" both verbally and visually.
  */
 export async function BaselineHookSlide({ unit, slideNumber }: BaselineHookSlideProps) {
   const u = await loadUnit(unit);
@@ -30,10 +35,15 @@ export async function BaselineHookSlide({ unit, slideNumber }: BaselineHookSlide
       slideNumber={slideNumber}
       kicker={<SlideKicker text={HOOK_KICKER} />}
     >
-      <div className="flex h-full flex-col justify-center gap-8">
+      <div className="grid h-full grid-cols-1 items-center gap-8 pt-8 md:grid-cols-[1fr_auto] md:gap-12">
         <p dir="rtl" className="font-arabic text-3xl font-medium leading-snug text-ink md:text-5xl">
           {intro}
         </p>
+        <div className="flex justify-center md:max-w-md md:justify-end">
+          <div className="bg-paper-raised/40 flex justify-center rounded-sm border border-border p-4">
+            <HookMotionDiagram />
+          </div>
+        </div>
       </div>
     </BaselineSlideFrame>
   );
