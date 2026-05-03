@@ -854,3 +854,310 @@ export function ThreeBoxesStackDiagram() {
     </DiagramFrame>
   );
 }
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * Problem-specific example diagrams — replace the generic reuse for
+ * `ex-two-forces-same-direction`, `ex-three-forces-1d`,
+ * `ex-2d-perpendicular-forces`, and `ex-weight-of-book`.
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+/** Two parallel forces (5 N + 3 N → 8 N). Specific to ex-two-forces-same-direction. */
+export function TwoForcesParallelDiagram() {
+  return (
+    <DiagramFrame width={480} height={240} ariaLabel="Two parallel forces summing">
+      <Block x={80} y={120} w={70} h={50} label="m" />
+      <Arrow x1={150} y1={145} x2={230} y2={145} color={INFO} label="5 N" />
+      <Arrow x1={150} y1={170} x2={198} y2={170} color={INFO} label="3 N" />
+      {/* Resultant on a separate line below */}
+      <line x1={80} y1={205} x2={80} y2={215} stroke={INK_MUTED} strokeWidth={0.8} />
+      <line x1={208} y1={205} x2={208} y2={215} stroke={INK_MUTED} strokeWidth={0.8} />
+      <Arrow x1={80} y1={210} x2={208} y2={210} color={ACCENT} width={3} label="ΣF = 8 N" />
+    </DiagramFrame>
+  );
+}
+
+/** Three 1-D forces with mixed signs (10 N right, 5 N right, 6 N left → 9 N right). */
+export function ThreeForces1DDiagram() {
+  return (
+    <DiagramFrame width={520} height={260} ariaLabel="Three horizontal forces summed">
+      <Block x={220} y={100} w={70} h={50} label="m" />
+      <Arrow x1={290} y1={115} x2={400} y2={115} color={INFO} label="10 N" />
+      <Arrow x1={290} y1={140} x2={345} y2={140} color={INFO} label="5 N" />
+      <Arrow x1={220} y1={132} x2={155} y2={132} color={WARNING} label="6 N" />
+      {/* Net force below */}
+      <line x1={155} y1={195} x2={155} y2={205} stroke={INK_MUTED} strokeWidth={0.8} />
+      <line x1={400} y1={195} x2={400} y2={205} stroke={INK_MUTED} strokeWidth={0.8} />
+      <Arrow x1={250} y1={200} x2={400} y2={200} color={ACCENT} width={3} label="ΣF = +9 N" />
+      <text x={260} y={235} fontFamily="monospace" fontSize="11" fill={INK_MUTED}>
+        + right · − left
+      </text>
+    </DiagramFrame>
+  );
+}
+
+/** Block on smooth surface, 8 N horizontal + 6 N vertical applied. */
+export function TwoForcesPerpendicularDiagram() {
+  return (
+    <DiagramFrame width={480} height={280} ariaLabel="Two perpendicular forces">
+      <Ground x1={60} x2={420} y={210} />
+      <Block x={210} y={150} w={60} h={50} label="m=2 kg" />
+      {/* Weight + normal (background, muted) */}
+      <Arrow x1={240} y1={175} x2={240} y2={250} color={INK_MUTED} width={1.6} label="W" />
+      <Arrow x1={240} y1={150} x2={240} y2={80} color={INK_MUTED} width={1.6} label="N" />
+      {/* Applied forces emphasised */}
+      <Arrow x1={270} y1={175} x2={360} y2={175} color={INFO} label="8 N" />
+      <Arrow x1={250} y1={130} x2={250} y2={70} color={SUCCESS} label="6 N" />
+    </DiagramFrame>
+  );
+}
+
+/** Single book with weight arrow and "5 kg" label. ex-weight-of-book. */
+export function BookWithWeightDiagram() {
+  return (
+    <DiagramFrame width={420} height={260} ariaLabel="Weight of a book">
+      <Block x={170} y={90} w={80} h={56} label="5 kg" />
+      <Arrow x1={210} y1={146} x2={210} y2={230} color={ACCENT} label="W = 49 N" />
+      <Ground x1={60} x2={360} y={235} />
+    </DiagramFrame>
+  );
+}
+
+/** Anatomy-of-a-vector — magnitude bracket, direction label, unit annotation. */
+export function ForceAnatomyDiagram() {
+  return (
+    <DiagramFrame width={480} height={220} ariaLabel="Anatomy of a force vector">
+      <Arrow
+        x1={70}
+        y1={120}
+        x2={350}
+        y2={120}
+        color={ACCENT}
+        width={3}
+        label="F"
+        labelOffset={20}
+      />
+      {/* Magnitude bracket below */}
+      <line x1={70} y1={155} x2={70} y2={165} stroke={INK_MUTED} strokeWidth={1} />
+      <line x1={350} y1={155} x2={350} y2={165} stroke={INK_MUTED} strokeWidth={1} />
+      <line x1={70} y1={160} x2={350} y2={160} stroke={INK_MUTED} strokeWidth={1} />
+      <text
+        x={210}
+        y={185}
+        textAnchor="middle"
+        fontFamily="monospace"
+        fontSize="13"
+        fill={INK_MUTED}
+      >
+        magnitude (N)
+      </text>
+      {/* Direction tag at the head */}
+      <text x={365} y={105} fontFamily="monospace" fontSize="12" fill={INK_MUTED}>
+        →
+      </text>
+      <text x={380} y={120} fontFamily="monospace" fontSize="11" fill={INK_MUTED}>
+        direction
+      </text>
+      {/* Tail dot */}
+      <circle cx={70} cy={120} r={3} fill={INK} />
+    </DiagramFrame>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * Misconception diagrams — visualize the wrong/right pair so the student
+ * sees the trap, not just reads it.
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+/** misc-moving-needs-force: puck on frictionless ice. Wrong panel shows a
+ *  "needed forward force" crossed out; right panel shows ΣF=0 still moving. */
+export function MovingNeedsForceMiscDiagram() {
+  return (
+    <DiagramFrame
+      width={520}
+      height={220}
+      ariaLabel="Moving objects need a constant force — wrong vs right"
+    >
+      {/* Divider */}
+      <line
+        x1={260}
+        y1={20}
+        x2={260}
+        y2={200}
+        stroke={INK_MUTED}
+        strokeWidth={0.8}
+        strokeDasharray="3 3"
+      />
+      {/* LEFT — wrong */}
+      <text
+        x={130}
+        y={30}
+        textAnchor="middle"
+        fontFamily="monospace"
+        fontSize="11"
+        fill="var(--error)"
+      >
+        WRONG
+      </text>
+      <Ground x1={30} x2={240} y={150} />
+      <Block x={70} y={110} w={50} h={40} label="m" />
+      {/* "needed" force, struck through */}
+      <Arrow x1={120} y1={130} x2={195} y2={130} color="var(--error)" label="F (?)" />
+      <line x1={115} y1={135} x2={205} y2={125} stroke="var(--error)" strokeWidth={2} />
+      {/* RIGHT — correct */}
+      <text x={400} y={30} textAnchor="middle" fontFamily="monospace" fontSize="11" fill={SUCCESS}>
+        RIGHT
+      </text>
+      <Ground x1={290} x2={500} y={150} />
+      <Block x={330} y={110} w={50} h={40} label="m" />
+      <Arrow
+        x1={385}
+        y1={130}
+        x2={460}
+        y2={130}
+        color={INK_MUTED}
+        dashed
+        label="v"
+        labelOffset={14}
+      />
+      <text
+        x={400}
+        y={185}
+        textAnchor="middle"
+        fontFamily="monospace"
+        fontSize="11"
+        fill={INK_MUTED}
+      >
+        ΣF = 0 · v = const
+      </text>
+    </DiagramFrame>
+  );
+}
+
+/** misc-action-reaction-cancel: two bodies, each with the OTHER's force drawn
+ *  on it. Caption emphasises "different bodies". */
+export function ActionReactionCancelMiscDiagram() {
+  return (
+    <DiagramFrame width={520} height={220} ariaLabel="Action and reaction — on different bodies">
+      <Ground x1={30} x2={490} y={170} />
+      {/* Body A */}
+      <Block x={120} y={110} w={60} h={60} label="A" />
+      {/* Body B */}
+      <Block x={340} y={110} w={60} h={60} label="B" />
+      {/* Force from A on B (acts on B) */}
+      <Arrow x1={200} y1={130} x2={335} y2={130} color={ACCENT} label="F_AB" />
+      {/* Force from B on A (acts on A) */}
+      <Arrow x1={320} y1={155} x2={185} y2={155} color={INFO} label="F_BA" />
+      <text
+        x={260}
+        y={205}
+        textAnchor="middle"
+        fontFamily="monospace"
+        fontSize="11"
+        fill={INK_MUTED}
+      >
+        on different bodies — they don&rsquo;t cancel anything
+      </text>
+    </DiagramFrame>
+  );
+}
+
+/** misc-N-equals-mg: side-by-side flat (N=mg) vs incline (N=mg cosθ). */
+export function NormalEqualsMgMiscDiagram() {
+  return (
+    <DiagramFrame width={520} height={240} ariaLabel="Normal force flat vs incline">
+      <line
+        x1={260}
+        y1={20}
+        x2={260}
+        y2={220}
+        stroke={INK_MUTED}
+        strokeWidth={0.8}
+        strokeDasharray="3 3"
+      />
+      {/* Flat surface */}
+      <text x={130} y={28} textAnchor="middle" fontFamily="monospace" fontSize="11" fill={SUCCESS}>
+        FLAT
+      </text>
+      <Ground x1={30} x2={240} y={170} />
+      <Block x={100} y={130} w={60} h={40} label="m" />
+      <Arrow x1={130} y1={150} x2={130} y2={210} color={ACCENT} label="W" />
+      <Arrow x1={130} y1={130} x2={130} y2={70} color={INK} label="N" />
+      <text
+        x={130}
+        y={232}
+        textAnchor="middle"
+        fontFamily="monospace"
+        fontSize="11"
+        fill={INK_MUTED}
+      >
+        N = mg
+      </text>
+      {/* Incline */}
+      <text x={400} y={28} textAnchor="middle" fontFamily="monospace" fontSize="11" fill={SUCCESS}>
+        INCLINE
+      </text>
+      <BlockOnIncline baseX={290} baseY={195} length={170} angleDeg={30} blockSize={40} />
+      <Arrow x1={400} y1={150} x2={400} y2={210} color={ACCENT} label="W" />
+      <Arrow
+        x1={400}
+        y1={150}
+        x2={400 - 50 * Math.sin(Math.PI / 6)}
+        y2={150 - 50 * Math.cos(Math.PI / 6)}
+        color={INK}
+        label="N"
+      />
+      <text
+        x={400}
+        y={232}
+        textAnchor="middle"
+        fontFamily="monospace"
+        fontSize="11"
+        fill={INK_MUTED}
+      >
+        N = mg cos θ &lt; mg
+      </text>
+    </DiagramFrame>
+  );
+}
+
+/** misc-friction-opposes-force: block pushed at angle, friction along the
+ *  surface (NOT opposite the applied force vector). */
+export function FrictionOpposesMotionMiscDiagram() {
+  return (
+    <DiagramFrame width={500} height={240} ariaLabel="Friction opposes motion not applied force">
+      <Ground x1={40} x2={460} y={180} />
+      <Block x={210} y={140} w={60} h={40} label="m" />
+      {/* Applied F at 30° below horizontal */}
+      <Arrow x1={150} y1={120} x2={210} y2={155} color={INFO} label="F" />
+      {/* Friction along surface, opposite motion (rightward push → friction left) */}
+      <Arrow x1={210} y1={170} x2={140} y2={170} color={WARNING} label="f_k" />
+      {/* Motion arrow */}
+      <Arrow x1={290} y1={130} x2={350} y2={130} color={INK_MUTED} dashed width={1.4} label="v" />
+      <text
+        x={250}
+        y={215}
+        textAnchor="middle"
+        fontFamily="monospace"
+        fontSize="11"
+        fill={INK_MUTED}
+      >
+        friction is along the surface, opposite v — not opposite F
+      </text>
+    </DiagramFrame>
+  );
+}
+
+/** misc-rest-no-forces: book on table — forces ARE present, they balance. */
+export function RestHasForcesMiscDiagram() {
+  return (
+    <DiagramFrame width={420} height={240} ariaLabel="At rest does not mean no forces">
+      <Ground x1={60} x2={360} y={180} />
+      <Block x={170} y={130} w={80} h={50} label="book" />
+      <Arrow x1={210} y1={155} x2={210} y2={225} color={ACCENT} label="W" />
+      <Arrow x1={210} y1={130} x2={210} y2={60} color={INK} label="N" />
+      <text x={210} y={215} textAnchor="middle" fontFamily="monospace" fontSize="11" fill={SUCCESS}>
+        ΣF = 0 (forces present, they balance)
+      </text>
+    </DiagramFrame>
+  );
+}

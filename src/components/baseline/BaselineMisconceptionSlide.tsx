@@ -2,6 +2,8 @@ import { findMisconception, loadUnit } from '@/lib/content/baseline';
 import { BaselineSlideFrame } from './SlideFrame';
 import { SlideKicker } from './SlideKicker';
 import { TrilingualBlock } from './Trilingual';
+import { DiagramRenderer } from './DiagramRenderer';
+import { hasDiagram } from './DiagramRegistry';
 import { I18n } from '@/components/i18n/I18n';
 import type { ArabicFlag, Severity } from '@/lib/content/types';
 
@@ -41,37 +43,47 @@ export async function BaselineMisconceptionSlide({
           </h2>
         </header>
 
-        <section className="space-y-2">
-          <I18n
-            k="whatStudentsSay"
-            className="block text-[10px] uppercase tracking-meta text-error"
-          />
-          <div className="bg-error/5 rounded-sm border-s-2 border-error px-4 py-3">
-            <TrilingualBlock value={m.wrong} tone="danger" />
-          </div>
-        </section>
+        <div className="grid flex-1 grid-cols-1 gap-6 md:grid-cols-[1fr_auto] md:items-start">
+          <div className="min-w-0 space-y-4">
+            <section className="space-y-2">
+              <I18n
+                k="whatStudentsSay"
+                className="block text-[10px] uppercase tracking-meta text-error"
+              />
+              <div className="bg-error/5 rounded-sm border-s-2 border-error px-4 py-3">
+                <TrilingualBlock value={m.wrong} tone="danger" />
+              </div>
+            </section>
 
-        <section className="space-y-2">
-          <I18n
-            k="actuallyTrue"
-            className="block text-[10px] uppercase tracking-meta text-success"
-          />
-          <div className="bg-success/5 rounded-sm border-s-2 border-success px-4 py-3">
-            <TrilingualBlock value={m.right} tone="success" size="lead" />
-          </div>
-        </section>
+            <section className="space-y-2">
+              <I18n
+                k="actuallyTrue"
+                className="block text-[10px] uppercase tracking-meta text-success"
+              />
+              <div className="bg-success/5 rounded-sm border-s-2 border-success px-4 py-3">
+                <TrilingualBlock value={m.right} tone="success" size="lead" />
+              </div>
+            </section>
 
-        {m.whyStudentsFall && (
-          <section className="border-t border-border pt-3">
-            <I18n
-              k="whyTheyFall"
-              className="me-2 inline-block text-[10px] uppercase tracking-meta text-ink-faint"
-            />
-            <span className="font-body text-sm italic leading-relaxed text-ink-muted">
-              {firstSentence(m.whyStudentsFall)}
-            </span>
-          </section>
-        )}
+            {m.whyStudentsFall && (
+              <section className="border-t border-border pt-3">
+                <I18n
+                  k="whyTheyFall"
+                  className="me-2 inline-block text-[10px] uppercase tracking-meta text-ink-faint"
+                />
+                <span className="font-body text-sm italic leading-relaxed text-ink-muted">
+                  {firstSentence(m.whyStudentsFall)}
+                </span>
+              </section>
+            )}
+          </div>
+
+          {hasDiagram(m.id) && (
+            <div className="flex justify-center md:max-w-md md:justify-end">
+              <DiagramRenderer id={m.id} />
+            </div>
+          )}
+        </div>
       </div>
     </BaselineSlideFrame>
   );

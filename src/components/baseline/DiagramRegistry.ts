@@ -1,10 +1,14 @@
 import type { ComponentType } from 'react';
 import {
+  ActionReactionCancelMiscDiagram,
   ActionReactionDiagram,
   AtwoodDiagram,
   BookOnTableDiagram,
+  BookWithWeightDiagram,
   BoxOnGroundFBD,
   FBDStepsDiagram,
+  ForceAnatomyDiagram,
+  FrictionOpposesMotionMiscDiagram,
   FrictionRegimesDiagram,
   HangingSignDiagram,
   HeadToTailDiagram,
@@ -12,12 +16,18 @@ import {
   InclineFullFBD,
   InclineHorizontalForceFBD,
   MassComparisonDiagram,
+  MovingNeedsForceMiscDiagram,
   NormalCompareDiagram,
+  NormalEqualsMgMiscDiagram,
+  RestHasForcesMiscDiagram,
   SigmaSymbolDiagram,
   SwimmingDiagram,
   TensionDiagram,
   ThreeBoxesStackDiagram,
+  ThreeForces1DDiagram,
   TwoBoxesContactDiagram,
+  TwoForcesParallelDiagram,
+  TwoForcesPerpendicularDiagram,
   WeightDiagram,
 } from '@/components/diagrams/physics';
 
@@ -31,7 +41,7 @@ import {
  */
 export const DIAGRAM_REGISTRY: Record<string, ComponentType> = {
   // Concepts
-  'force-as-vector': HeadToTailDiagram,
+  'force-as-vector': ForceAnatomyDiagram,
   'net-force-sigma': SigmaSymbolDiagram,
   'newton-first-law': HockeyPuckDiagram,
   'newton-second-vector': MassComparisonDiagram,
@@ -42,19 +52,19 @@ export const DIAGRAM_REGISTRY: Record<string, ComponentType> = {
   tension: TensionDiagram,
   friction: FrictionRegimesDiagram,
 
-  // Examples — basic tier
-  'ex-two-forces-same-direction': HeadToTailDiagram,
-  'ex-three-forces-1d': SigmaSymbolDiagram,
+  // Examples — problem-specific diagrams (replacing earlier reuses)
+  'ex-two-forces-same-direction': TwoForcesParallelDiagram,
+  'ex-three-forces-1d': ThreeForces1DDiagram,
   'ex-book-on-table': BookOnTableDiagram,
   'ex-block-pushed': () => BoxOnGroundFBD({ withApplied: true }),
-  'ex-2d-perpendicular-forces': () => BoxOnGroundFBD({ withApplied: true, withFriction: false }),
+  'ex-2d-perpendicular-forces': TwoForcesPerpendicularDiagram,
   'ex-swimming': SwimmingDiagram,
-  'ex-weight-of-book': WeightDiagram,
+  'ex-weight-of-book': BookWithWeightDiagram,
   'ex-block-on-incline-find-N': InclineFullFBD,
   'ex-atwood-basic': AtwoodDiagram,
   'ex-friction-bound': FrictionRegimesDiagram,
 
-  // Examples — newly authored tier
+  // Examples — newly authored tier (Phase E content)
   'ex-hanging-sign-equilibrium': HangingSignDiagram,
   'ex-incline-constant-velocity': InclineHorizontalForceFBD,
   'ex-two-boxes-contact': TwoBoxesContactDiagram,
@@ -62,6 +72,13 @@ export const DIAGRAM_REGISTRY: Record<string, ComponentType> = {
 
   // Cumulative
   'ex-incline-with-friction': InclineFullFBD,
+
+  // Misconceptions — wrong/right visualizations
+  'misc-moving-needs-force': MovingNeedsForceMiscDiagram,
+  'misc-action-reaction-cancel': ActionReactionCancelMiscDiagram,
+  'misc-N-equals-mg': NormalEqualsMgMiscDiagram,
+  'misc-friction-opposes-force': FrictionOpposesMotionMiscDiagram,
+  'misc-rest-no-forces': RestHasForcesMiscDiagram,
 
   // FBD method (sub-steps in concept teaching, used in Hook/method slides)
   'fbd-step-1': () => FBDStepsDiagram({ step: 1 }),
