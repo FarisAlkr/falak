@@ -141,6 +141,15 @@ falak/
 4. **Verify physics accuracy** by invoking the `physics-accuracy` skill. This is non-negotiable for equations, problems, and explanations.
 5. **After completing a unit phase**, summarize what was done, what was tested, and what remains.
 6. **Use subagents for large tasks.** Building a full unit should be split into subagent calls per phase.
+7. **Architecture revision after every long session.** Codebases turn into spaghetti when feature work isn't followed by deliberate cleanup. After any session where 5+ files changed, a multi-phase feature shipped, or a major refactor landed, run a deep architecture revision before declaring the work done. The pass:
+   - **Inventory** — list every file under `src/`; spot-check what's there.
+   - **Dead code** — `grep -rn` for every exported symbol; flag any with zero non-self-referential callers. Delete (or document why kept).
+   - **Duplicates / parallel implementations** — two components solving the same problem (old + new), two type definitions for the same shape, two pages rendering near-identical content. Pick one, delete the other.
+   - **Stale references** — IDs, file paths, counts (e.g., "14 units" vs the canonical "12 units"), unit-registry vs baseline-index drift. Reconcile.
+   - **Cloneability friction** — anything hardcoded to the unit you just shipped (constants, renderer functions, registry keys) that the next unit will have to copy-paste. Lift to shared layer.
+   - **Bad design** — overly broad types, circular imports, components with too many props, physics or content logic in components instead of `src/lib/`.
+   - **Triage** — definitely-fix / probably-fix / debatable. Execute as **focused commits, one concern per commit**, with `typecheck` + `lint` + `test` + `build` green after each. Document in the commit message exactly what was kept and why.
+     This is non-negotiable. The cost of a 30-minute revision pass after each session is far less than the cost of letting parallel implementations and stale references compound. The recent example of this rule in action is on this branch: `edebf41` → `8f2ccd0` (4 cleanup commits after the Phase A–F + diagram-enrichment session).
 
 ## Commands
 
