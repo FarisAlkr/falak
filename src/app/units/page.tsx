@@ -12,7 +12,8 @@ const FILTERS: { value: SectionFilter; label: string }[] = [
   { value: 'all', label: 'All · الكل' },
   { value: 'mechanics', label: 'Mechanics · ميكانيكا' },
   { value: 'electromagnetism', label: 'Electromagnetism · كهرومغناطيسية' },
-  { value: 'radiation-matter', label: 'Radiation & Matter · إشعاع ومادة' },
+  { value: 'waves-optics', label: 'Waves & Optics · موجات وبصريّات' },
+  { value: 'modern-atomic', label: 'Modern & Atomic · حديثة وذرّيّة' },
 ];
 
 export default function UnitsPage() {
@@ -28,7 +29,7 @@ export default function UnitsPage() {
           Units · الوحدات
         </span>
         <h1 dir="ltr" className="font-display text-4xl font-medium text-ink md:text-5xl">
-          The 14-unit curriculum
+          The 12-unit curriculum
         </h1>
       </header>
 
