@@ -6,7 +6,6 @@ import {
   BookOnTableDiagram,
   BookWithWeightDiagram,
   BoxOnGroundFBD,
-  FBDStepsDiagram,
   ForceAnatomyDiagram,
   FrictionOpposesMotionMiscDiagram,
   FrictionRegimesDiagram,
@@ -79,11 +78,6 @@ export const DIAGRAM_REGISTRY: Record<string, ComponentType> = {
   'misc-N-equals-mg': NormalEqualsMgMiscDiagram,
   'misc-friction-opposes-force': FrictionOpposesMotionMiscDiagram,
   'misc-rest-no-forces': RestHasForcesMiscDiagram,
-
-  // FBD method (sub-steps in concept teaching, used in Hook/method slides)
-  'fbd-step-1': () => FBDStepsDiagram({ step: 1 }),
-  'fbd-step-2': () => FBDStepsDiagram({ step: 2 }),
-  'fbd-step-3': () => FBDStepsDiagram({ step: 3 }),
 };
 
 export function hasDiagram(id: string | undefined): boolean {

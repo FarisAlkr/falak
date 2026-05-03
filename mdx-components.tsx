@@ -1,6 +1,5 @@
 import type { MDXComponents } from 'mdx/types';
 import { InlineMath, BlockMath } from '@/components/math/Math';
-import { Card } from '@/components/primitives';
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
@@ -61,7 +60,6 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     hr: (props) => <hr className="my-12 border-t border-border" {...props} />,
     InlineMath,
     BlockMath,
-    Card,
     ...components,
   };
 }

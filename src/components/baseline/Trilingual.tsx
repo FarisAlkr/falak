@@ -1,8 +1,6 @@
-import type { Trilingual } from '@/lib/content/types';
-import type { GlossaryEntry } from '@/lib/content/types';
+import type { GlossaryEntry, Trilingual } from '@/lib/content/types';
 import { cn } from '@/lib/utils/cn';
 import { LOCALE_DIR } from '@/lib/i18n/constants';
-import { Term } from '@/components/i18n/Term';
 import { termizeText } from '@/components/i18n/TermizedText';
 
 interface TrilingualBlockProps {
@@ -76,6 +74,3 @@ export function TrilingualBlock({
     </div>
   );
 }
-
-/** Re-export `Term` so call sites can use a single import path. */
-export { Term };
