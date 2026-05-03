@@ -2,9 +2,10 @@ import Link from 'next/link';
 import { Play } from 'lucide-react';
 import { PlaceholderPanel } from '@/components/layout/PlaceholderPanel';
 import { getUnitStaticParams } from '@/lib/content/staticParams';
-import { UNIT_03_DECK, renderUnit03Slide } from '@/content/units/newtons-laws/lectureDeck';
+import { UNIT_03_DECK, UNIT_03_NUMBER } from '@/content/units/newtons-laws/lectureDeck';
 import { UNIT_03_TOC, sectionAnchorForSlide } from '@/content/units/newtons-laws/toc';
 import { DeckIndex } from '@/components/baseline/DeckIndex';
+import { renderBaselineSlide } from '@/components/baseline/renderSlide';
 import { I18n } from '@/components/i18n/I18n';
 
 export const generateStaticParams = getUnitStaticParams;
@@ -48,7 +49,7 @@ export default function TheoryPage({ params }: TheoryPageProps) {
                   // below the sticky header.
                   <span id={`section-${sectionId}`} aria-hidden className="block scroll-mt-24" />
                 )}
-                {renderUnit03Slide(entry, `${n}/${total}`)}
+                {renderBaselineSlide(UNIT_03_NUMBER, entry, `${n}/${total}`)}
               </div>
             );
           })}

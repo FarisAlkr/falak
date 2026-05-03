@@ -1,8 +1,9 @@
 import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
-import { UNIT_03_DECK, renderUnit03Slide } from '@/content/units/newtons-laws/lectureDeck';
+import { UNIT_03_DECK, UNIT_03_NUMBER } from '@/content/units/newtons-laws/lectureDeck';
 import { UNIT_03_TOC } from '@/content/units/newtons-laws/toc';
 import { PresenterShell } from '@/components/baseline/PresenterShell';
+import { renderBaselineSlide } from '@/components/baseline/renderSlide';
 
 export function generateStaticParams() {
   // Only units with an authored deck get a presenter route; the others would
@@ -24,7 +25,9 @@ export default function PresentPage({ params }: PresentPageProps) {
     notFound();
   }
   const total = UNIT_03_DECK.length;
-  const slides = UNIT_03_DECK.map((entry, i) => renderUnit03Slide(entry, `${i + 1}/${total}`));
+  const slides = UNIT_03_DECK.map((entry, i) =>
+    renderBaselineSlide(UNIT_03_NUMBER, entry, `${i + 1}/${total}`),
+  );
   return (
     <Suspense fallback={null}>
       <PresenterShell

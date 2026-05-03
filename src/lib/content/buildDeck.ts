@@ -1,10 +1,10 @@
-import type { Difficulty, ExampleBlock, UnitBaseline } from './types';
+import type { BaselineDeckSlide, Difficulty, ExampleBlock, TocEntry, UnitBaseline } from './types';
 
 /**
  * Generic deck/TOC builder.
  *
- * Given a parsed `UnitBaseline`, produces a `DeckSlide[]` manifest and a
- * `TocEntry[]` table of contents that obey the three pedagogy rules:
+ * Given a parsed `UnitBaseline`, produces a `BaselineDeckSlide[]` manifest
+ * and a `TocEntry[]` table of contents that obey the three pedagogy rules:
  *
  *   Rule 1 — every concept is followed by its paired example(s).
  *   Rule 2 — examples within each concept group are ordered easy → mid → hard.
@@ -13,25 +13,13 @@ import type { Difficulty, ExampleBlock, UnitBaseline } from './types';
  *
  * The output is a "default deck" — sensible for any unit. A unit that wants
  * a hand-curated structure (like Unit 03's "four mechanical forces" grouping)
- * can author its own manifest and pass it through render directly; the
- * generic path is the cheap one for cloning new units.
+ * can author its own manifest in `src/content/units/{slug}/lectureDeck.tsx`;
+ * the generic path is the cheap one for cloning new units.
  */
 
-export interface BuildDeckSlide {
-  type: 'title' | 'hook' | 'concept' | 'example' | 'misconception' | 'summary';
-  id?: string;
-}
-
-export interface BuildTocEntry {
-  id: string;
-  title: { ar: string; he: string; en: string };
-  slides: [number, number];
-  children?: BuildTocEntry[];
-}
-
 export interface BuiltDeck {
-  slides: BuildDeckSlide[];
-  toc: BuildTocEntry[];
+  slides: BaselineDeckSlide[];
+  toc: TocEntry[];
 }
 
 const DIFFICULTY_ORDER: Record<Difficulty, number> = {
@@ -41,8 +29,8 @@ const DIFFICULTY_ORDER: Record<Difficulty, number> = {
 };
 
 export function buildDeckFromBaseline(unit: UnitBaseline): BuiltDeck {
-  const slides: BuildDeckSlide[] = [];
-  const toc: BuildTocEntry[] = [];
+  const slides: BaselineDeckSlide[] = [];
+  const toc: TocEntry[] = [];
 
   // Opening
   const openingStart = slides.length + 1;
@@ -162,10 +150,7 @@ function shortLabel(s: string | undefined): string | undefined {
   return first.slice(0, 38).trim() + '…';
 }
 
-function difficultyChildren(
-  paired: ExampleBlock[],
-  startSlide: number,
-): BuildTocEntry[] | undefined {
+function difficultyChildren(paired: ExampleBlock[], startSlide: number): TocEntry[] | undefined {
   if (paired.length < 2) return undefined;
   return paired.map((ex, i) => ({
     id: `ex-${ex.id}`,

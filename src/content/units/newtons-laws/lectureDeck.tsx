@@ -1,30 +1,26 @@
-import {
-  BaselineConceptSlide,
-  BaselineExampleSlide,
-  BaselineHookSlide,
-  BaselineMisconceptionSlide,
-  BaselineSummarySlide,
-  BaselineTitleSlide,
-} from '@/components/baseline';
-import type { ReactNode } from 'react';
+import type { BaselineDeckSlide } from '@/lib/content/types';
 
 export const UNIT_03_NUMBER = '03';
-
-export interface Unit03DeckSlide {
-  type: 'title' | 'hook' | 'concept' | 'example' | 'misconception' | 'summary';
-  id?: string;
-}
 
 /**
  * Unit 03 · Newton's Laws — slide manifest.
  *
  * Source of truth is `docs/content/03_newtons_laws.md`. This array names the
- * concept/example/misconception IDs from the baseline; every slide is one
- * `<Baseline*Slide>` invocation. Order follows `docs/09_pedagogy.md`:
- * title + hook → interleaved concept/example pairs (Rule 1) → cumulative 🔴 →
- * misconception quarantine (Rule 3) → summary.
+ * concept/example/misconception IDs from the baseline; rendering is delegated
+ * to `renderBaselineSlide(unit, entry, slideNumber)`.
+ *
+ * Order follows `docs/09_pedagogy.md`:
+ *   - title + hook
+ *   - interleaved concept/example pairs (Rule 1)
+ *   - cumulative 🔴
+ *   - misconception quarantine (Rule 3)
+ *   - summary
+ *
+ * Newton I and Newton III each ship three examples in difficulty order
+ * (basic → intermediate → advanced) per Rule 2. Newton II's 🔴 is the
+ * cumulative incline-with-friction that immediately follows.
  */
-export const UNIT_03_DECK: Unit03DeckSlide[] = [
+export const UNIT_03_DECK: BaselineDeckSlide[] = [
   // Opening
   { type: 'title' },
   { type: 'hook' },
@@ -80,30 +76,3 @@ export const UNIT_03_DECK: Unit03DeckSlide[] = [
   // Closing
   { type: 'summary' },
 ];
-
-export function renderUnit03Slide(entry: Unit03DeckSlide, slideNumber: string): ReactNode {
-  switch (entry.type) {
-    case 'title':
-      return <BaselineTitleSlide unit={UNIT_03_NUMBER} slideNumber={slideNumber} />;
-    case 'hook':
-      return <BaselineHookSlide unit={UNIT_03_NUMBER} slideNumber={slideNumber} />;
-    case 'concept':
-      return (
-        <BaselineConceptSlide unit={UNIT_03_NUMBER} id={entry.id!} slideNumber={slideNumber} />
-      );
-    case 'example':
-      return (
-        <BaselineExampleSlide unit={UNIT_03_NUMBER} id={entry.id!} slideNumber={slideNumber} />
-      );
-    case 'misconception':
-      return (
-        <BaselineMisconceptionSlide
-          unit={UNIT_03_NUMBER}
-          id={entry.id!}
-          slideNumber={slideNumber}
-        />
-      );
-    case 'summary':
-      return <BaselineSummarySlide unit={UNIT_03_NUMBER} slideNumber={slideNumber} />;
-  }
-}

@@ -1,10 +1,7 @@
 import { loadUnit } from '@/lib/content/baseline';
-import {
-  UNIT_03_DECK,
-  UNIT_03_NUMBER,
-  renderUnit03Slide,
-  type Unit03DeckSlide,
-} from '@/content/units/newtons-laws/lectureDeck';
+import { UNIT_03_DECK, UNIT_03_NUMBER } from '@/content/units/newtons-laws/lectureDeck';
+import { renderBaselineSlide } from '@/components/baseline/renderSlide';
+import type { BaselineDeckSlide } from '@/lib/content/types';
 import type { ReactNode } from 'react';
 
 /**
@@ -36,7 +33,7 @@ export default async function BaselineUnit03DevPreviewPage() {
       <div className="space-y-10">
         {UNIT_03_DECK.map((entry, i) => (
           <NumberedSlot key={i} n={`${i + 1}/${total}`} type={entry.type} id={entry.id}>
-            {renderUnit03Slide(entry, `${i + 1}/${total}`)}
+            {renderBaselineSlide(UNIT_03_NUMBER, entry, `${i + 1}/${total}`)}
           </NumberedSlot>
         ))}
       </div>
@@ -51,7 +48,7 @@ function NumberedSlot({
   children,
 }: {
   n: string;
-  type: Unit03DeckSlide['type'];
+  type: BaselineDeckSlide['type'];
   id?: string;
   children: ReactNode;
 }) {

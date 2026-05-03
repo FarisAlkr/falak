@@ -1,3 +1,5 @@
+import type { TocEntry } from '@/lib/content/types';
+
 /**
  * Unit 03 · Newton's Laws — table of contents (فهرس).
  *
@@ -10,15 +12,6 @@
  * tiers; Newton II has its 🟢 + 🟡 + a 🔴 picked up by the cumulative section
  * that follows.
  */
-
-export interface TocEntry {
-  id: string;
-  title: { ar: string; he: string; en: string };
-  /** Inclusive slide range, 1-indexed. */
-  slides: [number, number];
-  children?: TocEntry[];
-}
-
 export const UNIT_03_TOC: TocEntry[] = [
   {
     id: 'opening',

@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ChevronLeft, ChevronRight, Maximize2, Minimize2, X } from 'lucide-react';
 import { I18n } from '@/components/i18n/I18n';
-import type { TocEntry } from '@/content/units/newtons-laws/toc';
+import type { TocEntry } from '@/lib/content/types';
 import { LOCALE_DIR } from '@/lib/i18n/constants';
 import { cn } from '@/lib/utils/cn';
 

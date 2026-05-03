@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import type { TocEntry } from '@/content/units/newtons-laws/toc';
+import type { TocEntry } from '@/lib/content/types';
 import { I18n } from '@/components/i18n/I18n';
 import { LOCALE_DIR } from '@/lib/i18n/constants';
 import { cn } from '@/lib/utils/cn';

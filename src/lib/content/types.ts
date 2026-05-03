@@ -123,3 +123,36 @@ export interface UnitBaseline {
   /** Total ⚑ flags counted while parsing the body. */
   flagCount: number;
 }
+
+/* ───────────────────────────────────────────────────────────────────────
+ * Deck + TOC primitives — shared between hand-curated unit manifests
+ * (`src/content/units/{slug}/lectureDeck.tsx`) and the auto-builder
+ * (`src/lib/content/buildDeck.ts`).
+ * ─────────────────────────────────────────────────────────────────────── */
+
+export type BaselineSlideType =
+  | 'title'
+  | 'hook'
+  | 'concept'
+  | 'example'
+  | 'misconception'
+  | 'summary';
+
+export interface BaselineDeckSlide {
+  type: BaselineSlideType;
+  /** Concept / example / misconception ID from the baseline. Unused for
+   *  `title`, `hook`, `summary`. */
+  id?: string;
+}
+
+export interface TocEntry {
+  /** Anchor id (without `#`); matches a `<span id="section-{id}">` mounted
+   *  on the section's first slide wrapper by the deck renderer. */
+  id: string;
+  title: { ar: string; he: string; en: string };
+  /** Inclusive slide range, 1-indexed. */
+  slides: [number, number];
+  /** Sub-entries — typically the easy/medium/hard difficulty tiers within a
+   *  law section. One level deep. */
+  children?: TocEntry[];
+}
