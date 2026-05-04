@@ -14,6 +14,20 @@ export interface BaselineSlideFrameProps extends HTMLAttributes<HTMLElement> {
   kicker?: ReactNode;
 }
 
+/**
+ * Editorial slide frame.
+ *
+ * No aspect-ratio lock and no `overflow-hidden` on content — both choices
+ * are deliberate. An earlier version forced 16:10 + clipped overflow,
+ * which made content-rich slides (concept + equations + diagram, or
+ * misconception with wrong/right panels + diagram) overrun the box and
+ * appear cut off. Outline mode is a vertical scroll where each slide
+ * reads on its own; constraining height there fights the medium.
+ *
+ * Presenter mode (`/units/{id}/theory/present/`) re-applies a 16:10
+ * letterbox via its own scaled container — that's where the aspect
+ * matters (one slide projected at a time).
+ */
 export function BaselineSlideFrame({
   children,
   unitNumber,
@@ -26,17 +40,18 @@ export function BaselineSlideFrame({
   return (
     <article
       className={cn(
-        // Mobile: free-flow height with comfortable padding so the slide
-        // doesn't get squeezed into a 16:10 letterbox on small screens.
-        'relative mx-auto w-full max-w-5xl overflow-hidden rounded-sm border border-border bg-paper p-6 sm:p-10 md:aspect-[16/10] md:p-20',
+        'relative mx-auto w-full max-w-5xl rounded-sm border border-border bg-paper',
+        // Top padding leaves room for the absolute-positioned chrome
+        // (kicker on the start side, brand + slide number on the end).
+        'px-6 pb-6 pt-12 sm:px-10 sm:pb-10 sm:pt-14 md:px-14 md:pb-12 md:pt-16',
         className,
       )}
       {...props}
     >
-      <div className="absolute left-5 top-5 flex items-center gap-3">
+      <div className="absolute left-5 top-4 flex items-center gap-3">
         {kicker && <span className="text-ink-muted">{kicker}</span>}
       </div>
-      <div className="absolute right-5 top-5 flex items-center gap-3 text-xs text-ink-faint">
+      <div className="absolute right-5 top-4 flex items-center gap-3 text-xs text-ink-faint">
         {/* Brand mark — Latin in EN, native script in AR/HE */}
         <span dir="ltr" className="flex items-center gap-2">
           <span data-lang="ar" dir="rtl" className="font-arabic">
@@ -59,7 +74,7 @@ export function BaselineSlideFrame({
         )}
       </div>
       {arabicFlag === 'pending' && <FlagRibbon />}
-      <div className="flex h-full flex-col">{children}</div>
+      <div className="flex flex-col">{children}</div>
     </article>
   );
 }
