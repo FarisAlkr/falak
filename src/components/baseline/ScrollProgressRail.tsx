@@ -11,23 +11,23 @@ interface ScrollProgressRailProps {
 }
 
 /**
- * Vertical scroll-progress rail. Pinned to the right edge of the viewport
- * (start side of the page in LTR; flipped to the left edge in RTL via
- * Tailwind's `rtl:` modifier). Reads as a slim editorial progress index:
+ * Minimal vertical scroll line.
  *
- *  - One row per top-level TOC section.
- *  - Each row: a tick (filled crimson when active, ink-muted when already
- *    scrolled past, border-strong when upcoming) and a hidden-by-default
- *    section label that reveals on hover/focus.
- *  - A continuous crimson line on the inner edge fills as scroll progresses.
- *  - Slide counter (N / total) at the bottom.
+ * A 1px track running floor-to-ceiling (minus a comfortable inset for the
+ * sticky AppHeader and the slide-counter at the bottom), pinned to the
+ * start edge — right in LTR, left in RTL via the `rtl:` modifier.
  *
- * The whole rail hides when the reader is still at the top of the page
- * (no section in view), so the فهرس card has the stage to itself.
+ *  - Track in `border` color, full height.
+ *  - Crimson fill grows top → bottom as the page scrolls.
+ *  - Tiny ink-faint dots at each section boundary; the active section's
+ *    dot is bigger and crimson. Hover any dot to reveal the section's
+ *    trilingual title in a small pill on the inner side. Click to jump.
+ *  - Slide counter at the bottom of the line.
  *
- * On mobile (< md), the rail collapses to a thin progress strip at the
- * bottom of the viewport — a vertical rail next to the slide eats too
- * much horizontal real estate on small screens.
+ * Hidden until the reader has scrolled past the فهرس card so the index
+ * keeps the stage to itself at the top of the page. On mobile (< md) the
+ * line is replaced by a thin sticky strip below the AppHeader since a
+ * 1px vertical line is too easy to miss on small viewports.
  */
 export function ScrollProgressRail({ entries, totalSlides }: ScrollProgressRailProps) {
   const activeId = useActiveSection(entries);
@@ -38,72 +38,71 @@ export function ScrollProgressRail({ entries, totalSlides }: ScrollProgressRailP
 
   return (
     <>
-      {/* Desktop: vertical rail on the start edge */}
-      <aside
+      {/* Desktop: bare 1px vertical line on the start edge */}
+      <div
         aria-label="Scroll progress"
         dir="ltr"
-        className="pointer-events-none fixed inset-y-0 right-4 z-20 hidden flex-col items-end justify-center md:flex rtl:left-4 rtl:right-auto rtl:items-start"
+        className="pointer-events-none fixed bottom-12 right-8 top-12 z-20 hidden w-px md:block rtl:left-8 rtl:right-auto"
       >
-        <div className="bg-paper/85 pointer-events-auto relative flex flex-col gap-3 rounded-sm border border-border px-2 py-4 shadow-soft backdrop-blur-md">
-          {/* Crimson progress line on the inner edge */}
-          <span
-            aria-hidden
-            className="absolute inset-y-0 left-0 w-px bg-border rtl:left-auto rtl:right-0"
-          />
-          <span
-            aria-hidden
-            className="absolute left-0 top-0 w-px bg-accent transition-[height] duration-base ease-out rtl:left-auto rtl:right-0"
-            style={{ height: `${progress * 100}%` }}
-          />
+        {/* Track */}
+        <div aria-hidden className="absolute inset-0 bg-border" />
+        {/* Fill */}
+        <div
+          aria-hidden
+          className="absolute inset-x-0 top-0 bg-accent transition-[height] duration-base ease-out"
+          style={{ height: `${progress * 100}%` }}
+        />
 
-          {entries.map((entry) => {
-            const isActive = entry.id === activeId;
-            const isPast = entry.slides[1] / totalSlides <= progress && !isActive;
-            return (
-              <a
-                key={entry.id}
-                href={`#section-${entry.id}`}
-                aria-label={entry.title.en}
-                aria-current={isActive ? 'location' : undefined}
-                className="group/tick relative flex items-center gap-2 rtl:flex-row-reverse"
+        {/* Section dots */}
+        {entries.map((entry) => {
+          const topPct = ((entry.slides[0] - 1) / totalSlides) * 100;
+          const isActive = entry.id === activeId;
+          return (
+            <a
+              key={entry.id}
+              href={`#section-${entry.id}`}
+              aria-label={entry.title.en}
+              aria-current={isActive ? 'location' : undefined}
+              className="group/tick pointer-events-auto absolute left-1/2 -translate-x-1/2 -translate-y-1/2"
+              style={{ top: `${topPct}%` }}
+            >
+              {/* Dot */}
+              <span
+                aria-hidden
+                className={cn(
+                  'block rounded-full border-2 border-paper transition-all duration-fast',
+                  isActive
+                    ? 'h-2.5 w-2.5 bg-accent'
+                    : 'h-1.5 w-1.5 bg-ink-faint group-hover/tick:bg-ink',
+                )}
+              />
+              {/* Label — appears on hover on the inner (page) side */}
+              <span
+                className={cn(
+                  'pointer-events-none absolute top-1/2 -translate-y-1/2 whitespace-nowrap rounded-sm border border-border bg-paper-raised px-2 py-0.5 text-[11px] opacity-0 shadow-soft transition-opacity duration-fast',
+                  'group-hover/tick:opacity-100 group-focus-visible/tick:opacity-100',
+                  // Inner side = away from the viewport edge: left in LTR, right in RTL
+                  'right-3 rtl:left-3 rtl:right-auto',
+                )}
               >
-                {/* Section title — reveals on hover */}
-                <span
-                  className={cn(
-                    'pointer-events-none whitespace-nowrap rounded-sm border border-border bg-paper-raised px-2 py-0.5 text-[11px] opacity-0 shadow-soft transition-opacity duration-fast',
-                    'group-hover/tick:opacity-100 group-focus-visible/tick:opacity-100',
-                    isActive && 'opacity-100',
-                  )}
-                >
-                  <SectionTitle entry={entry} />
-                </span>
-                {/* Tick */}
-                <span
-                  aria-hidden
-                  className={cn(
-                    'block h-1.5 w-1.5 shrink-0 rounded-full transition-colors duration-fast',
-                    isActive
-                      ? 'h-2 w-2 bg-accent'
-                      : isPast
-                        ? 'bg-ink-muted'
-                        : 'bg-border-strong group-hover/tick:bg-ink-muted',
-                  )}
-                />
-              </a>
-            );
-          })}
+                <SectionTitle entry={entry} />
+              </span>
+            </a>
+          );
+        })}
 
-          {/* Slide counter */}
-          <span
-            dir="ltr"
-            className="mt-2 border-t border-border pt-2 text-end font-mono text-[10px] uppercase tabular-nums tracking-meta text-ink-faint"
-          >
-            {currentSlide} / {totalSlides}
-          </span>
-        </div>
-      </aside>
+        {/* Slide counter at the foot of the line */}
+        <span
+          dir="ltr"
+          className="absolute -bottom-6 right-1/2 translate-x-1/2 whitespace-nowrap font-mono text-[10px] uppercase tabular-nums tracking-meta text-ink-faint"
+        >
+          {currentSlide}
+          <span className="mx-px text-border-strong">/</span>
+          {totalSlides}
+        </span>
+      </div>
 
-      {/* Mobile: thin sticky progress strip below the AppHeader */}
+      {/* Mobile: thin sticky strip below the AppHeader */}
       <div
         dir="ltr"
         className="bg-paper/85 sticky top-[52px] z-20 border-b border-border backdrop-blur-md md:hidden"
