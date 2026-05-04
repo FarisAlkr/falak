@@ -281,12 +281,16 @@ interface FrameProps {
   ariaLabel?: string;
 }
 
-/** Standard SVG frame for slide diagrams */
+/** Standard SVG frame for slide diagrams.
+ *  Sizes by width — fills the parent up to a comfortable max, height is
+ *  auto-computed from viewBox aspect ratio. Robust regardless of whether
+ *  the parent has an explicit height (an earlier `h-full` default
+ *  collapsed to 0 in flex contexts where no ancestor declared a height). */
 export function DiagramFrame({
   width = 480,
   height = 280,
   children,
-  className = 'h-full max-h-72 w-auto',
+  className = 'h-auto w-full max-w-md',
   ariaLabel,
 }: FrameProps) {
   return (
