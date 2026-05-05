@@ -1,13 +1,39 @@
 import type { ReactNode } from 'react';
 
+/* ═══════════════════════════════════════════════════════════════════════
+ * Physics-diagram primitives + composed figures.
+ *
+ * Composition rules (apply to every diagram):
+ *   1. Diagrams are composed against a generous viewBox — typically
+ *      720 × 420 (16:10 at 1.5× the previous default). All drawn content
+ *      lives inside a 24-unit margin from the viewBox edges so arrows
+ *      and labels never touch the figure's outer rectangle.
+ *   2. Primary labels are 17px in JetBrains Mono (referenced via the CSS
+ *      `--font-mono` variable so they inherit the loaded font, not the
+ *      browser's default Courier). Secondary labels are 14px. Captions
+ *      living inside the SVG are 13px italic Fraunces.
+ *   3. Arrowhead-to-label gap is at least 12 SVG units (the Arrow's
+ *      `labelOffset` default is 16; raise per-call where text is large).
+ *   4. No two labels overlap — when in doubt, push the second label
+ *      further out and add a leader if necessary.
+ *
+ * Color tokens come from globals.css design tokens. Always reference the
+ * CSS variable, never a literal hex value.
+ * ═══════════════════════════════════════════════════════════════════════ */
+
 const ACCENT = 'var(--accent)';
 const INK = 'var(--ink)';
 const INK_MUTED = 'var(--ink-muted)';
+const INK_FAINT = 'var(--ink-faint)';
 const INFO = 'var(--info)';
 const WARNING = 'var(--warning)';
 const SUCCESS = 'var(--success)';
 const PAPER_RAISED = 'var(--paper-raised)';
-const BORDER = 'var(--border)';
+
+/** Mono labels in SVG must use the CSS variable so they inherit JetBrains
+ *  Mono. Plain `font-family="monospace"` falls back to Courier. */
+const FONT_MONO = 'var(--font-mono), ui-monospace, monospace';
+const FONT_DISPLAY = 'var(--font-display), Georgia, serif';
 
 export const PHYSICS_COLORS = {
   weight: ACCENT,
@@ -20,6 +46,42 @@ export const PHYSICS_COLORS = {
   inkMuted: INK_MUTED,
 };
 
+/* ═══════════════════════════════════════════════════════════════════════
+ *  Primitives
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+interface FrameProps {
+  width?: number;
+  height?: number;
+  children: ReactNode;
+  className?: string;
+  ariaLabel?: string;
+}
+
+/** Standard SVG frame. Sizes itself to the parent's width with auto height
+ *  derived from the viewBox aspect — works in any flex/grid context
+ *  regardless of whether an ancestor has an explicit height. */
+export function DiagramFrame({
+  width = 720,
+  height = 420,
+  children,
+  className = 'h-auto w-full',
+  ariaLabel,
+}: FrameProps) {
+  return (
+    <svg
+      viewBox={`0 0 ${width} ${height}`}
+      className={className}
+      preserveAspectRatio="xMidYMid meet"
+      aria-label={ariaLabel}
+      aria-hidden={!ariaLabel}
+      role={ariaLabel ? 'img' : undefined}
+    >
+      {children}
+    </svg>
+  );
+}
+
 interface ArrowProps {
   x1: number;
   y1: number;
@@ -29,19 +91,24 @@ interface ArrowProps {
   width?: number;
   label?: string;
   labelOffset?: number;
+  labelPerpOffset?: number;
   dashed?: boolean;
+  fontSize?: number;
 }
 
+/** Vector arrow with optional label placed past the arrowhead. */
 export function Arrow({
   x1,
   y1,
   x2,
   y2,
   color = INK,
-  width = 2.5,
+  width = 3,
   label,
-  labelOffset = 14,
+  labelOffset = 18,
+  labelPerpOffset = 0,
   dashed,
+  fontSize = 17,
 }: ArrowProps) {
   const dx = x2 - x1;
   const dy = y2 - y1;
@@ -49,8 +116,8 @@ export function Arrow({
   if (len < 0.5) return null;
   const nx = dx / len;
   const ny = dy / len;
-  const headLen = 10;
-  const headWidth = 5.5;
+  const headLen = 14;
+  const headWidth = 8;
   const baseX = x2 - nx * headLen;
   const baseY = y2 - ny * headLen;
   const perpX = -ny;
@@ -59,7 +126,8 @@ export function Arrow({
   const ly = baseY + perpY * headWidth;
   const rx = baseX - perpX * headWidth;
   const ry = baseY - perpY * headWidth;
-
+  const labelX = x2 + nx * labelOffset + perpX * labelPerpOffset;
+  const labelY = y2 + ny * labelOffset + perpY * labelPerpOffset;
   return (
     <g>
       <line
@@ -69,16 +137,16 @@ export function Arrow({
         y2={baseY}
         stroke={color}
         strokeWidth={width}
-        strokeDasharray={dashed ? '5 4' : undefined}
+        strokeDasharray={dashed ? '7 5' : undefined}
         strokeLinecap="round"
       />
       <polygon points={`${x2},${y2} ${lx},${ly} ${rx},${ry}`} fill={color} />
       {label && (
         <text
-          x={x2 + nx * labelOffset}
-          y={y2 + ny * labelOffset + 4}
-          fontFamily="monospace"
-          fontSize="14"
+          x={labelX}
+          y={labelY + fontSize * 0.32}
+          fontFamily={FONT_MONO}
+          fontSize={fontSize}
           fill={color}
           fontWeight="600"
           textAnchor="middle"
@@ -98,28 +166,31 @@ interface BlockProps {
   label?: string;
   fill?: string;
   rotate?: number;
+  fontSize?: number;
 }
 
+/** A schematic body. Centered label, soft fill, ink stroke. */
 export function Block({
   x,
   y,
-  w = 70,
-  h = 50,
+  w = 100,
+  h = 70,
   label,
   fill = PAPER_RAISED,
   rotate = 0,
+  fontSize = 16,
 }: BlockProps) {
   const cx = x + w / 2;
   const cy = y + h / 2;
   return (
     <g transform={rotate ? `rotate(${rotate} ${cx} ${cy})` : undefined}>
-      <rect x={x} y={y} width={w} height={h} fill={fill} stroke={INK} strokeWidth={1.5} rx={2} />
+      <rect x={x} y={y} width={w} height={h} fill={fill} stroke={INK} strokeWidth={1.8} rx={3} />
       {label && (
         <text
           x={cx}
-          y={cy + 4}
-          fontFamily="monospace"
-          fontSize="13"
+          y={cy + fontSize * 0.32}
+          fontFamily={FONT_MONO}
+          fontSize={fontSize}
           fill={INK_MUTED}
           textAnchor="middle"
         >
@@ -137,20 +208,28 @@ interface GroundProps {
   hatchAbove?: boolean;
 }
 
+/** Hatched ground line. */
 export function Ground({ x1, x2, y, hatchAbove = false }: GroundProps) {
-  const id = `hatch-${x1}-${y}`;
+  const id = `hatch-${Math.round(x1)}-${Math.round(y)}-${hatchAbove ? 'a' : 'b'}`;
   const dir = hatchAbove ? -1 : 1;
+  const hatchHeight = 10;
   return (
     <g>
-      <line x1={x1} y1={y} x2={x2} y2={y} stroke={INK_MUTED} strokeWidth={1.5} />
-      <pattern id={id} patternUnits="userSpaceOnUse" width="8" height="8">
+      <line x1={x1} y1={y} x2={x2} y2={y} stroke={INK_MUTED} strokeWidth={2} />
+      <pattern id={id} patternUnits="userSpaceOnUse" width="10" height="10">
         <path
-          d={`M0,${dir > 0 ? 8 : 0} L8,${dir > 0 ? 0 : 8}`}
+          d={`M0,${dir > 0 ? 10 : 0} L10,${dir > 0 ? 0 : 10}`}
           stroke={INK_MUTED}
-          strokeWidth="0.6"
+          strokeWidth="0.8"
         />
       </pattern>
-      <rect x={x1} y={hatchAbove ? y - 8 : y} width={x2 - x1} height={8} fill={`url(#${id})`} />
+      <rect
+        x={x1}
+        y={hatchAbove ? y - hatchHeight : y}
+        width={x2 - x1}
+        height={hatchHeight}
+        fill={`url(#${id})`}
+      />
     </g>
   );
 }
@@ -164,9 +243,9 @@ interface InclineProps {
 }
 
 export function Incline({
-  baseX = 80,
-  baseY = 240,
-  length = 280,
+  baseX = 100,
+  baseY = 360,
+  length = 420,
   angleDeg = 30,
   showAngleArc = true,
 }: InclineProps) {
@@ -180,20 +259,20 @@ export function Incline({
         points={`${baseX},${baseY} ${topX},${baseY} ${topX},${topY}`}
         fill={PAPER_RAISED}
         stroke={INK}
-        strokeWidth={1.5}
+        strokeWidth={1.8}
       />
       <Ground x1={baseX} x2={topX} y={baseY} />
       {showAngleArc && (
         <>
           <path
-            d={`M ${topX - 40},${baseY} A 40 40 0 0 0 ${
-              topX - 40 * Math.cos(rad)
-            },${baseY - 40 * Math.sin(rad)}`}
+            d={`M ${topX - 56},${baseY} A 56 56 0 0 0 ${
+              topX - 56 * Math.cos(rad)
+            },${baseY - 56 * Math.sin(rad)}`}
             fill="none"
             stroke={INK_MUTED}
-            strokeWidth={1}
+            strokeWidth={1.2}
           />
-          <text x={topX - 28} y={baseY - 12} fontFamily="monospace" fontSize="12" fill={INK_MUTED}>
+          <text x={topX - 32} y={baseY - 14} fontFamily={FONT_MONO} fontSize="14" fill={INK_MUTED}>
             θ={ang}°
           </text>
         </>
@@ -202,27 +281,37 @@ export function Incline({
   );
 }
 
-/** Block on an incline — returns block center + perpendicular axes for force placement */
+interface BlockOnInclineProps extends InclineProps {
+  blockSize?: number;
+  position?: number;
+}
+
+/** Block resting on an incline. Returns the block's center for force placement. */
 export function BlockOnIncline({
-  baseX = 80,
-  baseY = 240,
-  length = 280,
+  baseX = 100,
+  baseY = 360,
+  length = 420,
   angleDeg = 30,
-  blockSize = 50,
+  blockSize = 70,
   position = 0.5,
-}: InclineProps & { blockSize?: number; position?: number }) {
+  showAngleArc = true,
+}: BlockOnInclineProps) {
   const rad = (angleDeg * Math.PI) / 180;
-  // Position along the incline from base
   const px = baseX + length * (1 - position);
   const py = baseY - length * (1 - position) * Math.tan(rad);
-  // Block sits on the incline surface — perpendicular offset by blockSize/2
   const perpX = Math.sin(rad) * (blockSize / 2);
   const perpY = -Math.cos(rad) * (blockSize / 2);
   const cx = px + perpX;
   const cy = py + perpY;
   return (
     <g>
-      <Incline baseX={baseX} baseY={baseY} length={length} angleDeg={angleDeg} />
+      <Incline
+        baseX={baseX}
+        baseY={baseY}
+        length={length}
+        angleDeg={angleDeg}
+        showAngleArc={showAngleArc}
+      />
       <Block
         x={cx - blockSize / 2}
         y={cy - blockSize / 2}
@@ -240,12 +329,22 @@ interface PulleyProps {
   r?: number;
 }
 
-export function Pulley({ cx, cy, r = 22 }: PulleyProps) {
+export function Pulley({ cx, cy, r = 30 }: PulleyProps) {
   return (
     <g>
-      <circle cx={cx} cy={cy} r={r} fill={PAPER_RAISED} stroke={INK} strokeWidth={1.5} />
-      <circle cx={cx} cy={cy} r={r * 0.4} fill={INK_MUTED} />
-      <circle cx={cx} cy={cy} r={2} fill={INK} />
+      <circle cx={cx} cy={cy} r={r} fill={PAPER_RAISED} stroke={INK} strokeWidth={1.8} />
+      <circle cx={cx} cy={cy} r={r * 0.5} fill={INK_MUTED} opacity={0.35} />
+      <circle cx={cx} cy={cy} r={3} fill={INK} />
+      {/* Mounting bracket */}
+      <line
+        x1={cx - 4}
+        y1={cy - r - 12}
+        x2={cx + 4}
+        y2={cy - r - 12}
+        stroke={INK}
+        strokeWidth={2}
+      />
+      <line x1={cx} y1={cy - r} x2={cx} y2={cy - r - 12} stroke={INK} strokeWidth={1.5} />
     </g>
   );
 }
@@ -257,68 +356,151 @@ interface PersonProps {
   flipped?: boolean;
 }
 
-/** Stick figure for "person pushing a wall" type illustrations */
-export function Person({ x, y, scale = 1, flipped = false }: PersonProps) {
+export function Person({ x, y, scale = 1.4, flipped = false }: PersonProps) {
   const s = scale;
   const fx = flipped ? -1 : 1;
   return (
     <g transform={`translate(${x},${y})`}>
-      <circle cx={0} cy={-30 * s} r={8 * s} fill="none" stroke={INK} strokeWidth={1.5} />
-      <line x1={0} y1={-22 * s} x2={0} y2={10 * s} stroke={INK} strokeWidth={1.5} />
-      <line x1={0} y1={-12 * s} x2={fx * 14 * s} y2={-2 * s} stroke={INK} strokeWidth={1.5} />
-      <line x1={0} y1={-12 * s} x2={-fx * 12 * s} y2={2 * s} stroke={INK} strokeWidth={1.5} />
-      <line x1={0} y1={10 * s} x2={fx * 10 * s} y2={28 * s} stroke={INK} strokeWidth={1.5} />
-      <line x1={0} y1={10 * s} x2={-fx * 8 * s} y2={28 * s} stroke={INK} strokeWidth={1.5} />
+      <circle cx={0} cy={-32 * s} r={9 * s} fill="none" stroke={INK} strokeWidth={1.8} />
+      <line x1={0} y1={-23 * s} x2={0} y2={12 * s} stroke={INK} strokeWidth={1.8} />
+      <line x1={0} y1={-13 * s} x2={fx * 16 * s} y2={-2 * s} stroke={INK} strokeWidth={1.8} />
+      <line x1={0} y1={-13 * s} x2={-fx * 14 * s} y2={2 * s} stroke={INK} strokeWidth={1.8} />
+      <line x1={0} y1={12 * s} x2={fx * 12 * s} y2={32 * s} stroke={INK} strokeWidth={1.8} />
+      <line x1={0} y1={12 * s} x2={-fx * 10 * s} y2={32 * s} stroke={INK} strokeWidth={1.8} />
     </g>
   );
 }
 
-interface FrameProps {
-  width?: number;
-  height?: number;
-  children: ReactNode;
-  className?: string;
-  ariaLabel?: string;
-}
-
-/** Standard SVG frame for slide diagrams.
- *  Sizes by width — fills the parent up to a comfortable max, height is
- *  auto-computed from viewBox aspect ratio. Robust regardless of whether
- *  the parent has an explicit height (an earlier `h-full` default
- *  collapsed to 0 in flex contexts where no ancestor declared a height). */
-export function DiagramFrame({
-  width = 480,
-  height = 280,
+/** Helper for inline mono-text labels inside SVG, positioned by anchor. */
+function MonoText({
+  x,
+  y,
   children,
-  className = 'h-auto w-full max-w-md',
-  ariaLabel,
-}: FrameProps) {
+  size = 14,
+  color = INK_MUTED,
+  anchor = 'middle',
+  weight = '500',
+}: {
+  x: number;
+  y: number;
+  children: ReactNode;
+  size?: number;
+  color?: string;
+  anchor?: 'start' | 'middle' | 'end';
+  weight?: string;
+}) {
   return (
-    <svg
-      viewBox={`0 0 ${width} ${height}`}
-      className={className}
-      preserveAspectRatio="xMidYMid meet"
-      aria-label={ariaLabel}
-      aria-hidden={!ariaLabel}
+    <text
+      x={x}
+      y={y}
+      fontFamily={FONT_MONO}
+      fontSize={size}
+      fill={color}
+      fontWeight={weight}
+      textAnchor={anchor}
     >
       {children}
-    </svg>
+    </text>
   );
 }
 
-/** Two arrows tip-to-tail with the resultant — the head-to-tail visualization */
-export function HeadToTailDiagram() {
+/** Helper for figure captions in italic display font. */
+function CaptionText({
+  x,
+  y,
+  children,
+  size = 14,
+  color = INK_FAINT,
+  anchor = 'middle',
+}: {
+  x: number;
+  y: number;
+  children: ReactNode;
+  size?: number;
+  color?: string;
+  anchor?: 'start' | 'middle' | 'end';
+}) {
   return (
-    <DiagramFrame ariaLabel="Vector addition head-to-tail">
-      <Arrow x1={60} y1={200} x2={220} y2={200} color={INFO} label="F₁" />
-      <Arrow x1={220} y1={200} x2={300} y2={100} color={INFO} label="F₂" />
-      <Arrow x1={60} y1={200} x2={300} y2={100} color={ACCENT} width={3} dashed label="ΣF" />
-      <circle cx={60} cy={200} r={3} fill={INK} />
+    <text
+      x={x}
+      y={y}
+      fontFamily={FONT_DISPLAY}
+      fontStyle="italic"
+      fontSize={size}
+      fill={color}
+      textAnchor={anchor}
+    >
+      {children}
+    </text>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ *  Composed figures — concept and example diagrams
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+/** Anatomy of a force vector — magnitude bracket, direction tag, tail dot. */
+export function ForceAnatomyDiagram() {
+  return (
+    <DiagramFrame ariaLabel="Anatomy of a force vector">
+      <Arrow
+        x1={120}
+        y1={210}
+        x2={580}
+        y2={210}
+        color={ACCENT}
+        width={4.5}
+        label="F"
+        labelOffset={28}
+        fontSize={22}
+      />
+      {/* Magnitude bracket below */}
+      <line x1={120} y1={258} x2={120} y2={278} stroke={INK_MUTED} strokeWidth={1.4} />
+      <line x1={580} y1={258} x2={580} y2={278} stroke={INK_MUTED} strokeWidth={1.4} />
+      <line x1={120} y1={268} x2={580} y2={268} stroke={INK_MUTED} strokeWidth={1.4} />
+      <MonoText x={350} y={300} size={15}>
+        magnitude (N)
+      </MonoText>
+      {/* Direction marker at the head */}
+      <MonoText x={580} y={170} size={14} color={INK_FAINT}>
+        direction →
+      </MonoText>
+      {/* Tail dot */}
+      <circle cx={120} cy={210} r={5} fill={INK} />
+      <MonoText x={120} y={196} size={12} color={INK_FAINT}>
+        tail
+      </MonoText>
     </DiagramFrame>
   );
 }
 
-/** Box with weight and normal — for first-pass FBD intro */
+/** Two arrows tip-to-tail with the resultant. */
+export function HeadToTailDiagram() {
+  return (
+    <DiagramFrame ariaLabel="Vector addition head-to-tail">
+      <circle cx={100} cy={310} r={5} fill={INK} />
+      <Arrow x1={100} y1={310} x2={340} y2={310} color={INFO} label="F₁" />
+      <Arrow x1={340} y1={310} x2={460} y2={160} color={INFO} label="F₂" />
+      <Arrow
+        x1={100}
+        y1={310}
+        x2={460}
+        y2={160}
+        color={ACCENT}
+        width={4}
+        dashed
+        label="ΣF"
+        labelOffset={26}
+        fontSize={19}
+      />
+      <CaptionText x={280} y={395} size={15}>
+        tail-to-head construction
+      </CaptionText>
+    </DiagramFrame>
+  );
+}
+
+/** Block with weight + normal — basic FBD primer. */
 export function BoxOnGroundFBD({
   withApplied = false,
   withFriction = false,
@@ -328,380 +510,576 @@ export function BoxOnGroundFBD({
 }) {
   return (
     <DiagramFrame ariaLabel="Free body on ground">
-      <Ground x1={60} x2={420} y={210} />
-      <Block x={210} y={150} w={60} h={50} label="m" />
-      <Arrow x1={240} y1={175} x2={240} y2={250} color={ACCENT} label="W" />
-      <Arrow x1={240} y1={150} x2={240} y2={80} color={INK} label="N" />
-      {withApplied && <Arrow x1={270} y1={175} x2={350} y2={175} color={INFO} label="F" />}
-      {withFriction && <Arrow x1={210} y1={175} x2={140} y2={175} color={WARNING} label="f" />}
+      <Ground x1={80} x2={640} y={300} />
+      <Block x={310} y={220} w={100} h={80} label="m" fontSize={20} />
+      <Arrow x1={360} y1={260} x2={360} y2={372} color={ACCENT} label="W" />
+      <Arrow x1={360} y1={220} x2={360} y2={108} color={INK} label="N" />
+      {withApplied && <Arrow x1={420} y1={260} x2={560} y2={260} color={INFO} label="F" />}
+      {withFriction && <Arrow x1={310} y1={260} x2={170} y2={260} color={WARNING} label="f" />}
     </DiagramFrame>
   );
 }
 
-/** Newton's 3rd law: two people pushing each other */
+/** Newton's 3rd law: swimmer or pusher — two bodies, two arrows. */
 export function ActionReactionDiagram() {
   return (
     <DiagramFrame ariaLabel="Action reaction pair">
-      <Ground x1={40} x2={440} y={220} />
-      <Person x={130} y={220} />
-      <Person x={350} y={220} flipped />
-      <Arrow x1={150} y1={195} x2={220} y2={195} color={ACCENT} label="F_AB" />
-      <Arrow x1={330} y1={210} x2={260} y2={210} color={INFO} label="F_BA" />
-      <text
-        x={240}
-        y={250}
-        textAnchor="middle"
-        fontFamily="monospace"
-        fontSize="11"
-        fill={INK_MUTED}
-      >
-        F_AB = − F_BA
-      </text>
+      <Ground x1={60} x2={660} y={320} />
+      <Person x={200} y={320} />
+      <Person x={520} y={320} flipped />
+      <Arrow x1={232} y1={290} x2={350} y2={290} color={ACCENT} label="F_A→B" labelOffset={20} />
+      <Arrow x1={488} y1={310} x2={370} y2={310} color={INFO} label="F_B→A" labelOffset={20} />
+      <CaptionText x={360} y={395} size={16}>
+        F_A→B = − F_B→A · two bodies
+      </CaptionText>
     </DiagramFrame>
   );
 }
 
-/** Block on incline with all four classical forces */
+/** Block on incline with weight, normal, friction. */
 export function InclineFullFBD({ angleDeg = 30 }: { angleDeg?: number }) {
+  const rad = (angleDeg * Math.PI) / 180;
+  const sinT = Math.sin(rad);
+  const cosT = Math.cos(rad);
+  // Match the BlockOnIncline default geometry: baseX=100, baseY=360, length=420
+  // block at position=0.5 → centered around (310, 245)
+  const cx = 310;
+  const cy = 245;
   return (
-    <DiagramFrame width={480} height={300} ariaLabel="Block on incline FBD">
-      <BlockOnIncline angleDeg={angleDeg} />
-      {/* Approximate force positions on the block center */}
-      <Arrow x1={244} y1={185} x2={244} y2={260} color={ACCENT} label="W" />
+    <DiagramFrame width={720} height={460} ariaLabel="Block on incline FBD">
+      <BlockOnIncline />
+      {/* Weight straight down */}
+      <Arrow x1={cx} y1={cy + 35} x2={cx} y2={cy + 165} color={ACCENT} label="W" />
+      {/* Normal — perpendicular to slope, away from surface */}
+      <Arrow x1={cx} y1={cy} x2={cx - 110 * sinT} y2={cy - 110 * cosT} color={INK} label="N" />
+      {/* Friction along slope, up-slope (opposing downslope motion) */}
       <Arrow
-        x1={244}
-        y1={170}
-        x2={244 - 60 * Math.sin((angleDeg * Math.PI) / 180)}
-        y2={170 - 60 * Math.cos((angleDeg * Math.PI) / 180)}
-        color={INK}
-        label="N"
-      />
-      <Arrow
-        x1={244}
-        y1={170}
-        x2={244 + 50 * Math.cos((angleDeg * Math.PI) / 180)}
-        y2={170 + 50 * Math.sin((angleDeg * Math.PI) / 180)}
+        x1={cx}
+        y1={cy}
+        x2={cx - 90 * cosT}
+        y2={cy + 90 * sinT}
         color={WARNING}
         label="f"
+        labelOffset={20}
       />
     </DiagramFrame>
   );
 }
 
-/** Equal force, two different masses → different accelerations */
+/** Equal force, three different masses → three different accelerations. */
 export function MassComparisonDiagram() {
   return (
-    <DiagramFrame width={480} height={240} ariaLabel="Same force different masses">
-      <Block x={80} y={80} w={50} h={50} label="m" />
-      <Arrow x1={130} y1={105} x2={210} y2={105} color={INFO} label="F" />
-      <Arrow x1={130} y1={140} x2={250} y2={140} color={ACCENT} label="a" dashed />
-      <Block x={300} y={70} w={90} h={70} label="3m" />
-      <Arrow x1={390} y1={105} x2={460} y2={105} color={INFO} label="F" />
-      <Arrow x1={390} y1={150} x2={420} y2={150} color={ACCENT} label="a/3" dashed />
+    <DiagramFrame width={720} height={420} ariaLabel="F = ma — three regimes">
+      {/* Panel 1: m, F, a */}
+      <Block x={55} y={170} w={70} h={50} label="m" />
+      <Arrow x1={125} y1={195} x2={205} y2={195} color={INFO} label="F" />
+      <Arrow x1={90} y1={140} x2={170} y2={140} color={ACCENT} dashed label="a" />
+      <MonoText x={130} y={285} size={14} color={INK_FAINT}>
+        F → a
+      </MonoText>
+
+      {/* Panel 2: m, 2F, 2a */}
+      <Block x={295} y={170} w={70} h={50} label="m" />
+      <Arrow x1={365} y1={195} x2={555} y2={195} color={INFO} label="2F" />
+      <Arrow x1={330} y1={140} x2={520} y2={140} color={ACCENT} dashed label="2a" />
+      <MonoText x={420} y={285} size={14} color={INK_FAINT}>
+        2F → 2a
+      </MonoText>
+
+      {/* Panel 3: 3m (wider), F, a/3 */}
+      <Block x={580} y={170} w={120} h={50} label="3m" fontSize={15} />
+      <Arrow x1={700} y1={195} x2={695} y2={195} color={INFO} label="F" />
+      {/* Tiny dashed acceleration */}
+      <Arrow x1={620} y1={140} x2={648} y2={140} color={ACCENT} dashed label="a/3" fontSize={14} />
+      <MonoText x={640} y={285} size={14} color={INK_FAINT}>
+        F on 3m → a/3
+      </MonoText>
+
+      <CaptionText x={360} y={370} size={16}>
+        same body, force scales motion
+      </CaptionText>
     </DiagramFrame>
   );
 }
 
-/** Atwood machine */
+/** Atwood machine: pulley at top, two masses, rope. */
 export function AtwoodDiagram() {
   return (
-    <DiagramFrame width={400} height={280} ariaLabel="Atwood machine">
-      <line x1={200} y1={20} x2={200} y2={50} stroke={INK} strokeWidth={2} />
-      <line x1={170} y1={20} x2={230} y2={20} stroke={INK} strokeWidth={2} />
-      <Pulley cx={200} cy={70} />
-      <line x1={170} y1={70} x2={170} y2={170} stroke={INK} strokeWidth={1.5} />
-      <line x1={230} y1={70} x2={230} y2={130} stroke={INK} strokeWidth={1.5} />
-      <Block x={140} y={170} w={60} h={50} label="m₁" />
-      <Block x={200} y={130} w={60} h={50} label="m₂" />
-      <Arrow x1={170} y1={120} x2={170} y2={90} color={SUCCESS} label="T" />
-      <Arrow x1={230} y1={100} x2={230} y2={80} color={SUCCESS} label="T" />
+    <DiagramFrame width={720} height={460} ariaLabel="Atwood machine">
+      {/* Ceiling */}
+      <Ground x1={250} x2={470} y={70} hatchAbove />
+      <Pulley cx={360} cy={100} r={36} />
+      {/* Left rope */}
+      <line x1={324} y1={100} x2={250} y2={300} stroke={INK} strokeWidth={2} />
+      {/* Right rope */}
+      <line x1={396} y1={100} x2={470} y2={260} stroke={INK} strokeWidth={2} />
+      {/* Masses */}
+      <Block x={205} y={300} w={90} h={70} label="m₁" fontSize={17} />
+      <Block x={425} y={260} w={90} h={70} label="m₂" fontSize={17} />
+      {/* Tensions on the masses */}
+      <Arrow x1={250} y1={300} x2={250} y2={235} color={SUCCESS} label="T" fontSize={15} />
+      <Arrow x1={470} y1={260} x2={470} y2={195} color={SUCCESS} label="T" fontSize={15} />
+      {/* Weights */}
+      <Arrow
+        x1={250}
+        y1={370}
+        x2={250}
+        y2={420}
+        color={ACCENT}
+        label="W₁"
+        fontSize={15}
+        labelOffset={14}
+      />
+      <Arrow
+        x1={470}
+        y1={330}
+        x2={470}
+        y2={400}
+        color={ACCENT}
+        label="W₂"
+        fontSize={15}
+        labelOffset={14}
+      />
+      <CaptionText x={360} y={445} size={14}>
+        massless, inextensible rope · frictionless pulley
+      </CaptionText>
     </DiagramFrame>
   );
 }
 
-/** Spring-pulled box */
+/** Hockey puck on frictionless ice — Newton I demonstration. */
 export function HockeyPuckDiagram() {
   return (
-    <DiagramFrame width={480} height={200} ariaLabel="Frictionless puck">
-      <Ground x1={40} x2={440} y={160} />
-      <ellipse
-        cx={240}
-        cy={150}
-        rx={26}
-        ry={8}
-        fill={PAPER_RAISED}
-        stroke={INK}
-        strokeWidth={1.5}
+    <DiagramFrame ariaLabel="Hockey puck on frictionless ice">
+      {/* Ice surface as a paler hatched line */}
+      <line x1={60} y1={280} x2={660} y2={280} stroke={INK_MUTED} strokeWidth={2} />
+      {/* Subtle ice marks below */}
+      <line x1={80} y1={300} x2={120} y2={300} stroke={INK_FAINT} strokeWidth={1} />
+      <line x1={180} y1={310} x2={240} y2={310} stroke={INK_FAINT} strokeWidth={1} />
+      <line x1={310} y1={300} x2={360} y2={300} stroke={INK_FAINT} strokeWidth={1} />
+      <line x1={420} y1={310} x2={480} y2={310} stroke={INK_FAINT} strokeWidth={1} />
+      <line x1={540} y1={300} x2={600} y2={300} stroke={INK_FAINT} strokeWidth={1} />
+
+      {/* Puck — short flat ellipse */}
+      <ellipse cx={320} cy={272} rx={36} ry={10} fill={INK} stroke={INK} strokeWidth={1.5} />
+      {/* Motion arrow */}
+      <Arrow
+        x1={370}
+        y1={250}
+        x2={530}
+        y2={250}
+        color={INK_MUTED}
+        dashed
+        width={2}
+        label="v = const"
+        fontSize={15}
+        labelOffset={20}
       />
-      <Arrow x1={266} y1={150} x2={360} y2={150} color={ACCENT} label="v" dashed />
-      <text
-        x={240}
-        y={195}
-        textAnchor="middle"
-        fontFamily="monospace"
-        fontSize="11"
-        fill={INK_MUTED}
-      >
-        Σ F = 0 → v = constant
-      </text>
+      {/* Trailing motion lines */}
+      <line x1={280} y1={260} x2={250} y2={260} stroke={INK_FAINT} strokeWidth={1} />
+      <line x1={280} y1={272} x2={240} y2={272} stroke={INK_FAINT} strokeWidth={1} />
+      <line x1={280} y1={284} x2={250} y2={284} stroke={INK_FAINT} strokeWidth={1} />
+
+      <MonoText x={320} y={170} size={16} color={INK_MUTED}>
+        ΣF = 0
+      </MonoText>
+      <CaptionText x={360} y={365} size={15}>
+        no force needed to maintain constant velocity
+      </CaptionText>
     </DiagramFrame>
   );
 }
 
-/** Static vs kinetic friction visual */
+/** Static vs kinetic friction — three panels showing the regime change. */
 export function FrictionRegimesDiagram() {
+  const drawPanel = (xOffset: number, label: string, F: number, fk: boolean) => (
+    <g transform={`translate(${xOffset}, 0)`}>
+      <Ground x1={0} x2={210} y={220} />
+      <Block x={70} y={160} w={70} h={60} label="m" fontSize={15} />
+      <Arrow
+        x1={140}
+        y1={190}
+        x2={140 + F}
+        y2={190}
+        color={INFO}
+        label={`F=${F / 4} N`}
+        fontSize={13}
+        labelOffset={16}
+      />
+      {fk ? (
+        <Arrow
+          x1={70}
+          y1={190}
+          x2={20}
+          y2={190}
+          color={WARNING}
+          label="fₖ"
+          fontSize={14}
+          labelOffset={14}
+        />
+      ) : (
+        <Arrow
+          x1={70}
+          y1={190}
+          x2={70 - F}
+          y2={190}
+          color={WARNING}
+          label="fₛ"
+          fontSize={14}
+          labelOffset={14}
+        />
+      )}
+      <MonoText x={105} y={270} size={13} color={INK_FAINT}>
+        {label}
+      </MonoText>
+    </g>
+  );
   return (
-    <DiagramFrame width={480} height={260} ariaLabel="Friction regimes">
-      <Ground x1={40} x2={440} y={150} />
-      <Block x={120} y={100} w={50} h={50} label="m" />
-      <Arrow x1={170} y1={125} x2={230} y2={125} color={INFO} label="F" />
-      <Arrow x1={120} y1={125} x2={70} y2={125} color={WARNING} label="fₛ" />
-      <text
-        x={150}
-        y={200}
-        textAnchor="middle"
-        fontFamily="monospace"
-        fontSize="11"
-        fill={INK_MUTED}
-      >
-        Static: fₛ ≤ μₛN
-      </text>
-
-      <Block x={300} y={100} w={50} h={50} label="m" />
-      <Arrow x1={350} y1={125} x2={420} y2={125} color={INFO} label="F" dashed />
-      <Arrow x1={300} y1={125} x2={245} y2={125} color={WARNING} label="fₖ" />
-      <Arrow x1={350} y1={170} x2={420} y2={170} color={ACCENT} label="v" dashed />
-      <text
-        x={345}
-        y={210}
-        textAnchor="middle"
-        fontFamily="monospace"
-        fontSize="11"
-        fill={INK_MUTED}
-      >
-        Kinetic: fₖ = μₖN
-      </text>
+    <DiagramFrame width={720} height={360} ariaLabel="Static vs kinetic friction regimes">
+      {drawPanel(30, 'fₛ matches push', 32, false)}
+      {drawPanel(255, 'fₛ at maximum', 56, false)}
+      {drawPanel(480, 'sliding · fₖ < fₛ_max', 80, true)}
+      <CaptionText x={360} y={325} size={14}>
+        static negotiates · kinetic is fixed
+      </CaptionText>
     </DiagramFrame>
   );
 }
 
-/** Tension on a rope */
+/** Tension along an ideal rope. */
 export function TensionDiagram() {
   return (
-    <DiagramFrame width={460} height={200} ariaLabel="Tension along a rope">
-      <line x1={60} y1={100} x2={400} y2={100} stroke={INK} strokeWidth={2} />
-      <Block x={400} y={75} w={50} h={50} label="m" />
-      <Arrow x1={60} y1={100} x2={20} y2={100} color={SUCCESS} label="T" />
-      <Arrow x1={400} y1={100} x2={440} y2={100} color={SUCCESS} label="T" />
-      <text
-        x={230}
-        y={140}
-        textAnchor="middle"
-        fontFamily="monospace"
-        fontSize="11"
-        fill={INK_MUTED}
-      >
-        Same tension everywhere along the rope
-      </text>
+    <DiagramFrame ariaLabel="Tension along a rope">
+      {/* Two hands as anchors */}
+      <Person x={130} y={250} scale={1.2} />
+      <Person x={590} y={250} scale={1.2} flipped />
+      {/* Rope */}
+      <line x1={158} y1={245} x2={562} y2={245} stroke={INK} strokeWidth={2.5} />
+      {/* Multiple tension arrows along the rope */}
+      <Arrow
+        x1={210}
+        y1={210}
+        x2={250}
+        y2={210}
+        color={SUCCESS}
+        label="T"
+        fontSize={15}
+        labelOffset={14}
+      />
+      <Arrow
+        x1={510}
+        y1={210}
+        x2={470}
+        y2={210}
+        color={SUCCESS}
+        label="T"
+        fontSize={15}
+        labelOffset={14}
+      />
+      <Arrow
+        x1={350}
+        y1={210}
+        x2={310}
+        y2={210}
+        color={SUCCESS}
+        label="T"
+        fontSize={15}
+        labelOffset={14}
+      />
+      <Arrow
+        x1={370}
+        y1={210}
+        x2={410}
+        y2={210}
+        color={SUCCESS}
+        label="T"
+        fontSize={15}
+        labelOffset={14}
+      />
+      <CaptionText x={360} y={330} size={16}>
+        tension is the same magnitude everywhere along an ideal rope
+      </CaptionText>
     </DiagramFrame>
   );
 }
 
-/** Weight: gravity acts on an object */
+/** Weight always points to Earth's center. */
 export function WeightDiagram() {
+  // Earth as a circle with three blocks on different sides
+  const cx = 360;
+  const cy = 460;
+  const R = 220;
   return (
-    <DiagramFrame width={400} height={240} ariaLabel="Weight">
-      <Block x={170} y={70} w={60} h={50} label="m" />
-      <Arrow x1={200} y1={120} x2={200} y2={210} color={ACCENT} label="W=mg" width={3} />
-      <text
-        x={200}
-        y={232}
-        textAnchor="middle"
-        fontFamily="monospace"
-        fontSize="11"
-        fill={INK_MUTED}
-      >
-        Always toward Earth&rsquo;s center
-      </text>
+    <DiagramFrame width={720} height={460} ariaLabel="Weight points toward Earth's center">
+      {/* Earth */}
+      <circle cx={cx} cy={cy} r={R} fill={PAPER_RAISED} stroke={INK_MUTED} strokeWidth={1.6} />
+      {/* Top block + weight pointing down (toward center) */}
+      <Block x={335} y={cy - R - 60} w={50} h={50} label="m" fontSize={14} />
+      <Arrow
+        x1={360}
+        y1={cy - R - 10}
+        x2={360}
+        y2={cy - R + 60}
+        color={ACCENT}
+        label="W"
+        fontSize={14}
+        labelOffset={14}
+      />
+      {/* Right block + weight pointing left */}
+      <Block x={cx + R - 5} y={cy - 25} w={50} h={50} label="m" fontSize={14} rotate={-90} />
+      <Arrow
+        x1={cx + R + 10}
+        y1={cy}
+        x2={cx + R - 60}
+        y2={cy}
+        color={ACCENT}
+        label="W"
+        fontSize={14}
+        labelOffset={14}
+      />
+      {/* Left block + weight pointing right */}
+      <Block x={cx - R - 45} y={cy - 25} w={50} h={50} label="m" fontSize={14} rotate={90} />
+      <Arrow
+        x1={cx - R - 10}
+        y1={cy}
+        x2={cx - R + 60}
+        y2={cy}
+        color={ACCENT}
+        label="W"
+        fontSize={14}
+        labelOffset={14}
+      />
+      {/* Center label */}
+      <circle cx={cx} cy={cy} r={4} fill={INK_FAINT} />
+      <MonoText x={cx} y={cy + 22} size={13} color={INK_FAINT}>
+        {'Earth’s center'}
+      </MonoText>
     </DiagramFrame>
   );
 }
 
-/** Normal flat vs incline comparison */
+/** Normal force on flat surface vs incline. */
 export function NormalCompareDiagram() {
   return (
-    <DiagramFrame width={480} height={260} ariaLabel="Normal flat vs incline">
-      <Ground x1={40} x2={220} y={200} />
-      <Block x={100} y={150} w={50} h={50} label="m" />
-      <Arrow x1={125} y1={175} x2={125} y2={235} color={ACCENT} label="W" />
-      <Arrow x1={125} y1={150} x2={125} y2={90} color={INK} label="N" />
-      <text
-        x={130}
-        y={250}
-        textAnchor="middle"
-        fontFamily="monospace"
-        fontSize="11"
-        fill={INK_MUTED}
-      >
+    <DiagramFrame width={720} height={420} ariaLabel="Normal force flat vs incline">
+      {/* Divider */}
+      <line
+        x1={360}
+        y1={40}
+        x2={360}
+        y2={380}
+        stroke={INK_MUTED}
+        strokeWidth={1.2}
+        strokeDasharray="6 6"
+      />
+      {/* LEFT — flat */}
+      <MonoText x={180} y={60} size={13} color={INK_FAINT}>
+        FLAT SURFACE
+      </MonoText>
+      <Ground x1={50} x2={330} y={310} />
+      <Block x={140} y={250} w={80} h={60} label="m" fontSize={15} />
+      <Arrow x1={180} y1={282} x2={180} y2={372} color={ACCENT} label="W" fontSize={15} />
+      <Arrow x1={180} y1={250} x2={180} y2={150} color={INK} label="N" fontSize={15} />
+      <CaptionText x={180} y={398} size={15}>
         N = mg
-      </text>
+      </CaptionText>
 
-      <g transform="translate(220 0)">
-        <Incline baseX={20} baseY={200} length={210} angleDeg={30} showAngleArc={false} />
-        <BlockOnIncline baseX={20} baseY={200} length={210} angleDeg={30} />
-        <text
-          x={140}
-          y={250}
-          textAnchor="middle"
-          fontFamily="monospace"
-          fontSize="11"
-          fill={INK_MUTED}
-        >
-          N = mg cos θ
-        </text>
-      </g>
+      {/* RIGHT — incline */}
+      <MonoText x={540} y={60} size={13} color={INK_FAINT}>
+        ON AN INCLINE
+      </MonoText>
+      <BlockOnIncline baseX={400} baseY={310} length={280} angleDeg={30} blockSize={60} />
+      {/* Block center for incline default ≈ (525, 240) */}
+      <Arrow x1={525} y1={272} x2={525} y2={372} color={ACCENT} label="W" fontSize={15} />
+      <Arrow
+        x1={525}
+        y1={240}
+        x2={525 - 90 * Math.sin(Math.PI / 6)}
+        y2={240 - 90 * Math.cos(Math.PI / 6)}
+        color={INK}
+        label="N"
+        fontSize={15}
+      />
+      <CaptionText x={540} y={398} size={15}>
+        N = mg cos θ &lt; mg
+      </CaptionText>
     </DiagramFrame>
   );
 }
 
-/** Σ Symbol visual — large sigma with arrows feeding in */
+/** Stylized Σ symbol — a typographic moment for the net-force concept. */
 export function SigmaSymbolDiagram() {
   return (
-    <DiagramFrame width={400} height={240} ariaLabel="Sigma sum of forces">
+    <DiagramFrame width={720} height={420} ariaLabel="Sigma — sum of all forces">
+      {/* Big stylized Σ */}
       <text
-        x={200}
-        y={140}
-        textAnchor="middle"
-        fontFamily="serif"
-        fontSize="120"
-        fontWeight="600"
+        x={360}
+        y={250}
+        fontFamily={FONT_DISPLAY}
+        fontSize="220"
+        fontWeight="500"
         fill={ACCENT}
+        textAnchor="middle"
       >
         Σ
       </text>
-      <Arrow x1={60} y1={120} x2={150} y2={120} color={INK} label="F₁" />
-      <Arrow x1={250} y1={80} x2={340} y2={80} color={INK} label="F₂" />
-      <Arrow x1={250} y1={160} x2={340} y2={160} color={INK} label="F₃" />
-      <text
-        x={200}
-        y={210}
-        textAnchor="middle"
-        fontFamily="monospace"
-        fontSize="13"
-        fill={INK_MUTED}
-      >
-        Σ F = F₁ + F₂ + F₃ + ...
-      </text>
+      <CaptionText x={360} y={325} size={18}>
+        sum of all forces, vector-wise
+      </CaptionText>
+      <MonoText x={360} y={365} size={14} color={INK_MUTED}>
+        ΣF = F₁ + F₂ + F₃ + …
+      </MonoText>
     </DiagramFrame>
   );
 }
 
-/** Book on table (1st law equilibrium) */
+/** Book on a table at rest — Newton I example. */
 export function BookOnTableDiagram() {
   return (
-    <DiagramFrame width={400} height={240} ariaLabel="Book on table at rest">
-      <line x1={80} y1={180} x2={320} y2={180} stroke={INK} strokeWidth={2} />
-      <line x1={100} y1={180} x2={100} y2={220} stroke={INK} strokeWidth={2} />
-      <line x1={300} y1={180} x2={300} y2={220} stroke={INK} strokeWidth={2} />
+    <DiagramFrame ariaLabel="Book on a table">
+      {/* Table top */}
+      <line x1={120} y1={300} x2={600} y2={300} stroke={INK} strokeWidth={2} />
+      <line x1={160} y1={300} x2={160} y2={380} stroke={INK} strokeWidth={2} />
+      <line x1={560} y1={300} x2={560} y2={380} stroke={INK} strokeWidth={2} />
+      <Ground x1={80} x2={640} y={380} />
+
+      {/* Book — a slim block on the table */}
       <rect
-        x={170}
-        y={150}
-        width={80}
-        height={28}
+        x={300}
+        y={258}
+        width={120}
+        height={42}
         fill={PAPER_RAISED}
         stroke={INK}
-        strokeWidth={1.5}
+        strokeWidth={1.8}
         rx={2}
       />
-      <Arrow x1={210} y1={170} x2={210} y2={130} color={INK} label="N" />
-      <Arrow x1={210} y1={170} x2={210} y2={215} color={ACCENT} label="W" />
-      <text
-        x={210}
-        y={235}
-        textAnchor="middle"
-        fontFamily="monospace"
-        fontSize="11"
-        fill={INK_MUTED}
-      >
-        ΣF = 0 → at rest
-      </text>
+      <MonoText x={360} y={284} size={14} color={INK_MUTED}>
+        2 kg
+      </MonoText>
+
+      {/* Forces */}
+      <Arrow x1={360} y1={300} x2={360} y2={384} color={ACCENT} label="W" />
+      <Arrow x1={360} y1={258} x2={360} y2={155} color={INK} label="N" />
+
+      <CaptionText x={360} y={120} size={15}>
+        ΣF = 0 · N = mg
+      </CaptionText>
     </DiagramFrame>
   );
 }
 
-/** Swimming — 3rd law */
+/** Swimming — Newton III as locomotion. */
 export function SwimmingDiagram() {
   return (
-    <DiagramFrame width={460} height={200} ariaLabel="Swimming third law">
-      <rect x={0} y={120} width={460} height={80} fill={INFO} opacity={0.1} />
-      <Person x={200} y={150} scale={1.2} />
-      <Arrow x1={210} y1={140} x2={300} y2={140} color={ACCENT} label="hand → water" />
-      <Arrow x1={180} y1={170} x2={90} y2={170} color={INFO} label="water → hand" />
-      <text
-        x={230}
-        y={195}
-        textAnchor="middle"
-        fontFamily="monospace"
-        fontSize="11"
-        fill={INK_MUTED}
-      >
-        Push water back → water pushes you forward (= − force, on YOU)
-      </text>
+    <DiagramFrame ariaLabel="Swimmer's hand pushing water backward">
+      {/* Water surface */}
+      <line x1={60} y1={270} x2={660} y2={270} stroke={INFO} strokeWidth={2} opacity={0.4} />
+      <line x1={60} y1={285} x2={660} y2={285} stroke={INFO} strokeWidth={1} opacity={0.25} />
+      <line x1={60} y1={300} x2={660} y2={300} stroke={INFO} strokeWidth={0.8} opacity={0.15} />
+
+      {/* Swimmer body — simplified outline */}
+      <ellipse cx={400} cy={240} rx={100} ry={28} fill="none" stroke={INK} strokeWidth={1.8} />
+      <circle cx={500} cy={220} r={20} fill="none" stroke={INK} strokeWidth={1.8} />
+      {/* Hand pushing water back */}
+      <ellipse cx={290} cy={232} rx={28} ry={14} fill={INK} opacity={0.85} />
+
+      {/* Arrows */}
+      <Arrow
+        x1={290}
+        y1={232}
+        x2={170}
+        y2={232}
+        color={ACCENT}
+        label="F: hand → water"
+        fontSize={14}
+        labelOffset={20}
+      />
+      <Arrow
+        x1={350}
+        y1={208}
+        x2={470}
+        y2={208}
+        color={INFO}
+        label="F: water → hand"
+        fontSize={14}
+        labelOffset={20}
+      />
+
+      <CaptionText x={360} y={365} size={15}>
+        you push the water back · the water pushes you forward
+      </CaptionText>
     </DiagramFrame>
   );
 }
 
-/** FBD steps */
+/** FBD method walkthrough — three steps. */
 export function FBDStepsDiagram({ step }: { step: 1 | 2 | 3 }) {
   return (
-    <DiagramFrame width={400} height={240} ariaLabel={`FBD step ${step}`}>
+    <DiagramFrame width={720} height={420} ariaLabel={`FBD step ${step}`}>
       {step === 1 && (
         <>
-          <Block x={150} y={90} w={100} h={70} label="object" />
+          {/* Choose the body — show the system, highlight one piece */}
+          <Ground x1={80} x2={640} y={300} />
+          <Block x={170} y={230} w={80} h={70} label="A" fontSize={18} />
+          <rect
+            x={290}
+            y={230}
+            width={80}
+            height={70}
+            fill="none"
+            stroke={ACCENT}
+            strokeWidth={3}
+            strokeDasharray="6 4"
+            rx={3}
+          />
           <text
-            x={200}
-            y={210}
+            x={330}
+            y={275}
+            fontFamily={FONT_MONO}
+            fontSize={20}
+            fontWeight="600"
+            fill={ACCENT}
             textAnchor="middle"
-            fontFamily="monospace"
-            fontSize="11"
-            fill={INK_MUTED}
           >
-            ١. اختر الجسم — انظر إليه فقط
+            B
           </text>
+          <Block x={410} y={230} w={80} h={70} label="C" fontSize={18} />
+          <CaptionText x={360} y={365} size={16}>
+            Step 1 · Choose ONE body to analyze
+          </CaptionText>
         </>
       )}
       {step === 2 && (
         <>
-          <circle cx={200} cy={120} r={6} fill={INK} />
+          {/* Replace the body with a single point */}
+          <circle cx={360} cy={210} r={8} fill={INK} />
           <text
-            x={200}
-            y={210}
-            textAnchor="middle"
-            fontFamily="monospace"
-            fontSize="11"
+            x={360}
+            y={250}
+            fontFamily={FONT_MONO}
+            fontSize={16}
             fill={INK_MUTED}
+            textAnchor="middle"
           >
-            ٢. مثّل الجسم بنقطة واحدة
+            m
           </text>
+          <CaptionText x={360} y={365} size={16}>
+            Step 2 · Represent it as a point at its center
+          </CaptionText>
         </>
       )}
       {step === 3 && (
         <>
-          <circle cx={200} cy={120} r={6} fill={INK} />
-          <Arrow x1={200} y1={120} x2={200} y2={60} color={INK} label="N" />
-          <Arrow x1={200} y1={120} x2={200} y2={195} color={ACCENT} label="W" />
-          <Arrow x1={200} y1={120} x2={300} y2={120} color={INFO} label="F" />
-          <Arrow x1={200} y1={120} x2={100} y2={120} color={WARNING} label="f" />
-          <text
-            x={200}
-            y={225}
-            textAnchor="middle"
-            fontFamily="monospace"
-            fontSize="11"
-            fill={INK_MUTED}
-          >
-            ٣. ارسم سهماً لكلّ قوّة — وسمّه
-          </text>
+          {/* Draw every force as an arrow from the point */}
+          <circle cx={360} cy={210} r={6} fill={INK} />
+          <Arrow x1={360} y1={210} x2={360} y2={320} color={ACCENT} label="W" />
+          <Arrow x1={360} y1={210} x2={360} y2={100} color={INK} label="N" />
+          <Arrow x1={360} y1={210} x2={500} y2={210} color={INFO} label="F" />
+          <Arrow x1={360} y1={210} x2={220} y2={210} color={WARNING} label="f" />
+          <CaptionText x={360} y={365} size={16}>
+            Step 3 · One arrow per force, all from the point
+          </CaptionText>
         </>
       )}
     </DiagramFrame>
@@ -709,514 +1087,546 @@ export function FBDStepsDiagram({ step }: { step: 1 | 2 | 3 }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
- * Diagrams added for the new Newton-I and Newton-III examples.
+ *  Example-specific diagrams
  * ═══════════════════════════════════════════════════════════════════════ */
 
-/** Hanging-sign equilibrium: a mass suspended from two ropes meeting at the
- *  top hook, each at angle θ from vertical. Newton I in 2D. */
-export function HangingSignDiagram({ angleDeg = 30 }: { angleDeg?: number }) {
-  const theta = (angleDeg * Math.PI) / 180;
-  const ropeLen = 110;
-  const hookX = 240;
-  const hookY = 70;
-  const massX = hookX;
-  const massY = hookY + ropeLen * Math.cos(theta);
-  const leftAnchorX = hookX - ropeLen * Math.sin(theta);
-  const rightAnchorX = hookX + ropeLen * Math.sin(theta);
-
+/** Two parallel forces 5 N + 3 N → 8 N. */
+export function TwoForcesParallelDiagram() {
   return (
-    <DiagramFrame width={480} height={300} ariaLabel="Hanging sign in equilibrium">
-      {/* Ceiling */}
-      <Ground x1={leftAnchorX - 30} x2={rightAnchorX + 30} y={hookY} hatchAbove />
-      {/* Two ropes */}
-      <line x1={leftAnchorX} y1={hookY} x2={massX} y2={massY} stroke={INK} strokeWidth={1.8} />
-      <line x1={rightAnchorX} y1={hookY} x2={massX} y2={massY} stroke={INK} strokeWidth={1.8} />
-      {/* Sign block */}
-      <Block x={massX - 35} y={massY} w={70} h={50} label="m" />
-      {/* Tension arrows on the mass — along each rope, away from the mass */}
+    <DiagramFrame ariaLabel="Two forces in the same direction sum to 8 N">
+      <Block x={100} y={170} w={100} h={70} label="m" fontSize={17} />
+      <Arrow x1={200} y1={195} x2={360} y2={195} color={INFO} label="5 N" fontSize={16} />
+      <Arrow x1={200} y1={228} x2={296} y2={228} color={INFO} label="3 N" fontSize={16} />
+      {/* Resultant on a separate line below */}
+      <line x1={100} y1={300} x2={100} y2={320} stroke={INK_MUTED} strokeWidth={1.4} />
+      <line x1={296} y1={300} x2={296} y2={320} stroke={INK_MUTED} strokeWidth={1.4} />
       <Arrow
-        x1={massX}
-        y1={massY}
-        x2={massX - 60 * Math.sin(theta)}
-        y2={massY - 60 * Math.cos(theta)}
-        color={SUCCESS}
-        label="T₁"
+        x1={100}
+        y1={310}
+        x2={296}
+        y2={310}
+        color={ACCENT}
+        width={4.5}
+        label="ΣF = 8 N"
+        fontSize={18}
+        labelOffset={26}
       />
-      <Arrow
-        x1={massX}
-        y1={massY}
-        x2={massX + 60 * Math.sin(theta)}
-        y2={massY - 60 * Math.cos(theta)}
-        color={SUCCESS}
-        label="T₂"
-      />
-      {/* Weight */}
-      <Arrow x1={massX} y1={massY + 50} x2={massX} y2={massY + 110} color={ACCENT} label="W = mg" />
-      {/* Angle markers */}
-      <text
-        x={leftAnchorX + 24}
-        y={hookY + 22}
-        fontFamily="monospace"
-        fontSize="13"
-        fill={INK_MUTED}
-      >
-        θ
-      </text>
-      <text
-        x={rightAnchorX - 32}
-        y={hookY + 22}
-        fontFamily="monospace"
-        fontSize="13"
-        fill={INK_MUTED}
-      >
-        θ
-      </text>
+      <CaptionText x={360} y={365} size={15}>
+        same direction · scalar sum
+      </CaptionText>
     </DiagramFrame>
   );
 }
 
-/** Block on incline, pushed by a horizontal force F, with friction.
- *  Used by ex-incline-constant-velocity. Shows W, N, F, f_k. */
+/** Three 1-D forces with mixed signs → +9 N net. */
+export function ThreeForces1DDiagram() {
+  return (
+    <DiagramFrame width={720} height={420} ariaLabel="Three horizontal forces">
+      <Block x={310} y={150} w={100} h={70} label="m" fontSize={17} />
+      <Arrow x1={410} y1={172} x2={580} y2={172} color={INFO} label="10 N" fontSize={15} />
+      <Arrow x1={410} y1={205} x2={490} y2={205} color={INFO} label="5 N" fontSize={15} />
+      <Arrow x1={310} y1={188} x2={210} y2={188} color={WARNING} label="6 N" fontSize={15} />
+      {/* Net force below */}
+      <line x1={210} y1={290} x2={210} y2={310} stroke={INK_MUTED} strokeWidth={1.4} />
+      <line x1={580} y1={290} x2={580} y2={310} stroke={INK_MUTED} strokeWidth={1.4} />
+      <Arrow
+        x1={295}
+        y1={300}
+        x2={580}
+        y2={300}
+        color={ACCENT}
+        width={4.5}
+        label="ΣF = +9 N"
+        fontSize={18}
+        labelOffset={28}
+      />
+      <CaptionText x={360} y={365} size={14}>
+        + right · − left · then add as signed scalars
+      </CaptionText>
+    </DiagramFrame>
+  );
+}
+
+/** Block on smooth surface with 8 N horizontal + 6 N vertical. */
+export function TwoForcesPerpendicularDiagram() {
+  return (
+    <DiagramFrame ariaLabel="Two perpendicular forces">
+      <Ground x1={80} x2={640} y={300} />
+      <Block x={310} y={230} w={100} h={70} label="m=2 kg" fontSize={14} />
+      {/* Background W and N */}
+      <Arrow
+        x1={360}
+        y1={262}
+        x2={360}
+        y2={372}
+        color={INK_FAINT}
+        width={2}
+        label="W"
+        fontSize={14}
+        labelOffset={14}
+      />
+      <Arrow
+        x1={360}
+        y1={230}
+        x2={360}
+        y2={130}
+        color={INK_FAINT}
+        width={2}
+        label="N"
+        fontSize={14}
+        labelOffset={14}
+      />
+      {/* Foreground applied forces */}
+      <Arrow x1={410} y1={262} x2={550} y2={262} color={INFO} label="8 N" fontSize={16} />
+      <Arrow x1={388} y1={210} x2={388} y2={100} color={SUCCESS} label="6 N" fontSize={16} />
+    </DiagramFrame>
+  );
+}
+
+/** A single 5 kg book + 49 N weight arrow. */
+export function BookWithWeightDiagram() {
+  return (
+    <DiagramFrame ariaLabel="Weight of a 5 kg book">
+      <rect
+        x={290}
+        y={120}
+        width={140}
+        height={80}
+        fill={PAPER_RAISED}
+        stroke={INK}
+        strokeWidth={1.8}
+        rx={3}
+      />
+      <MonoText x={360} y={158} size={20} color={INK_MUTED}>
+        5 kg
+      </MonoText>
+      <MonoText x={360} y={184} size={14} color={INK_FAINT}>
+        a book
+      </MonoText>
+      <Arrow
+        x1={360}
+        y1={200}
+        x2={360}
+        y2={350}
+        color={ACCENT}
+        width={4.5}
+        label="W = 49 N"
+        fontSize={18}
+        labelOffset={28}
+      />
+      <Ground x1={140} x2={580} y={384} />
+    </DiagramFrame>
+  );
+}
+
+/** Hanging-sign equilibrium — mass on two ropes at angle θ. */
+export function HangingSignDiagram({ angleDeg = 30 }: { angleDeg?: number }) {
+  const theta = (angleDeg * Math.PI) / 180;
+  const ropeLen = 170;
+  const hookY = 70;
+  const massX = 360;
+  const massY = hookY + ropeLen * Math.cos(theta);
+  const leftAnchorX = massX - ropeLen * Math.sin(theta);
+  const rightAnchorX = massX + ropeLen * Math.sin(theta);
+  return (
+    <DiagramFrame width={720} height={460} ariaLabel="Hanging sign in equilibrium">
+      {/* Ceiling */}
+      <Ground x1={leftAnchorX - 50} x2={rightAnchorX + 50} y={hookY} hatchAbove />
+      {/* Two ropes */}
+      <line x1={leftAnchorX} y1={hookY} x2={massX} y2={massY} stroke={INK} strokeWidth={2} />
+      <line x1={rightAnchorX} y1={hookY} x2={massX} y2={massY} stroke={INK} strokeWidth={2} />
+      {/* Sign */}
+      <rect
+        x={massX - 50}
+        y={massY}
+        width={100}
+        height={60}
+        fill={PAPER_RAISED}
+        stroke={INK}
+        strokeWidth={1.8}
+        rx={3}
+      />
+      <MonoText x={massX} y={massY + 36} size={16} color={INK_MUTED}>
+        m
+      </MonoText>
+      {/* Tensions on the mass — along each rope, away from mass */}
+      <Arrow
+        x1={massX}
+        y1={massY}
+        x2={massX - 90 * Math.sin(theta)}
+        y2={massY - 90 * Math.cos(theta)}
+        color={SUCCESS}
+        label="T₁"
+        fontSize={16}
+      />
+      <Arrow
+        x1={massX}
+        y1={massY}
+        x2={massX + 90 * Math.sin(theta)}
+        y2={massY - 90 * Math.cos(theta)}
+        color={SUCCESS}
+        label="T₂"
+        fontSize={16}
+      />
+      {/* Weight */}
+      <Arrow
+        x1={massX}
+        y1={massY + 60}
+        x2={massX}
+        y2={massY + 150}
+        color={ACCENT}
+        label="W = mg"
+        fontSize={16}
+        labelOffset={22}
+      />
+      {/* Angle marks */}
+      <MonoText x={leftAnchorX + 30} y={hookY + 32} size={14}>
+        θ
+      </MonoText>
+      <MonoText x={rightAnchorX - 30} y={hookY + 32} size={14}>
+        θ
+      </MonoText>
+    </DiagramFrame>
+  );
+}
+
+/** Block on incline, pushed by horizontal force F at constant velocity. */
 export function InclineHorizontalForceFBD({ angleDeg = 30 }: { angleDeg?: number }) {
   const sinT = Math.sin((angleDeg * Math.PI) / 180);
   const cosT = Math.cos((angleDeg * Math.PI) / 180);
+  const cx = 310;
+  const cy = 245;
   return (
-    <DiagramFrame width={520} height={320} ariaLabel="Incline with horizontal applied force">
-      <BlockOnIncline angleDeg={angleDeg} />
-      {/* Block center is approximately (244, 170). Adjust per BlockOnIncline. */}
-      {/* Weight straight down */}
-      <Arrow x1={244} y1={185} x2={244} y2={275} color={ACCENT} label="W" />
-      {/* Normal perpendicular to surface, away from slope */}
-      <Arrow x1={244} y1={170} x2={244 - 70 * sinT} y2={170 - 70 * cosT} color={INK} label="N" />
-      {/* Friction down the slope (opposing upward motion) */}
+    <DiagramFrame width={720} height={460} ariaLabel="Incline with horizontal applied force">
+      <BlockOnIncline />
+      {/* Weight */}
+      <Arrow x1={cx} y1={cy + 35} x2={cx} y2={cy + 155} color={ACCENT} label="W" />
+      {/* Normal */}
+      <Arrow x1={cx} y1={cy} x2={cx - 110 * sinT} y2={cy - 110 * cosT} color={INK} label="N" />
+      {/* Friction down-slope (opposing upward motion) */}
       <Arrow
-        x1={244}
-        y1={170}
-        x2={244 - 60 * cosT}
-        y2={170 + 60 * sinT}
+        x1={cx}
+        y1={cy}
+        x2={cx - 90 * cosT}
+        y2={cy + 90 * sinT}
         color={WARNING}
-        label="f_k"
+        label="fₖ"
+        labelOffset={18}
       />
-      {/* Horizontal applied force, into the page direction */}
-      <Arrow x1={185} y1={170} x2={244} y2={170} color={INFO} label="F" />
-      <text
-        x={260}
-        y={310}
-        fontFamily="monospace"
-        fontSize="11"
-        fill={INK_MUTED}
-        textAnchor="middle"
-      >
-        ΣF = 0 (constant velocity)
-      </text>
+      {/* Horizontal applied force, into the page */}
+      <Arrow x1={210} y1={cy} x2={cx} y2={cy} color={INFO} label="F" labelOffset={18} />
+      <CaptionText x={360} y={440} size={15}>
+        constant velocity · ΣF = 0
+      </CaptionText>
     </DiagramFrame>
   );
 }
 
-/** Two boxes in contact, force F pushes A which pushes B. Newton III pair. */
+/** Two boxes A + B in contact, pushed by F. */
 export function TwoBoxesContactDiagram() {
   return (
-    <DiagramFrame width={520} height={260} ariaLabel="Two boxes in contact">
-      <Ground x1={40} x2={480} y={200} />
-      <Block x={170} y={140} w={70} h={60} label="A" />
-      <Block x={240} y={130} w={90} h={70} label="B" />
-      {/* Applied force F */}
-      <Arrow x1={100} y1={170} x2={170} y2={170} color={INFO} label="F" />
-      {/* Action-reaction pair at the interface */}
-      <Arrow x1={232} y1={158} x2={262} y2={158} color={ACCENT} label="F_AB" labelOffset={18} />
-      <Arrow x1={248} y1={184} x2={218} y2={184} color={ACCENT} label="F_BA" labelOffset={18} />
-      <text
-        x={260}
-        y={240}
-        textAnchor="middle"
-        fontFamily="monospace"
-        fontSize="11"
-        fill={INK_MUTED}
-      >
-        F_AB = − F_BA (Newton III)
-      </text>
-    </DiagramFrame>
-  );
-}
-
-/** Three boxes in contact, force F pushes m₁; multi-pair Newton III. */
-export function ThreeBoxesStackDiagram() {
-  return (
-    <DiagramFrame width={560} height={260} ariaLabel="Three boxes pushed together">
-      <Ground x1={30} x2={530} y={210} />
-      <Block x={140} y={170} w={50} h={40} label="m₁" />
-      <Block x={190} y={155} w={70} h={55} label="m₂" />
-      <Block x={260} y={135} w={100} h={75} label="m₃" />
-      {/* Applied force */}
-      <Arrow x1={80} y1={190} x2={140} y2={190} color={INFO} label="F" />
-      {/* First contact pair */}
-      <Arrow x1={184} y1={180} x2={208} y2={180} color={ACCENT} label="F₁₂" labelOffset={14} />
-      {/* Second contact pair */}
-      <Arrow x1={254} y1={170} x2={278} y2={170} color={ACCENT} label="F₂₃" labelOffset={14} />
-      {/* a indicator */}
-      <Arrow x1={400} y1={120} x2={460} y2={120} color={INK_MUTED} label="a" dashed width={1.6} />
-    </DiagramFrame>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════════════════════
- * Problem-specific example diagrams — replace the generic reuse for
- * `ex-two-forces-same-direction`, `ex-three-forces-1d`,
- * `ex-2d-perpendicular-forces`, and `ex-weight-of-book`.
- * ═══════════════════════════════════════════════════════════════════════ */
-
-/** Two parallel forces (5 N + 3 N → 8 N). Specific to ex-two-forces-same-direction. */
-export function TwoForcesParallelDiagram() {
-  return (
-    <DiagramFrame width={480} height={240} ariaLabel="Two parallel forces summing">
-      <Block x={80} y={120} w={70} h={50} label="m" />
-      <Arrow x1={150} y1={145} x2={230} y2={145} color={INFO} label="5 N" />
-      <Arrow x1={150} y1={170} x2={198} y2={170} color={INFO} label="3 N" />
-      {/* Resultant on a separate line below */}
-      <line x1={80} y1={205} x2={80} y2={215} stroke={INK_MUTED} strokeWidth={0.8} />
-      <line x1={208} y1={205} x2={208} y2={215} stroke={INK_MUTED} strokeWidth={0.8} />
-      <Arrow x1={80} y1={210} x2={208} y2={210} color={ACCENT} width={3} label="ΣF = 8 N" />
-    </DiagramFrame>
-  );
-}
-
-/** Three 1-D forces with mixed signs (10 N right, 5 N right, 6 N left → 9 N right). */
-export function ThreeForces1DDiagram() {
-  return (
-    <DiagramFrame width={520} height={260} ariaLabel="Three horizontal forces summed">
-      <Block x={220} y={100} w={70} h={50} label="m" />
-      <Arrow x1={290} y1={115} x2={400} y2={115} color={INFO} label="10 N" />
-      <Arrow x1={290} y1={140} x2={345} y2={140} color={INFO} label="5 N" />
-      <Arrow x1={220} y1={132} x2={155} y2={132} color={WARNING} label="6 N" />
-      {/* Net force below */}
-      <line x1={155} y1={195} x2={155} y2={205} stroke={INK_MUTED} strokeWidth={0.8} />
-      <line x1={400} y1={195} x2={400} y2={205} stroke={INK_MUTED} strokeWidth={0.8} />
-      <Arrow x1={250} y1={200} x2={400} y2={200} color={ACCENT} width={3} label="ΣF = +9 N" />
-      <text x={260} y={235} fontFamily="monospace" fontSize="11" fill={INK_MUTED}>
-        + right · − left
-      </text>
-    </DiagramFrame>
-  );
-}
-
-/** Block on smooth surface, 8 N horizontal + 6 N vertical applied. */
-export function TwoForcesPerpendicularDiagram() {
-  return (
-    <DiagramFrame width={480} height={280} ariaLabel="Two perpendicular forces">
-      <Ground x1={60} x2={420} y={210} />
-      <Block x={210} y={150} w={60} h={50} label="m=2 kg" />
-      {/* Weight + normal (background, muted) */}
-      <Arrow x1={240} y1={175} x2={240} y2={250} color={INK_MUTED} width={1.6} label="W" />
-      <Arrow x1={240} y1={150} x2={240} y2={80} color={INK_MUTED} width={1.6} label="N" />
-      {/* Applied forces emphasised */}
-      <Arrow x1={270} y1={175} x2={360} y2={175} color={INFO} label="8 N" />
-      <Arrow x1={250} y1={130} x2={250} y2={70} color={SUCCESS} label="6 N" />
-    </DiagramFrame>
-  );
-}
-
-/** Single book with weight arrow and "5 kg" label. ex-weight-of-book. */
-export function BookWithWeightDiagram() {
-  return (
-    <DiagramFrame width={420} height={260} ariaLabel="Weight of a book">
-      <Block x={170} y={90} w={80} h={56} label="5 kg" />
-      <Arrow x1={210} y1={146} x2={210} y2={230} color={ACCENT} label="W = 49 N" />
-      <Ground x1={60} x2={360} y={235} />
-    </DiagramFrame>
-  );
-}
-
-/** Anatomy-of-a-vector — magnitude bracket, direction label, unit annotation. */
-export function ForceAnatomyDiagram() {
-  return (
-    <DiagramFrame width={480} height={220} ariaLabel="Anatomy of a force vector">
+    <DiagramFrame width={720} height={380} ariaLabel="Two boxes in contact">
+      <Ground x1={60} x2={660} y={280} />
+      <Block x={235} y={200} w={100} h={80} label="A" fontSize={18} />
+      <Block x={335} y={185} w={140} h={95} label="B" fontSize={18} />
+      {/* Applied F on the back of A */}
+      <Arrow x1={140} y1={240} x2={235} y2={240} color={INFO} label="F" labelOffset={18} />
+      {/* Action-reaction at the interface — offset slightly so they don't overlap */}
       <Arrow
-        x1={70}
-        y1={120}
-        x2={350}
-        y2={120}
+        x1={328}
+        y1={222}
+        x2={362}
+        y2={222}
         color={ACCENT}
-        width={3}
-        label="F"
+        label="F_AB"
+        fontSize={15}
         labelOffset={20}
       />
-      {/* Magnitude bracket below */}
-      <line x1={70} y1={155} x2={70} y2={165} stroke={INK_MUTED} strokeWidth={1} />
-      <line x1={350} y1={155} x2={350} y2={165} stroke={INK_MUTED} strokeWidth={1} />
-      <line x1={70} y1={160} x2={350} y2={160} stroke={INK_MUTED} strokeWidth={1} />
-      <text
-        x={210}
-        y={185}
-        textAnchor="middle"
-        fontFamily="monospace"
-        fontSize="13"
-        fill={INK_MUTED}
-      >
-        magnitude (N)
-      </text>
-      {/* Direction tag at the head */}
-      <text x={365} y={105} fontFamily="monospace" fontSize="12" fill={INK_MUTED}>
-        →
-      </text>
-      <text x={380} y={120} fontFamily="monospace" fontSize="11" fill={INK_MUTED}>
-        direction
-      </text>
-      {/* Tail dot */}
-      <circle cx={70} cy={120} r={3} fill={INK} />
+      <Arrow
+        x1={342}
+        y1={258}
+        x2={308}
+        y2={258}
+        color={ACCENT}
+        label="F_BA"
+        fontSize={15}
+        labelOffset={20}
+      />
+      <CaptionText x={360} y={340} size={15}>
+        F_AB = − F_BA · Newton III pair
+      </CaptionText>
     </DiagramFrame>
   );
 }
 
-/* ═══════════════════════════════════════════════════════════════════════
- * Misconception diagrams — visualize the wrong/right pair so the student
- * sees the trap, not just reads it.
- * ═══════════════════════════════════════════════════════════════════════ */
-
-/** misc-moving-needs-force: puck on frictionless ice. Wrong panel shows a
- *  "needed forward force" crossed out; right panel shows ΣF=0 still moving. */
-export function MovingNeedsForceMiscDiagram() {
+/** Three boxes m₁ < m₂ < m₃ in contact pushed by F. */
+export function ThreeBoxesStackDiagram() {
   return (
-    <DiagramFrame
-      width={520}
-      height={220}
-      ariaLabel="Moving objects need a constant force — wrong vs right"
-    >
-      {/* Divider */}
-      <line
-        x1={260}
-        y1={20}
-        x2={260}
-        y2={200}
-        stroke={INK_MUTED}
-        strokeWidth={0.8}
-        strokeDasharray="3 3"
-      />
-      {/* LEFT — wrong */}
-      <text
-        x={130}
-        y={30}
-        textAnchor="middle"
-        fontFamily="monospace"
-        fontSize="11"
-        fill="var(--error)"
-      >
-        WRONG
-      </text>
-      <Ground x1={30} x2={240} y={150} />
-      <Block x={70} y={110} w={50} h={40} label="m" />
-      {/* "needed" force, struck through */}
-      <Arrow x1={120} y1={130} x2={195} y2={130} color="var(--error)" label="F (?)" />
-      <line x1={115} y1={135} x2={205} y2={125} stroke="var(--error)" strokeWidth={2} />
-      {/* RIGHT — correct */}
-      <text x={400} y={30} textAnchor="middle" fontFamily="monospace" fontSize="11" fill={SUCCESS}>
-        RIGHT
-      </text>
-      <Ground x1={290} x2={500} y={150} />
-      <Block x={330} y={110} w={50} h={40} label="m" />
+    <DiagramFrame width={720} height={380} ariaLabel="Three boxes pushed in series">
+      <Ground x1={50} x2={680} y={290} />
+      <Block x={170} y={230} w={70} h={60} label="m₁" fontSize={16} />
+      <Block x={240} y={210} w={100} h={80} label="m₂" fontSize={16} />
+      <Block x={340} y={180} w={140} h={110} label="m₃" fontSize={18} />
+      {/* Applied F */}
+      <Arrow x1={80} y1={260} x2={170} y2={260} color={INFO} label="F" labelOffset={18} />
+      {/* Inter-box contact pairs */}
       <Arrow
-        x1={385}
-        y1={130}
-        x2={460}
-        y2={130}
-        color={INK_MUTED}
+        x1={236}
+        y1={245}
+        x2={264}
+        y2={245}
+        color={ACCENT}
+        label="F₁₂"
+        fontSize={14}
+        labelOffset={16}
+      />
+      <Arrow
+        x1={336}
+        y1={228}
+        x2={364}
+        y2={228}
+        color={ACCENT}
+        label="F₂₃"
+        fontSize={14}
+        labelOffset={16}
+      />
+      {/* a indicator */}
+      <Arrow
+        x1={540}
+        y1={150}
+        x2={620}
+        y2={150}
+        color={INK_FAINT}
+        width={2}
+        label="a"
+        fontSize={14}
         dashed
-        label="v"
         labelOffset={14}
       />
-      <text
-        x={400}
-        y={185}
-        textAnchor="middle"
-        fontFamily="monospace"
-        fontSize="11"
-        fill={INK_MUTED}
-      >
-        ΣF = 0 · v = const
-      </text>
+      <CaptionText x={360} y={340} size={14}>
+        F_each = (mass behind that interface) × a
+      </CaptionText>
     </DiagramFrame>
   );
 }
 
-/** misc-action-reaction-cancel: two bodies, each with the OTHER's force drawn
- *  on it. Caption emphasises "different bodies". */
-export function ActionReactionCancelMiscDiagram() {
-  return (
-    <DiagramFrame width={520} height={220} ariaLabel="Action and reaction — on different bodies">
-      <Ground x1={30} x2={490} y={170} />
-      {/* Body A */}
-      <Block x={120} y={110} w={60} h={60} label="A" />
-      {/* Body B */}
-      <Block x={340} y={110} w={60} h={60} label="B" />
-      {/* Force from A on B (acts on B) */}
-      <Arrow x1={200} y1={130} x2={335} y2={130} color={ACCENT} label="F_AB" />
-      {/* Force from B on A (acts on A) */}
-      <Arrow x1={320} y1={155} x2={185} y2={155} color={INFO} label="F_BA" />
-      <text
-        x={260}
-        y={205}
-        textAnchor="middle"
-        fontFamily="monospace"
-        fontSize="11"
-        fill={INK_MUTED}
-      >
-        on different bodies — they don&rsquo;t cancel anything
-      </text>
-    </DiagramFrame>
-  );
-}
-
-/** misc-N-equals-mg: side-by-side flat (N=mg) vs incline (N=mg cosθ). */
-export function NormalEqualsMgMiscDiagram() {
-  return (
-    <DiagramFrame width={520} height={240} ariaLabel="Normal force flat vs incline">
-      <line
-        x1={260}
-        y1={20}
-        x2={260}
-        y2={220}
-        stroke={INK_MUTED}
-        strokeWidth={0.8}
-        strokeDasharray="3 3"
-      />
-      {/* Flat surface */}
-      <text x={130} y={28} textAnchor="middle" fontFamily="monospace" fontSize="11" fill={SUCCESS}>
-        FLAT
-      </text>
-      <Ground x1={30} x2={240} y={170} />
-      <Block x={100} y={130} w={60} h={40} label="m" />
-      <Arrow x1={130} y1={150} x2={130} y2={210} color={ACCENT} label="W" />
-      <Arrow x1={130} y1={130} x2={130} y2={70} color={INK} label="N" />
-      <text
-        x={130}
-        y={232}
-        textAnchor="middle"
-        fontFamily="monospace"
-        fontSize="11"
-        fill={INK_MUTED}
-      >
-        N = mg
-      </text>
-      {/* Incline */}
-      <text x={400} y={28} textAnchor="middle" fontFamily="monospace" fontSize="11" fill={SUCCESS}>
-        INCLINE
-      </text>
-      <BlockOnIncline baseX={290} baseY={195} length={170} angleDeg={30} blockSize={40} />
-      <Arrow x1={400} y1={150} x2={400} y2={210} color={ACCENT} label="W" />
-      <Arrow
-        x1={400}
-        y1={150}
-        x2={400 - 50 * Math.sin(Math.PI / 6)}
-        y2={150 - 50 * Math.cos(Math.PI / 6)}
-        color={INK}
-        label="N"
-      />
-      <text
-        x={400}
-        y={232}
-        textAnchor="middle"
-        fontFamily="monospace"
-        fontSize="11"
-        fill={INK_MUTED}
-      >
-        N = mg cos θ &lt; mg
-      </text>
-    </DiagramFrame>
-  );
-}
-
-/** misc-friction-opposes-force: block pushed at angle, friction along the
- *  surface (NOT opposite the applied force vector). */
-export function FrictionOpposesMotionMiscDiagram() {
-  return (
-    <DiagramFrame width={500} height={240} ariaLabel="Friction opposes motion not applied force">
-      <Ground x1={40} x2={460} y={180} />
-      <Block x={210} y={140} w={60} h={40} label="m" />
-      {/* Applied F at 30° below horizontal */}
-      <Arrow x1={150} y1={120} x2={210} y2={155} color={INFO} label="F" />
-      {/* Friction along surface, opposite motion (rightward push → friction left) */}
-      <Arrow x1={210} y1={170} x2={140} y2={170} color={WARNING} label="f_k" />
-      {/* Motion arrow */}
-      <Arrow x1={290} y1={130} x2={350} y2={130} color={INK_MUTED} dashed width={1.4} label="v" />
-      <text
-        x={250}
-        y={215}
-        textAnchor="middle"
-        fontFamily="monospace"
-        fontSize="11"
-        fill={INK_MUTED}
-      >
-        friction is along the surface, opposite v — not opposite F
-      </text>
-    </DiagramFrame>
-  );
-}
-
-/**
- * Hook diagram — visualizes the unit's opening question "why do things move
- * the way they move?". Two scenes: a stationary block (top) and a sliding
- * block with motion lines (bottom), connected by a large "?" mark.
- */
+/** Hook diagram — two scenes (rest vs motion) connected by a question mark. */
 export function HookMotionDiagram() {
   return (
-    <DiagramFrame width={520} height={300} ariaLabel="Why do things move the way they move?">
-      {/* Top scene — at rest */}
-      <Ground x1={40} x2={240} y={100} />
-      <Block x={120} y={70} w={50} h={30} label="m" />
-      <text
-        x={140}
-        y={140}
-        textAnchor="middle"
-        fontFamily="monospace"
-        fontSize="11"
-        fill={INK_MUTED}
-      >
+    <DiagramFrame width={720} height={420} ariaLabel="Why do things move the way they move?">
+      {/* TOP — at rest */}
+      <Ground x1={70} x2={300} y={130} />
+      <Block x={155} y={88} w={60} h={42} label="m" fontSize={14} />
+      <CaptionText x={185} y={170} size={14}>
         at rest
-      </text>
+      </CaptionText>
 
-      {/* Bottom scene — in motion */}
-      <Ground x1={280} x2={500} y={200} />
-      <Block x={360} y={170} w={50} h={30} label="m" />
-      <Arrow x1={415} y1={185} x2={485} y2={185} color={INK_MUTED} dashed width={1.6} label="v" />
-      {/* Motion lines trailing the block */}
-      <line x1={350} y1={178} x2={335} y2={178} stroke={INK_MUTED} strokeWidth={0.8} />
-      <line x1={350} y1={188} x2={330} y2={188} stroke={INK_MUTED} strokeWidth={0.8} />
-      <line x1={350} y1={195} x2={335} y2={195} stroke={INK_MUTED} strokeWidth={0.8} />
-      <text
-        x={400}
-        y={240}
-        textAnchor="middle"
-        fontFamily="monospace"
-        fontSize="11"
-        fill={INK_MUTED}
-      >
+      {/* BOTTOM — in motion */}
+      <Ground x1={420} x2={650} y={290} />
+      <Block x={488} y={245} w={60} h={45} label="m" fontSize={14} />
+      <Arrow
+        x1={552}
+        y1={268}
+        x2={640}
+        y2={268}
+        color={INK_MUTED}
+        width={2}
+        label="v"
+        fontSize={15}
+        dashed
+        labelOffset={14}
+      />
+      {/* Trailing motion lines */}
+      <line x1={482} y1={258} x2={460} y2={258} stroke={INK_FAINT} strokeWidth={1} />
+      <line x1={482} y1={272} x2={450} y2={272} stroke={INK_FAINT} strokeWidth={1} />
+      <line x1={482} y1={283} x2={460} y2={283} stroke={INK_FAINT} strokeWidth={1} />
+      <CaptionText x={518} y={330} size={14}>
         in motion
-      </text>
+      </CaptionText>
 
-      {/* Big question mark connecting the two scenes */}
+      {/* Big italic ? in the middle */}
       <text
-        x={250}
-        y={170}
-        textAnchor="middle"
-        fontFamily="serif"
-        fontSize="68"
-        fill={ACCENT}
+        x={360}
+        y={250}
+        fontFamily={FONT_DISPLAY}
+        fontSize="140"
         fontStyle="italic"
-        opacity="0.85"
+        fontWeight="500"
+        fill={ACCENT}
+        textAnchor="middle"
+        opacity={0.85}
       >
         ?
       </text>
 
-      {/* Caption beneath */}
-      <text
-        x={260}
-        y={285}
-        textAnchor="middle"
-        fontFamily="monospace"
-        fontSize="11"
-        fill={INK_MUTED}
-      >
+      <CaptionText x={360} y={380} size={16}>
         what makes the difference?
-      </text>
+      </CaptionText>
+    </DiagramFrame>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ *  Misconception diagrams — wrong/right comparative pairs
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+const MISC_DIVIDER = (
+  <line
+    x1={360}
+    y1={40}
+    x2={360}
+    y2={380}
+    stroke={INK_MUTED}
+    strokeWidth={1.2}
+    strokeDasharray="6 6"
+  />
+);
+
+/** misc-moving-needs-force: puck on ice. */
+export function MovingNeedsForceMiscDiagram() {
+  return (
+    <DiagramFrame
+      width={720}
+      height={420}
+      ariaLabel="Moving objects need a constant force — wrong vs right"
+    >
+      {MISC_DIVIDER}
+      {/* LEFT — wrong */}
+      <MonoText x={180} y={60} size={13} color={'var(--error)'}>
+        WRONG
+      </MonoText>
+      <Ground x1={50} x2={330} y={250} />
+      <Block x={140} y={190} w={70} h={60} label="m" fontSize={15} />
+      <Arrow x1={210} y1={220} x2={310} y2={220} color="var(--error)" label="F (?)" fontSize={15} />
+      <line x1={200} y1={228} x2={320} y2={210} stroke="var(--error)" strokeWidth={2.5} />
+      <CaptionText x={180} y={295} size={14} color={'var(--error)'}>
+        a forward force is needed
+      </CaptionText>
+
+      {/* RIGHT — correct */}
+      <MonoText x={540} y={60} size={13} color={SUCCESS}>
+        RIGHT
+      </MonoText>
+      <Ground x1={400} x2={680} y={250} />
+      <Block x={490} y={190} w={70} h={60} label="m" fontSize={15} />
+      <Arrow
+        x1={560}
+        y1={220}
+        x2={650}
+        y2={220}
+        color={INK_MUTED}
+        dashed
+        label="v"
+        fontSize={15}
+        labelOffset={14}
+      />
+      <CaptionText x={540} y={295} size={14} color={INK_MUTED}>
+        ΣF = 0 · v stays constant
+      </CaptionText>
+    </DiagramFrame>
+  );
+}
+
+/** misc-action-reaction-cancel: two bodies, force on B drawn on B, etc. */
+export function ActionReactionCancelMiscDiagram() {
+  return (
+    <DiagramFrame width={720} height={400} ariaLabel="Action-reaction acts on different bodies">
+      <Ground x1={60} x2={660} y={300} />
+      <Block x={170} y={210} w={90} h={90} label="A" fontSize={20} />
+      <Block x={460} y={210} w={90} h={90} label="B" fontSize={20} />
+      {/* Force from A on B (acts on B) */}
+      <Arrow
+        x1={260}
+        y1={244}
+        x2={455}
+        y2={244}
+        color={ACCENT}
+        label="F_AB on B"
+        fontSize={14}
+        labelOffset={20}
+      />
+      {/* Force from B on A (acts on A) */}
+      <Arrow
+        x1={460}
+        y1={272}
+        x2={265}
+        y2={272}
+        color={INFO}
+        label="F_BA on A"
+        fontSize={14}
+        labelOffset={20}
+      />
+      <CaptionText x={360} y={365} size={15}>
+        {'on different bodies — they don’t cancel anything'}
+      </CaptionText>
+    </DiagramFrame>
+  );
+}
+
+/** misc-N-equals-mg: flat (N=mg) vs incline (N=mg cos θ). */
+export function NormalEqualsMgMiscDiagram() {
+  return (
+    <DiagramFrame width={720} height={420} ariaLabel="Normal force flat vs incline">
+      {MISC_DIVIDER}
+      {/* Flat */}
+      <MonoText x={180} y={60} size={13} color={SUCCESS}>
+        FLAT
+      </MonoText>
+      <Ground x1={50} x2={330} y={250} />
+      <Block x={140} y={190} w={80} h={60} label="m" fontSize={15} />
+      <Arrow x1={180} y1={220} x2={180} y2={310} color={ACCENT} label="W" />
+      <Arrow x1={180} y1={190} x2={180} y2={100} color={INK} label="N" />
+      <CaptionText x={180} y={365} size={15}>
+        N = mg
+      </CaptionText>
+
+      {/* Incline */}
+      <MonoText x={540} y={60} size={13} color={SUCCESS}>
+        INCLINE
+      </MonoText>
+      <BlockOnIncline baseX={400} baseY={290} length={260} angleDeg={30} blockSize={60} />
+      {/* Block center for these incline params ≈ (525, 220) */}
+      <Arrow x1={525} y1={252} x2={525} y2={350} color={ACCENT} label="W" />
+      <Arrow
+        x1={525}
+        y1={220}
+        x2={525 - 90 * Math.sin(Math.PI / 6)}
+        y2={220 - 90 * Math.cos(Math.PI / 6)}
+        color={INK}
+        label="N"
+      />
+      <CaptionText x={540} y={365} size={15}>
+        N = mg cos θ &lt; mg
+      </CaptionText>
+    </DiagramFrame>
+  );
+}
+
+/** misc-friction-opposes-force: block pushed at angle, friction along surface. */
+export function FrictionOpposesMotionMiscDiagram() {
+  return (
+    <DiagramFrame ariaLabel="Friction opposes motion not applied force">
+      <Ground x1={60} x2={660} y={260} />
+      <Block x={295} y={200} w={100} h={60} label="m" fontSize={16} />
+      {/* Applied F at 30° below horizontal */}
+      <Arrow x1={210} y1={170} x2={295} y2={228} color={INFO} label="F" labelOffset={18} />
+      {/* Friction along surface, opposite motion */}
+      <Arrow x1={295} y1={244} x2={185} y2={244} color={WARNING} label="fₖ" labelOffset={18} />
+      {/* Motion arrow */}
+      <Arrow
+        x1={400}
+        y1={196}
+        x2={510}
+        y2={196}
+        color={INK_MUTED}
+        dashed
+        width={2}
+        label="v"
+        labelOffset={14}
+      />
+      <CaptionText x={360} y={340} size={15}>
+        friction is along the surface, opposite v — not opposite F
+      </CaptionText>
     </DiagramFrame>
   );
 }
@@ -1224,14 +1634,29 @@ export function HookMotionDiagram() {
 /** misc-rest-no-forces: book on table — forces ARE present, they balance. */
 export function RestHasForcesMiscDiagram() {
   return (
-    <DiagramFrame width={420} height={240} ariaLabel="At rest does not mean no forces">
-      <Ground x1={60} x2={360} y={180} />
-      <Block x={170} y={130} w={80} h={50} label="book" />
-      <Arrow x1={210} y1={155} x2={210} y2={225} color={ACCENT} label="W" />
-      <Arrow x1={210} y1={130} x2={210} y2={60} color={INK} label="N" />
-      <text x={210} y={215} textAnchor="middle" fontFamily="monospace" fontSize="11" fill={SUCCESS}>
-        ΣF = 0 (forces present, they balance)
-      </text>
+    <DiagramFrame ariaLabel="At rest does not mean no forces">
+      <line x1={120} y1={250} x2={600} y2={250} stroke={INK} strokeWidth={2} />
+      <line x1={160} y1={250} x2={160} y2={330} stroke={INK} strokeWidth={2} />
+      <line x1={560} y1={250} x2={560} y2={330} stroke={INK} strokeWidth={2} />
+      <Ground x1={80} x2={640} y={330} />
+      <rect
+        x={290}
+        y={210}
+        width={140}
+        height={40}
+        fill={PAPER_RAISED}
+        stroke={INK}
+        strokeWidth={1.8}
+        rx={2}
+      />
+      <MonoText x={360} y={235} size={14} color={INK_MUTED}>
+        book
+      </MonoText>
+      <Arrow x1={360} y1={250} x2={360} y2={350} color={ACCENT} label="W" />
+      <Arrow x1={360} y1={210} x2={360} y2={110} color={INK} label="N" />
+      <CaptionText x={360} y={395} size={16} color={SUCCESS}>
+        ΣF = 0 · forces present, balanced
+      </CaptionText>
     </DiagramFrame>
   );
 }
