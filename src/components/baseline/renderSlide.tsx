@@ -8,9 +8,15 @@ import { BaselineSummarySlide } from './BaselineSummarySlide';
 import { BaselineTitleSlide } from './BaselineTitleSlide';
 
 /**
- * Generic baseline-slide renderer. Dispatches a `BaselineDeckSlide` entry to
- * the matching slide component for any unit. Used by:
- *   - the canonical theory route (`/units/{id}/theory/`)
+ * Presenter-mode slide renderer. Dispatches a `BaselineDeckSlide` to a
+ * `<Baseline*Slide>` component framed by `BaselineSlideFrame` (16:10 card,
+ * letter-boxed for projection).
+ *
+ * **Outline mode no longer uses this path.** As of the editorial rebuild,
+ * `/units/{id}/theory/` composes a continuous spread document via the
+ * components in `src/components/spreads/` instead — each slide type
+ * renders its own full-width composition with hero figures and editorial
+ * typography. This file remains for:
  *   - the presenter route (`/units/{id}/theory/present/`)
  *   - the dev preview (`/dev/baseline-03/`)
  *   - any future unit's lectureDeck manifest — Unit 02 will reuse this as-is.

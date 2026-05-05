@@ -19,11 +19,13 @@ export default function UnitLayout({ children, params }: UnitLayoutProps) {
   }
 
   return (
-    <main className="mx-auto max-w-6xl px-6 py-12">
+    <main className="mx-auto max-w-7xl px-6 py-12">
       <UnitHeader unit={unit} />
       <div className="mt-8">
         <UnitModeNav unitId={unit.id} />
       </div>
+      {/* No max-width on the children container — spreads control their
+          own width per variant (hero ≈ 700px, plate ≈ 1100px). */}
       <div className="mt-10">{children}</div>
     </main>
   );
