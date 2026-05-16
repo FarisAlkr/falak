@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ChevronLeft, ChevronRight, Maximize2, Minimize2, X } from 'lucide-react';
 import { I18n } from '@/components/i18n/I18n';
-import type { TocEntry } from '@/lib/content/types';
+import type { Chapter, TocEntry } from '@/lib/content/types';
 import { LOCALE_DIR } from '@/lib/i18n/constants';
 import { cn } from '@/lib/utils/cn';
 
@@ -15,6 +15,16 @@ interface PresenterShellProps {
   toc: TocEntry[];
   unitId: string;
   totalSlides: number;
+  /**
+   * Chapter scope. When provided, the presenter operates in chapter mode:
+   *   - the breadcrumb and counter say "Chapter II · 4/12" instead of the
+   *     unit-wide range
+   *   - the exit button returns to the chapter document
+   *   - on the final slide, an "End of chapter — continue?" CTA links to
+   *     the next chapter's presenter
+   */
+  chapter?: Chapter;
+  nextChapter?: Chapter;
 }
 
 /**
@@ -29,7 +39,14 @@ interface PresenterShellProps {
  *
  * URL param `?slide=N` keeps position on refresh and supports deep-linking.
  */
-export function PresenterShell({ slides, toc, unitId, totalSlides }: PresenterShellProps) {
+export function PresenterShell({
+  slides,
+  toc,
+  unitId,
+  totalSlides,
+  chapter,
+  nextChapter,
+}: PresenterShellProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const initial = clamp(parseInt(searchParams.get('slide') ?? '1', 10) || 1, 1, totalSlides);
@@ -119,21 +136,42 @@ export function PresenterShell({ slides, toc, unitId, totalSlides }: PresenterSh
       <div className="bg-paper/85 absolute inset-x-0 top-0 z-50 flex items-center justify-between border-b border-border px-6 py-2 backdrop-blur-sm">
         <div className="flex items-center gap-3 text-xs text-ink-muted">
           <Link
-            href={`/units/${unitId}/theory/`}
+            href={chapter ? `/units/${unitId}/theory/${chapter.id}/` : `/units/${unitId}/theory/`}
             className="inline-flex items-center gap-1 transition-colors hover:text-ink"
             aria-label="Exit presenter"
           >
             <X size={14} strokeWidth={1.5} aria-hidden />
             <I18n
-              ar="عودة"
-              he="חזרה"
-              en="Outline"
+              ar={chapter ? 'الفصل' : 'فهرس'}
+              he={chapter ? 'הפרק' : 'תוכן'}
+              en={chapter ? 'Chapter' : 'Outline'}
               as="span"
               unstyled
               className="font-mono uppercase tracking-meta"
             />
           </Link>
-          {currentSection && (
+          {chapter && (
+            <>
+              <span aria-hidden className="text-border-strong">
+                ·
+              </span>
+              <span className="font-mono uppercase tracking-meta text-accent">
+                {chapter.number}
+              </span>
+              <span>
+                <span data-lang="ar" dir={LOCALE_DIR.ar} className="font-arabic">
+                  {chapter.title.ar}
+                </span>
+                <span data-lang="he" dir={LOCALE_DIR.he} className="font-hebrew">
+                  {chapter.title.he}
+                </span>
+                <span data-lang="en" dir={LOCALE_DIR.en} className="font-display">
+                  {chapter.title.en}
+                </span>
+              </span>
+            </>
+          )}
+          {!chapter && currentSection && (
             <>
               <span aria-hidden className="text-border-strong">
                 ·
@@ -191,6 +229,12 @@ export function PresenterShell({ slides, toc, unitId, totalSlides }: PresenterSh
           </motion.div>
         </AnimatePresence>
 
+        {/* End-of-chapter banner — only shown on the last slide of a
+            chapter-scope presenter when there's a next chapter. */}
+        {chapter && index === totalSlides && nextChapter && (
+          <EndOfChapterCTA unitId={unitId} currentChapter={chapter} nextChapter={nextChapter} />
+        )}
+
         {/* Edge nav — large invisible click zones with subtle chevrons */}
         <button
           type="button"
@@ -234,6 +278,61 @@ export function PresenterShell({ slides, toc, unitId, totalSlides }: PresenterSh
       {/* Hidden hint about keyboard shortcuts — first-mount nudge */}
       <KeyboardHint />
     </div>
+  );
+}
+
+function EndOfChapterCTA({
+  unitId,
+  currentChapter,
+  nextChapter,
+}: {
+  unitId: string;
+  currentChapter: Chapter;
+  nextChapter: Chapter;
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+      className="pointer-events-none absolute inset-x-0 bottom-16 z-30 flex justify-center px-6"
+    >
+      <div className="bg-paper-raised/95 pointer-events-auto flex max-w-2xl flex-col items-center gap-4 border border-border px-8 py-6 text-center shadow-soft backdrop-blur-sm md:gap-5 md:px-12 md:py-8">
+        <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-accent">
+          <I18n
+            ar={`نهاية الفصل ${currentChapter.number}`}
+            he={`סוף פרק ${currentChapter.number}`}
+            en={`End of Chapter ${currentChapter.number}`}
+            unstyled
+          />
+        </span>
+        <p className="font-display text-xl italic leading-snug text-ink md:text-2xl">
+          <I18n
+            ar={`تابع إلى الفصل ${nextChapter.number}؟`}
+            he={`להמשיך לפרק ${nextChapter.number}?`}
+            en={`Continue to Chapter ${nextChapter.number}?`}
+            unstyled
+          />
+        </p>
+        <Link
+          href={`/units/${unitId}/theory/${nextChapter.id}/present/`}
+          className="inline-flex items-center gap-2 border border-accent bg-accent px-5 py-2.5 font-mono text-xs uppercase tracking-[0.25em] text-ink-inverted transition-colors duration-fast hover:bg-accent-dark"
+        >
+          <span>
+            <span data-lang="ar" dir={LOCALE_DIR.ar} className="font-arabic">
+              {nextChapter.title.ar}
+            </span>
+            <span data-lang="he" dir={LOCALE_DIR.he} className="font-hebrew">
+              {nextChapter.title.he}
+            </span>
+            <span data-lang="en" dir={LOCALE_DIR.en} className="font-display">
+              {nextChapter.title.en}
+            </span>
+          </span>
+          <ChevronRight size={14} strokeWidth={1.5} aria-hidden className="rtl:rotate-180" />
+        </Link>
+      </div>
+    </motion.div>
   );
 }
 
