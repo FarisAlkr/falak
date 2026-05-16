@@ -21,6 +21,22 @@ export const UNIT_IDS = [
 
 export type UnitId = (typeof UNIT_IDS)[number];
 
+/** Type guard. Use at the dynamic-route boundary to narrow `params.unitId`
+ *  from `string` to `UnitId`. */
+export function isUnitId(slug: string): slug is UnitId {
+  return (UNIT_IDS as readonly string[]).includes(slug);
+}
+
+/** Narrowing helper for callers that have already established the slug is
+ *  a known unit (e.g. via a chapter manifest lookup). Throws if not — the
+ *  caller is responsible for the prior `notFound()` / placeholder branch. */
+export function requireUnitId(slug: string): UnitId {
+  if (!isUnitId(slug)) {
+    throw new Error(`requireUnitId: "${slug}" is not a known unit id`);
+  }
+  return slug;
+}
+
 export type Section = 'mechanics' | 'electromagnetism' | 'waves-optics' | 'modern-atomic';
 
 export type BagrutWeight = 'low' | 'medium' | 'high' | 'very-high';

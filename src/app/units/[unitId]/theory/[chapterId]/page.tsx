@@ -1,19 +1,12 @@
 import { notFound } from 'next/navigation';
 import { Fragment } from 'react';
 import { loadUnit } from '@/lib/content/baseline';
-import {
-  findChapter,
-  getUnitChapters,
-  nextChapter,
-  prevChapter,
-  sliceDeckByChapter,
-} from '@/lib/content/chapters';
+import { findChapter, nextChapter, prevChapter, sliceDeckByChapter } from '@/lib/content/chapters';
 import { getChapterStaticParams } from '@/lib/content/chapterParams';
-import { UNIT_03_DECK, UNIT_03_NUMBER } from '@/content/units/newtons-laws/lectureDeck';
-import { sectionAnchorForSlide } from '@/content/units/newtons-laws/toc';
+import { getChapterUnit } from '@/lib/content/chapterUnits';
 import { ChapterDocumentLayout } from '@/components/chapter/ChapterDocumentLayout';
 import { renderSpread } from '@/components/spreads';
-import type { UnitId } from '@/types/unit';
+import { requireUnitId } from '@/types/unit';
 
 export const generateStaticParams = getChapterStaticParams;
 
@@ -33,41 +26,35 @@ export interface ChapterPageProps {
  * in; an inline divider would be redundant.
  */
 export default async function ChapterPage({ params }: ChapterPageProps) {
-  const chapters = getUnitChapters(params.unitId);
-  const chapter = findChapter(params.unitId, params.chapterId);
-  if (!chapter || chapters.length === 0) {
+  const cfg = getChapterUnit(params.unitId);
+  const chapter = cfg && findChapter(params.unitId, params.chapterId);
+  if (!cfg || !chapter) {
     notFound();
   }
 
-  // Each unit hard-codes its deck import. As more units land, this becomes
-  // a per-unit lookup table.
-  if (params.unitId !== 'newtons-laws') {
-    notFound();
-  }
-
-  const unit = await loadUnit(UNIT_03_NUMBER);
-  const slidesInChapter = sliceDeckByChapter(UNIT_03_DECK, chapter);
+  const unit = await loadUnit(cfg.number);
+  const slidesInChapter = sliceDeckByChapter(cfg.deck, chapter);
   const prev = prevChapter(params.unitId, params.chapterId);
   const next = nextChapter(params.unitId, params.chapterId);
 
   return (
     <ChapterDocumentLayout
-      unitId={params.unitId as UnitId}
+      unitId={requireUnitId(params.unitId)}
       unitTitle={unit.frontmatter.titles}
       unitNumber={unit.frontmatter.unit.number}
       chapter={chapter}
-      chapters={chapters}
+      chapters={cfg.chapters}
       prev={prev}
       next={next}
     >
       {slidesInChapter.map(({ n, entry }) => {
-        const sectionId = sectionAnchorForSlide(n);
+        const sectionId = cfg.sectionAnchorForSlide(n);
         return (
           <Fragment key={n}>
             {sectionId && (
               <span id={`section-${sectionId}`} aria-hidden className="block scroll-mt-24" />
             )}
-            {renderSpread(entry, UNIT_03_NUMBER, `slide-${n}`)}
+            {renderSpread(entry, cfg.number, `slide-${n}`)}
           </Fragment>
         );
       })}

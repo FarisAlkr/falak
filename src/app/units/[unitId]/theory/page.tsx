@@ -2,12 +2,12 @@ import Link from 'next/link';
 import { Play, BookOpen } from 'lucide-react';
 import { PlaceholderPanel } from '@/components/layout/PlaceholderPanel';
 import { getUnitStaticParams } from '@/lib/content/staticParams';
-import { getUnitChapters } from '@/lib/content/chapters';
+import { getChapterUnit } from '@/lib/content/chapterUnits';
 import { loadUnit } from '@/lib/content/baseline';
 import { LOCALE_DIR } from '@/lib/i18n/constants';
 import { I18n } from '@/components/i18n/I18n';
 import { ChapterCard } from '@/components/chapter/ChapterCard';
-import type { UnitId } from '@/types/unit';
+import { requireUnitId } from '@/types/unit';
 
 export const generateStaticParams = getUnitStaticParams;
 
@@ -25,14 +25,15 @@ export interface TheoryIndexPageProps {
  * prefer to read the whole unit as one document.
  */
 export default async function TheoryIndexPage({ params }: TheoryIndexPageProps) {
-  const chapters = getUnitChapters(params.unitId);
-  if (chapters.length === 0) {
+  const cfg = getChapterUnit(params.unitId);
+  if (!cfg) {
     // Other units don't have authored chapters yet — fall back to the
     // existing placeholder.
     return <PlaceholderPanel mode="theory" />;
   }
+  const { chapters } = cfg;
 
-  const unit = await loadUnit(unitNumberFromSlug(params.unitId));
+  const unit = await loadUnit(cfg.number);
   const t = unit.frontmatter.titles;
   const number = unit.frontmatter.unit.number;
   const totalSlides = chapters.reduce((acc, c) => acc + (c.slides[1] - c.slides[0] + 1), 0);
@@ -121,7 +122,7 @@ export default async function TheoryIndexPage({ params }: TheoryIndexPageProps) 
           {chapters.map((chapter) => (
             <ChapterCard
               key={chapter.id}
-              unitId={params.unitId as UnitId}
+              unitId={requireUnitId(params.unitId)}
               chapter={chapter}
               chapters={chapters}
             />
@@ -156,18 +157,6 @@ export default async function TheoryIndexPage({ params }: TheoryIndexPageProps) 
       </section>
     </div>
   );
-}
-
-/** Map a unit slug to its zero-padded baseline number. The chapter system
- *  currently only knows about Newton's Laws (`03`); add to this map as
- *  more units acquire chapter manifests. */
-function unitNumberFromSlug(slug: string): string {
-  switch (slug) {
-    case 'newtons-laws':
-      return '03';
-    default:
-      throw new Error(`unitNumberFromSlug: no chapter manifest for "${slug}"`);
-  }
 }
 
 /** Take the first reasonably substantial sentence from a markdown body. */

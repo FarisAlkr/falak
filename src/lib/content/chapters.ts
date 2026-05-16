@@ -1,20 +1,17 @@
 import type { BaselineDeckSlide, Chapter } from './types';
-import { NEWTONS_LAWS_CHAPTERS } from '@/content/units/newtons-laws/chapters';
+import { getChapterUnit } from './chapterUnits';
 
 /**
  * Generic chapter utilities. Per-unit chapter manifests live alongside
  * each unit's content (`src/content/units/{slug}/chapters.ts`); this
  * module is the lookup + slicing layer that pages and route helpers
- * call against any unit.
+ * call against any unit. The chapter-enabled units themselves are
+ * registered in `./chapterUnits.ts`.
  */
-
-const UNIT_CHAPTERS: Record<string, readonly Chapter[]> = {
-  'newtons-laws': NEWTONS_LAWS_CHAPTERS,
-};
 
 /** All chapters for the given unit. Empty if the unit has no manifest. */
 export function getUnitChapters(unitId: string): readonly Chapter[] {
-  return UNIT_CHAPTERS[unitId] ?? [];
+  return getChapterUnit(unitId)?.chapters ?? [];
 }
 
 /** Find a chapter by its slug within a unit. */
