@@ -156,3 +156,40 @@ export interface TocEntry {
    *  law section. One level deep. */
   children?: TocEntry[];
 }
+
+/**
+ * Chapter — the next layer up from TocEntry. A unit divides into a small
+ * number of chapters (typically 4–6); each chapter spans a contiguous range
+ * of slides and can contain multiple TocEntry sub-sections.
+ *
+ * Chapters drive the per-chapter routing under `/units/{id}/theory/{slug}/`
+ * and the chapter-index landing page. They DO NOT replace the TOC — TOC
+ * entries are slide-level structure inside the long-scroll document and
+ * inside per-chapter pages; chapters are the outer organisational layer.
+ */
+export type ChapterKind = 'foundation' | 'core' | 'synthesis' | 'misconceptions' | 'summary';
+
+export interface Chapter {
+  /** URL slug. Stable across baseline revisions. Kebab-case. */
+  id: string;
+  /** Roman numeral (`I`, `II`, …) shown in chapter chrome. */
+  number: string;
+  /** Trilingual title — appears as the chapter heading and in nav. */
+  title: { ar: string; he: string; en: string };
+  /** Trilingual one-sentence summary — shown on the chapter index card
+   *  and on the chapter document page below the title. Each language
+   *  written natively (no machine translation). */
+  description: { ar: string; he: string; en: string };
+  /** Inclusive slide range, 1-indexed, matching the unit's slide manifest. */
+  slides: [number, number];
+  /** Rough study time, in minutes. */
+  estimatedMinutes: number;
+  /** TocEntry ids (from `toc.ts`) that fall within this chapter. Lets the
+   *  index render a quick "what's inside this chapter" preview. */
+  tocSectionIds: string[];
+  /** Chapter ids the student is recommended to read first. Soft sequencing
+   *  only — the route is always navigable regardless of completion state. */
+  prerequisites: string[];
+  /** Pedagogical role — drives small visual cues on the index card. */
+  kind: ChapterKind;
+}

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { loadUnit } from './baseline';
 import { buildDeckFromBaseline } from './buildDeck';
+import { getUnitChapters } from './chapters';
 import type { UnitBaseline, ExampleBlock } from './types';
 
 /**
@@ -162,6 +163,39 @@ for (const unitNumber of UNITS_TO_VERIFY) {
         expect(t.slides[0]).toBeGreaterThanOrEqual(1);
         expect(t.slides[1]).toBeLessThanOrEqual(slides.length);
         expect(t.slides[0]).toBeLessThanOrEqual(t.slides[1]);
+      }
+    });
+
+    /* ─────────────────────────────────────────────────────────────────
+     * Chapter manifest invariants — validate the per-chapter routing
+     * structure layered on top of the deck.
+     * ───────────────────────────────────────────────────────────────── */
+    it('Chapters · slide ranges are valid and non-overlapping', async () => {
+      // The chapter manifest is keyed by unit slug, not number, so the
+      // mapping unit-number → unit-slug needs to be done out-of-band.
+      // Today only Newton's Laws (03 → newtons-laws) has chapters.
+      const slugForNumber: Record<string, string> = { '03': 'newtons-laws' };
+      const slug = slugForNumber[unitNumber];
+      if (!slug) return; // unit has no chapter manifest yet — skip
+      const chapters = getUnitChapters(slug);
+      if (chapters.length === 0) return;
+
+      unit ??= await loadUnit(unitNumber);
+      const deckLength = buildDeckFromBaseline(unit).slides.length;
+
+      // Every range valid and within deck bounds.
+      for (const c of chapters) {
+        expect(c.slides[0]).toBeGreaterThanOrEqual(1);
+        expect(c.slides[1]).toBeLessThanOrEqual(deckLength);
+        expect(c.slides[0]).toBeLessThanOrEqual(c.slides[1]);
+      }
+
+      // No two chapters overlap.
+      const sorted = [...chapters].sort((a, b) => a.slides[0] - b.slides[0]);
+      for (let i = 0; i < sorted.length - 1; i++) {
+        const cur = sorted[i]!;
+        const next = sorted[i + 1]!;
+        expect(next.slides[0]).toBeGreaterThan(cur.slides[1]);
       }
     });
   });
