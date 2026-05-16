@@ -40,6 +40,7 @@ describe('FalakDB schema v1', () => {
     initial.unitProgress['newtons-laws'] = {
       theoryCompleted: true,
       theoryLastSlide: 5,
+      completedChapters: [],
       interactiveBestScore: 80,
       interactiveStreak: 3,
       examScores: [{ attemptId: 'a1', score: 75, date: 1700000000000 }],

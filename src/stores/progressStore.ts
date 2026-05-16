@@ -9,6 +9,11 @@ import type { UnitId } from '@/types/unit';
 interface ProgressActions {
   setTheoryLastSlide: (unitId: UnitId, slide: number) => Promise<void>;
   markTheoryComplete: (unitId: UnitId) => Promise<void>;
+  /** Record that a chapter has been read end-to-end. Idempotent. */
+  markChapterComplete: (unitId: UnitId, chapterId: string) => Promise<void>;
+  /** Undo a chapter completion (used by the chapter index for the "mark
+   *  unread" affordance). Idempotent. */
+  unmarkChapterComplete: (unitId: UnitId, chapterId: string) => Promise<void>;
   recordExamScore: (unitId: UnitId, attemptId: string, score: number) => Promise<void>;
   bumpInteractiveStreak: (unitId: UnitId) => Promise<void>;
   setInteractiveBestScore: (unitId: UnitId, score: number) => Promise<void>;
@@ -34,6 +39,18 @@ export const useProgressStore = create<ProgressActions>(() => ({
 
   markTheoryComplete: (unitId) =>
     mutateUnitProgress(unitId, (p) => ({ ...p, theoryCompleted: true })),
+
+  markChapterComplete: (unitId, chapterId) =>
+    mutateUnitProgress(unitId, (p) => {
+      if (p.completedChapters.includes(chapterId)) return p;
+      return { ...p, completedChapters: [...p.completedChapters, chapterId] };
+    }),
+
+  unmarkChapterComplete: (unitId, chapterId) =>
+    mutateUnitProgress(unitId, (p) => ({
+      ...p,
+      completedChapters: p.completedChapters.filter((id) => id !== chapterId),
+    })),
 
   recordExamScore: (unitId, attemptId, score) =>
     mutateUnitProgress(unitId, (p) => ({

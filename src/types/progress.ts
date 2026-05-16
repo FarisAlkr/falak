@@ -11,6 +11,9 @@ export interface ExamAttempt {
 export interface UnitProgress {
   theoryCompleted: boolean;
   theoryLastSlide: number;
+  /** Chapter slugs the student has marked (or auto-marked) complete.
+   *  Soft sequencing only — navigation is never gated on this. */
+  completedChapters: string[];
   interactiveBestScore: number;
   interactiveStreak: number;
   examScores: ExamAttempt[];
@@ -34,6 +37,7 @@ export function defaultUnitProgress(): UnitProgress {
   return {
     theoryCompleted: false,
     theoryLastSlide: 0,
+    completedChapters: [],
     interactiveBestScore: 0,
     interactiveStreak: 0,
     examScores: [],
