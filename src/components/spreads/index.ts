@@ -1,4 +1,5 @@
 export { ChapterBreak, type ChapterBreakProps } from './ChapterBreak';
+export { renderSpread } from './renderSpread';
 export { ConceptSpread, type ConceptSpreadProps } from './ConceptSpread';
 export { ExampleSpread, type ExampleSpreadProps } from './ExampleSpread';
 export { HookSpread, type HookSpreadProps } from './HookSpread';
