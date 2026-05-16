@@ -81,8 +81,9 @@ export default async function TheoryIndexPage({ params }: TheoryIndexPageProps) 
           >
             {firstSentenceOf(unit.introduction, 'ar')}
           </span>
+          {/* ⚑ Hebrew pending native-speaker review — draft only. */}
           <span data-lang="he" dir={LOCALE_DIR.he} className="font-hebrew text-ink-muted">
-            خمسة فصول · ابدأ بالأسس وانتهِ بمسائل البجروت.
+            חמישה פרקים. התחילו ביסודות וסיימו בשאלות הבגרות.
           </span>
           <span data-lang="en" dir={LOCALE_DIR.en} className="font-display italic text-ink-muted">
             Five chapters. Begin with foundations, finish at the Bagrut.
