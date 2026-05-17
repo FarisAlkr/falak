@@ -5,13 +5,14 @@ import { motion } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
 import { Badge } from '@/components/primitives';
 import { fadeUp, staggerParent } from '@/lib/motion';
+import { I18n } from '@/components/i18n/I18n';
 import type { UnitListing, BagrutWeight } from '@/types/unit';
 
-const WEIGHT_LABEL: Record<BagrutWeight, string> = {
-  low: 'Low yield',
-  medium: 'Medium yield',
-  high: 'High yield',
-  'very-high': 'High-yield',
+const WEIGHT_LABEL: Record<BagrutWeight, { ar: string; he: string; en: string }> = {
+  low: { ar: 'وزن منخفض', he: 'משקל נמוך', en: 'Low yield' },
+  medium: { ar: 'وزن متوسّط', he: 'משקל בינוני', en: 'Medium yield' },
+  high: { ar: 'وزن مرتفع', he: 'משקל גבוה', en: 'High yield' },
+  'very-high': { ar: 'وزن مرتفع جدّاً', he: 'משקל גבוה מאוד', en: 'Very high yield' },
 };
 
 const WEIGHT_TONE = {
@@ -38,7 +39,7 @@ export function UnitHeader({ unit }: UnitHeaderProps) {
       <motion.div variants={fadeUp}>
         <Link
           href="/"
-          className="group inline-flex items-center gap-2 font-mono text-xs uppercase tracking-meta text-ink-muted transition-colors duration-base ease-out hover:text-ink"
+          className="group inline-flex items-center gap-2 text-xs text-ink-muted transition-colors duration-base ease-out hover:text-ink"
         >
           <ChevronRight
             size={14}
@@ -46,36 +47,35 @@ export function UnitHeader({ unit }: UnitHeaderProps) {
             className="transition-transform duration-base ease-out group-hover:translate-x-0.5 rtl:rotate-180 rtl:group-hover:-translate-x-0.5"
             aria-hidden
           />
-          <span>All units · العودة</span>
+          <I18n ar="كلّ الوحدات" he="כל היחידות" en="All units" as="span" className="" />
         </Link>
       </motion.div>
 
       <div className="mt-8 flex items-start justify-between gap-6">
         <div className="space-y-3">
-          <motion.span
-            variants={fadeUp}
-            dir="ltr"
-            className="inline-block font-mono text-xs uppercase tracking-meta text-ink-muted"
-          >
-            UNIT {unitNumber}
-          </motion.span>
+          <motion.div variants={fadeUp}>
+            <I18n
+              ar={`الوحدة ${unitNumber}`}
+              he={`יחידה ${unitNumber}`}
+              en={`UNIT ${unitNumber}`}
+              as="span"
+              className="inline-block text-xs uppercase tracking-meta text-ink-muted"
+            />
+          </motion.div>
           <motion.h1
             variants={fadeUp}
-            dir="rtl"
-            className="font-arabic text-4xl font-semibold leading-tight text-ink md:text-5xl"
+            className="text-4xl font-semibold leading-tight text-ink md:text-5xl"
           >
-            {unit.titles.ar}
+            <span data-lang="ar" dir="rtl" className="font-arabic">
+              {unit.titles.ar}
+            </span>
+            <span data-lang="he" dir="rtl" className="font-hebrew">
+              {unit.titles.he}
+            </span>
+            <span data-lang="en" dir="ltr" className="font-display">
+              {unit.titles.en}
+            </span>
           </motion.h1>
-          <motion.p variants={fadeUp} dir="rtl" className="font-hebrew text-base text-accent">
-            {unit.titles.he}
-          </motion.p>
-          <motion.p
-            variants={fadeUp}
-            dir="ltr"
-            className="font-body text-base italic text-ink-muted"
-          >
-            {unit.titles.en}
-          </motion.p>
         </div>
 
         <motion.div variants={fadeUp} className="shrink-0">
@@ -83,7 +83,7 @@ export function UnitHeader({ unit }: UnitHeaderProps) {
             tone={WEIGHT_TONE[unit.bagrutWeight]}
             dot={unit.bagrutWeight === 'very-high' || unit.bagrutWeight === 'high'}
           >
-            {WEIGHT_LABEL[unit.bagrutWeight]}
+            <I18n {...WEIGHT_LABEL[unit.bagrutWeight]} unstyled />
           </Badge>
         </motion.div>
       </div>

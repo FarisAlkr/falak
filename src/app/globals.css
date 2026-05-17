@@ -55,6 +55,13 @@
     min-height: 100vh;
   }
 
+  html {
+    /* Account for the sticky AppHeader so anchor scrolls don't tuck a section
+       title behind the bar. */
+    scroll-padding-top: 96px;
+    scroll-behavior: smooth;
+  }
+
   body {
     background-color: var(--paper);
     color: var(--ink);
@@ -112,6 +119,25 @@
     z-index: 1;
   }
 
+  /* Editorial leader dots — used in the deck index between section title and
+     slide-number range. The pseudo-element fills the flex space with a
+     repeating dot pattern that respects the active text color. */
+  .leader-dots {
+    align-self: end;
+    background-image: radial-gradient(circle, currentColor 1px, transparent 1px);
+    background-position: bottom;
+    background-repeat: repeat-x;
+    background-size: 6px 1px;
+    height: 1px;
+    opacity: 0.5;
+    transition: opacity var(--duration-fast) var(--ease-out);
+  }
+
+  .group:hover .leader-dots,
+  .group:focus-visible .leader-dots {
+    opacity: 1;
+  }
+
   /* A subtle radial accent — used by the cursor-spotlight effect on cards. */
   .spotlight {
     background-image: radial-gradient(
@@ -120,6 +146,92 @@
       transparent 50%
     );
   }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * Language switcher — site-wide visibility rules.
+ *
+ * Components emit each language variant with a `data-lang` attribute. The
+ * active locale is reflected onto `<html lang>` by `<LanguageBootstrap>`.
+ * These rules hide the non-active variants without removing them from the
+ * DOM (so the static HTML stays the source of truth for all three).
+ * ───────────────────────────────────────────────────────────────────────── */
+
+html[lang='ar'] [data-lang='he'],
+html[lang='ar'] [data-lang='en'],
+html[lang='he'] [data-lang='ar'],
+html[lang='he'] [data-lang='en'],
+html[lang='en'] [data-lang='ar'],
+html[lang='en'] [data-lang='he'] {
+  display: none !important;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * Term hover tooltip.
+ *
+ * <Term> emits one tooltip per active locale (`data-tooltip-for="ar|he|en"`).
+ * Show only the one matching the active locale, and only on hover/focus of
+ * the term wrapper.
+ * ───────────────────────────────────────────────────────────────────────── */
+
+.falak-term {
+  cursor: help;
+  border-bottom: 1px dotted var(--ink-faint);
+  text-decoration: none;
+  transition: border-color var(--duration-fast) var(--ease-out);
+}
+
+.falak-term:hover,
+.falak-term:focus-within {
+  border-bottom-color: var(--accent);
+}
+
+.falak-term-tooltip {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translate(-50%, 4px);
+  z-index: 40;
+  white-space: nowrap;
+  padding: 4px 10px;
+  border-radius: 2px;
+  border: 1px solid var(--border-strong);
+  background-color: var(--paper-raised);
+  color: var(--ink);
+  font-size: 0.875rem;
+  line-height: 1.2;
+  box-shadow:
+    0 1px 2px rgba(26, 22, 18, 0.04),
+    0 4px 16px rgba(26, 22, 18, 0.08);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity var(--duration-base) var(--ease-out),
+    transform var(--duration-base) var(--ease-out);
+  display: none;
+}
+
+.falak-term-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-top-color: var(--paper-raised);
+  filter: drop-shadow(0 1px 0 var(--border-strong));
+}
+
+html[lang='ar'] .falak-term-tooltip[data-tooltip-for='ar'],
+html[lang='he'] .falak-term-tooltip[data-tooltip-for='he'],
+html[lang='en'] .falak-term-tooltip[data-tooltip-for='en'] {
+  display: inline-block;
+}
+
+.falak-term:hover .falak-term-tooltip,
+.falak-term:focus-within .falak-term-tooltip {
+  opacity: 1;
+  transform: translate(-50%, 0);
 }
 
 @media (prefers-reduced-motion: reduce) {

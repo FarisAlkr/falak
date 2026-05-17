@@ -31,7 +31,9 @@ Physics content in Falak is bilingual by design. This skill ensures Arabic is Mo
 
 ### Step 2 · Verify physics terminology
 
-Before using ANY physics term in Arabic, verify it against the terminology table in `docs/07_content_guidelines.md`. Common errors to avoid:
+The canonical bilingual terminology source is the **Bilingual Glossary** section of each unit's baseline file (`docs/content/{NN}_{unit}.md`), where every term carries an Arabic flag (`✓` confirmed · `⚑` needs review · `→ Sayakim` pulled from the official Ministry of Education dictionary). The aggregated review queue lives at `docs/content/_arabic_review_queue.md`. Cross-reference with `docs/07_content_guidelines.md` for general bilingual rules.
+
+Before using ANY physics term in Arabic, verify it against the unit's baseline glossary. Common errors to avoid:
 
 | Wrong / Non-standard                    | Correct                              |
 | --------------------------------------- | ------------------------------------ |

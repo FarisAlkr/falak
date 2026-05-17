@@ -25,36 +25,35 @@ export function PlaceholderPanel({ mode }: PlaceholderPanelProps) {
         animate="visible"
         className="relative flex flex-col items-center px-8 py-20 text-center md:px-16 md:py-28"
       >
-        <motion.span
-          variants={fadeUp}
-          dir="ltr"
-          className="font-mono text-xs uppercase tracking-meta text-ink-muted"
-        >
-          {label.en}
+        <motion.span variants={fadeUp} className="text-xs text-ink-muted">
+          <span data-lang="ar" dir="rtl" className="font-arabic">
+            {label.ar}
+          </span>
+          <span data-lang="he" dir="rtl" className="font-hebrew">
+            {label.he}
+          </span>
+          <span data-lang="en" dir="ltr" className="font-mono uppercase tracking-meta">
+            {label.en}
+          </span>
         </motion.span>
 
         <motion.p
           variants={fadeUp}
-          dir="rtl"
-          className="mt-8 font-arabic text-4xl font-semibold text-ink md:text-5xl"
+          className="mt-8 text-4xl font-semibold text-ink md:text-5xl"
           animate={{
             opacity: [0.85, 1, 0.85],
             transition: { duration: 4, repeat: Infinity, ease: [0.83, 0, 0.17, 1] },
           }}
         >
-          قريباً
-        </motion.p>
-
-        <motion.p variants={fadeUp} dir="rtl" className="mt-4 font-hebrew text-base text-ink-muted">
-          בקרוב
-        </motion.p>
-
-        <motion.p
-          variants={fadeUp}
-          dir="ltr"
-          className="mt-2 font-body text-sm italic text-ink-faint"
-        >
-          Coming soon
+          <span data-lang="ar" dir="rtl" className="font-arabic">
+            قريباً
+          </span>
+          <span data-lang="he" dir="rtl" className="font-hebrew">
+            בקרוב
+          </span>
+          <span data-lang="en" dir="ltr" className="font-display italic">
+            Coming soon
+          </span>
         </motion.p>
 
         <motion.div

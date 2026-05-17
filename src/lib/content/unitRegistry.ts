@@ -2,6 +2,13 @@ import { type UnitListing, UNIT_IDS } from '@/types/unit';
 
 export { UNIT_IDS };
 
+/**
+ * The 12-unit listing — mirrors `docs/content/00_baseline_index.md`.
+ *
+ * `bagrutWeight` is a coarse pedagogical signal (very-high/high/medium/low)
+ * shown on unit cards; it's not the same as `bagrut_weight_estimate` in the
+ * baseline frontmatter (which is a percentage of one shaalon).
+ */
 export const UNIT_LISTING: readonly UnitListing[] = [
   {
     id: 'kinematics-1d',
@@ -21,8 +28,8 @@ export const UNIT_LISTING: readonly UnitListing[] = [
     section: 'mechanics',
     titles: {
       ar: 'الحركة في بُعدين والمقذوفات',
-      he: 'תנועה במישור וזריקות',
-      en: '2D Motion & Projectiles',
+      he: 'תנועה בשני צירים וזריקות',
+      en: '2D Kinematics & Projectiles',
     },
     bagrutWeight: 'high',
     status: 'not-started',
@@ -37,14 +44,14 @@ export const UNIT_LISTING: readonly UnitListing[] = [
       en: "Newton's Laws & Dynamics",
     },
     bagrutWeight: 'very-high',
-    status: 'not-started',
+    status: 'in-progress',
   },
   {
     id: 'work-energy',
     number: 4,
     section: 'mechanics',
     titles: {
-      ar: 'العمل والطاقة والقدرة',
+      ar: 'الشغل والطاقة والقدرة',
       he: 'עבודה, אנרגיה והספק',
       en: 'Work, Energy, Power',
     },
@@ -68,21 +75,21 @@ export const UNIT_LISTING: readonly UnitListing[] = [
     number: 6,
     section: 'mechanics',
     titles: {
-      ar: 'الحركة الدائرية',
-      he: 'תנועה מעגלית',
-      en: 'Circular Motion',
+      ar: 'الحركة الدائريّة والجاذبيّة',
+      he: 'תנועה מעגלית וגרביטציה',
+      en: 'Circular Motion & Gravitation',
     },
-    bagrutWeight: 'medium',
+    bagrutWeight: 'high',
     status: 'not-started',
   },
   {
-    id: 'gravitation',
+    id: 'oscillations',
     number: 7,
-    section: 'mechanics',
+    section: 'waves-optics',
     titles: {
-      ar: 'الجاذبية والحركة الهرمونية',
-      he: 'גרביטציה ותנועה הרמונית',
-      en: 'Gravitation & SHM',
+      ar: 'الاهتزازات والحركة التوافقيّة',
+      he: 'תנודות ותנועה הרמונית',
+      en: 'Oscillations & SHM',
     },
     bagrutWeight: 'medium',
     status: 'not-started',
@@ -100,12 +107,12 @@ export const UNIT_LISTING: readonly UnitListing[] = [
     status: 'not-started',
   },
   {
-    id: 'dc-circuits',
+    id: 'circuits',
     number: 9,
     section: 'electromagnetism',
     titles: {
-      ar: 'الدوائر الكهربائية',
-      he: 'זרם חשמלי ומעגלים',
+      ar: 'الدوائر الكهربائيّة',
+      he: 'מעגלים חשמליים',
       en: 'DC Circuits',
     },
     bagrutWeight: 'very-high',
@@ -116,7 +123,7 @@ export const UNIT_LISTING: readonly UnitListing[] = [
     number: 10,
     section: 'electromagnetism',
     titles: {
-      ar: 'المغناطيسية والحث',
+      ar: 'المغناطيسيّة والحثّ',
       he: 'מגנטיות והשראה',
       en: 'Magnetism & Induction',
     },
@@ -124,51 +131,27 @@ export const UNIT_LISTING: readonly UnitListing[] = [
     status: 'not-started',
   },
   {
-    id: 'geometric-optics',
+    id: 'waves-optics',
     number: 11,
-    section: 'radiation-matter',
+    section: 'waves-optics',
     titles: {
-      ar: 'البصريات الهندسية',
-      he: 'אופטיקה גאומטרית',
-      en: 'Geometric Optics',
-    },
-    bagrutWeight: 'medium',
-    status: 'not-started',
-  },
-  {
-    id: 'physical-optics',
-    number: 12,
-    section: 'radiation-matter',
-    titles: {
-      ar: 'البصريات الفيزيائية والموجات',
-      he: 'אופטיקה פיזיקלית וגלים',
-      en: 'Physical Optics & Waves',
+      ar: 'الموجات والبصريّات',
+      he: 'גלים ואופטיקה',
+      en: 'Waves & Optics',
     },
     bagrutWeight: 'high',
     status: 'not-started',
   },
   {
-    id: 'modern-physics',
-    number: 13,
-    section: 'radiation-matter',
+    id: 'modern-atomic',
+    number: 12,
+    section: 'modern-atomic',
     titles: {
-      ar: 'الفيزياء الحديثة',
-      he: 'פיזיקה מודרנית',
-      en: 'Modern Physics',
+      ar: 'الفيزياء الحديثة والذرّيّة',
+      he: 'פיזיקה מודרנית ופיזיקת האטום',
+      en: 'Modern & Atomic Physics',
     },
     bagrutWeight: 'very-high',
-    status: 'not-started',
-  },
-  {
-    id: 'atomic-nuclear',
-    number: 14,
-    section: 'radiation-matter',
-    titles: {
-      ar: 'الذرة والنواة',
-      he: 'האטום והגרעין',
-      en: 'Atomic & Nuclear',
-    },
-    bagrutWeight: 'high',
     status: 'not-started',
   },
 ];

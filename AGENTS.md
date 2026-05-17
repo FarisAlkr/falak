@@ -6,7 +6,9 @@ Any agent working on this codebase (Claude Code, Cursor, Codex, Aider, etc.) sho
 
 1. Read `START_HERE.md` first
 2. Read `CLAUDE.md` for persistent context
-3. Consult the `docs/` folder for specifics
-4. Never skip the physics accuracy and bilingual content verification steps
+3. Treat **`docs/content/`** as the canonical source of truth for all unit teaching content (concepts, equations, examples, misconceptions, bilingual terminology, past Bagrut questions). The schema is defined in `docs/content/_format_spec.md`; the unit map is `docs/content/00_baseline_index.md`; `docs/content/03_newtons_laws.md` is the reference unit.
+4. Consult the rest of the `docs/` folder for project-level specifics (architecture, design system, unit template shape).
+5. Never invent physics content. Compose slides, exams, and interactives from the baseline; flag any uncertain Arabic with `⚑` for native-speaker review.
+6. Never skip the physics accuracy and bilingual content verification steps.
 
 **Note:** `CLAUDE.md` is the source of truth. This file exists only for tool compatibility.

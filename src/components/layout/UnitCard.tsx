@@ -7,12 +7,13 @@ import { ChevronLeft } from 'lucide-react';
 import { Badge } from '@/components/primitives';
 import { cn } from '@/lib/utils/cn';
 import { useElementMouse, useTilt, TRANSITION } from '@/lib/motion';
+import { I18n } from '@/components/i18n/I18n';
 import type { UnitListing } from '@/types/unit';
 
-const STATUS_LABEL: Record<UnitListing['status'], string> = {
-  'not-started': 'قريباً',
-  'in-progress': 'قيد التحضير',
-  ready: 'جاهز',
+const STATUS_LABEL: Record<UnitListing['status'], { ar: string; he: string; en: string }> = {
+  'not-started': { ar: 'قريباً', he: 'בקרוב', en: 'Coming soon' },
+  'in-progress': { ar: 'قيد التحضير', he: 'בהכנה', en: 'In progress' },
+  ready: { ar: 'جاهز', he: 'מוכן', en: 'Ready' },
 };
 
 const STATUS_TONE = {
@@ -45,7 +46,7 @@ export function UnitCard({ unit, index = 0 }: UnitCardProps) {
       transition={{ ...TRANSITION.slow, delay: 0.04 * index }}
     >
       <Link
-        href={`/units/${unit.id}`}
+        href={`/units/${unit.id}/`}
         className="group block focus-visible:outline-none"
         aria-label={unit.titles.ar}
       >
@@ -88,35 +89,43 @@ export function UnitCard({ unit, index = 0 }: UnitCardProps) {
 
           <div className="relative flex h-full flex-col gap-6">
             <div className="flex items-center justify-between">
-              <span dir="ltr" className="font-mono text-xs uppercase tracking-meta text-ink-muted">
-                UNIT {unitNumber}
-              </span>
+              <I18n
+                ar={`الوحدة ${unitNumber}`}
+                he={`יחידה ${unitNumber}`}
+                en={`UNIT ${unitNumber}`}
+                as="span"
+                className="text-xs text-ink-muted"
+              />
               <Badge tone={STATUS_TONE[unit.status]} dot={unit.status !== 'not-started'}>
-                {STATUS_LABEL[unit.status]}
+                <I18n {...STATUS_LABEL[unit.status]} unstyled />
               </Badge>
             </div>
 
             <div className="flex-1 space-y-2">
-              <h2 dir="rtl" className="font-arabic text-2xl font-semibold leading-tight text-ink">
-                {unit.titles.ar}
+              <h2 className="text-2xl font-semibold leading-tight text-ink">
+                <span data-lang="ar" dir="rtl" className="font-arabic">
+                  {unit.titles.ar}
+                </span>
+                <span data-lang="he" dir="rtl" className="font-hebrew">
+                  {unit.titles.he}
+                </span>
+                <span data-lang="en" dir="ltr" className="font-display">
+                  {unit.titles.en}
+                </span>
               </h2>
-              <p dir="rtl" className="font-hebrew text-sm text-accent">
-                {unit.titles.he}
-              </p>
-              <p dir="ltr" className="font-body text-sm italic text-ink-muted">
-                {unit.titles.en}
-              </p>
             </div>
 
             <div className="flex items-center justify-between border-t border-border pt-4">
-              <span
+              <I18n
+                ar="نظري · لعب · امتحان"
+                he="תיאוריה · סימולציה · מבחן"
+                en="Theory · Interactive · Exam"
+                as="span"
                 className={cn(
-                  'font-mono text-xs uppercase tracking-meta transition-colors duration-base ease-out',
+                  'text-xs transition-colors duration-base ease-out',
                   isHovered ? 'text-ink' : 'text-ink-faint',
                 )}
-              >
-                Theory · Interactive · Exam
-              </span>
+              />
               <ChevronLeft
                 size={16}
                 strokeWidth={1.5}

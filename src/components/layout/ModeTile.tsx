@@ -46,7 +46,7 @@ export function ModeTile({ unitId, mode, index = 0 }: ModeTileProps) {
       transition={{ ...TRANSITION.slow, delay: 0.06 * index }}
     >
       <Link
-        href={`/units/${unitId}/${mode}`}
+        href={`/units/${unitId}/${mode}/`}
         className="group block focus-visible:outline-none"
         aria-label={label.en}
       >
@@ -90,14 +90,16 @@ export function ModeTile({ unitId, mode, index = 0 }: ModeTileProps) {
             </div>
 
             <div className="flex-1 space-y-2">
-              <p dir="rtl" className="font-arabic text-3xl font-semibold leading-tight text-ink">
-                {label.ar}
-              </p>
-              <p dir="rtl" className="font-hebrew text-sm text-accent">
-                {label.he}
-              </p>
-              <p dir="ltr" className="font-body text-sm italic text-ink-muted">
-                {label.en}
+              <p className="text-3xl font-semibold leading-tight text-ink">
+                <span data-lang="ar" dir="rtl" className="font-arabic">
+                  {label.ar}
+                </span>
+                <span data-lang="he" dir="rtl" className="font-hebrew">
+                  {label.he}
+                </span>
+                <span data-lang="en" dir="ltr" className="font-display">
+                  {label.en}
+                </span>
               </p>
             </div>
 

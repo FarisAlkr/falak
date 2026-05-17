@@ -1,9 +1,10 @@
-import { Fraunces, Inter, JetBrains_Mono, Noto_Kufi_Arabic, Heebo } from 'next/font/google';
+import { Fraunces, Inter, JetBrains_Mono, Noto_Naskh_Arabic, Heebo } from 'next/font/google';
 
 export const fraunces = Fraunces({
   subsets: ['latin'],
   variable: '--font-display',
   weight: ['400', '500', '700', '900'],
+  style: ['normal', 'italic'],
   display: 'swap',
 });
 
@@ -21,10 +22,15 @@ export const jetbrainsMono = JetBrains_Mono({
   display: 'swap',
 });
 
-export const notoKufiArabic = Noto_Kufi_Arabic({
+/**
+ * Noto Naskh Arabic — naskh forms read more like a printed book and pair
+ * better with Fraunces at editorial sizes than the kufi (geometric, sans-
+ * style) used in earlier phases. Per design-system v2.
+ */
+export const notoNaskhArabic = Noto_Naskh_Arabic({
   subsets: ['arabic'],
   variable: '--font-arabic',
-  weight: ['400', '500', '600', '700', '800'],
+  weight: ['400', '500', '600', '700'],
   display: 'swap',
 });
 

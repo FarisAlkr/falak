@@ -20,12 +20,14 @@ This skill is the first line of defense against physics errors in Falak content.
 
 ### Step 1 · Verify against curriculum scope
 
-Open `docs/01_curriculum_and_units.md`. Confirm:
+The canonical source for unit-level scope is **`docs/content/{NN}_{unit}.md`** (full content) and **`docs/content/00_baseline_index.md`** (the 12-unit map). The schema lives in `docs/content/_format_spec.md`. `docs/01_curriculum_and_units.md` is the curriculum-level overview pointing into the baseline.
 
-1. The topic is actually in the 5-unit Bagrut curriculum
+Confirm:
+
+1. The topic appears as a `concept` block in the unit's baseline file (or in the unit's `key_concepts` list in `00_baseline_index.md`)
 2. The topic is in the unit you're writing for (not a different unit)
 3. The depth matches 5-unit expectations (not 3-unit, not university)
-4. Any "stretch" material is explicitly marked as optional
+4. Any "stretch" material is explicitly marked as optional in the baseline
 
 **Red flag:** If you're writing about relativistic effects in a 10th-grade kinematics unit, stop. That's a scope error.
 

@@ -7,6 +7,10 @@ description: Templates and guidelines for writing Falak slide decks (MDX files).
 
 Falak slides are the teacher's primary classroom tool. They are projected, pointed at, discussed around. Every slide must be designed for classroom use — not for silent self-study.
 
+## Source content
+
+Slides are **rendering output**, not authored content. The scientific source for every slide — concepts, equations, examples, misconceptions, bilingual phrasings — lives in `docs/content/{NN}_{unit}.md` per the schema in `docs/content/_format_spec.md`. Compose slides from that baseline; do not invent. `docs/content/03_newtons_laws.md` is the structural reference. Surface any baseline `⚑` Arabic flags in the rendered output for the human reviewer.
+
 ## When to trigger this skill
 
 - Writing a new `slides.mdx` file for any unit
